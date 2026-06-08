@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap');
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-bg text-text-primary font-sans antialiased;
+    overscroll-behavior: none;
+  }
+
+  /* 自定义滚动条 */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+  }
+
+  /* 选中色 */
+  ::selection {
+    background: rgba(200, 169, 81, 0.3);
+    color: #fff;
+  }
+}
+
+@layer components {
+  .text-gold-gradient {
+    @apply text-gold;
+  }
+
+  .card {
+    @apply bg-bg-card rounded-card overflow-hidden;
+    transition: transform 300ms ease, box-shadow 300ms ease;
+  }
+  .card:active {
+    transform: scale(0.98);
+  }
+  @media (hover: hover) {
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .btn-gold {
+    @apply bg-gold text-black font-medium rounded-btn px-6 py-3;
+    transition: opacity 300ms ease;
+  }
+  .btn-gold:active {
+    opacity: 0.8;
+  }
+}
+
+@layer utilities {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  /* 渐变遮罩 */
+  .mask-bottom {
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  }
+
+  .gradient-overlay {
+    background: linear-gradient(to top, #0a0a0a 0%, transparent 60%);
+  }
+}

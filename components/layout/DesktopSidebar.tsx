@@ -1,0 +1,49 @@
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const navItems = [
+  { label: "首页", href: "/" },
+  { label: "发现", href: "/discover" },
+  { label: "影史", href: "/history" },
+  { label: "喜欢", href: "/likes" },
+  { label: "我的", href: "/profile" },
+];
+
+export default function DesktopSidebar() {
+  const pathname = usePathname();
+
+  return (
+    <aside className="hidden lg:flex flex-col fixed left-0 top-0 bottom-0 w-56 bg-bg/80 backdrop-blur-lg border-r border-white/5 px-6 py-8 z-40">
+      <Link href="/" className="mb-12">
+        <h1 className="text-xl font-display font-semibold text-gold tracking-wider">
+          CineVault
+        </h1>
+      </Link>
+
+      <nav className="flex flex-col gap-2">
+        {navItems.map(({ label, href }) => {
+          const active = pathname === href || (href !== "/" && pathname.startsWith(href));
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={`px-4 py-2.5 rounded-btn text-sm transition-all
+                ${active
+                  ? "bg-gold/10 text-gold font-medium"
+                  : "text-text-secondary hover:text-text-primary hover:bg-bg-card"
+                }`}
+            >
+              {label}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="mt-auto">
+        <p className="text-text-muted text-xs">© 2026 CineVault</p>
+        <p className="text-text-muted text-xs mt-1">探索电影之美</p>
+      </div>
+    </aside>
+  );
+}

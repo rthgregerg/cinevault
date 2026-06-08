@@ -1,0 +1,7 @@
+<svg width="300" height="450" viewBox="0 0 300 450" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="450" fill="#141414"/>
+  <rect x="60" y="100" width="180" height="250" rx="8" fill="none" stroke="#333" stroke-width="2"/>
+  <circle cx="150" cy="200" r="40" fill="none" stroke="#333" stroke-width="2"/>
+  <polygon points="140,185 140,215 168,200" fill="#333"/>
+  <text x="150" y="280" text-anchor="middle" fill="#555" font-family="sans-serif" font-size="12">暂无海报</text>
+</svg>

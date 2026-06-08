@@ -1,0 +1,24 @@
+[
+  {
+    "id": "the-shawshank-redemption",
+    "titleZh": "肖申克的救赎",
+    "titleEn": "The Shawshank Redemption",
+    "year": 1994,
+    "director": ["弗兰克·德拉邦特"],
+    "cast": ["蒂姆·罗宾斯", "摩根·弗里曼", "鲍勃·冈顿", "威廉·赛德勒", "克兰西·布朗"],
+    "genres": ["剧情", "犯罪"],
+    "region": "美国",
+    "language": "英语",
+    "runtime": 142,
+    "rating": 9.7,
+    "ratingCount": 2850000,
+    "ratingDistribution": [85, 10, 3, 1, 1],
+    "synopsis": "一个银行家被误判谋杀妻子及其情人，关进肖申克监狱。在狱中他凭借才智和毅力，不仅赢得了狱友的尊重，更用一把小锤子挖了二十年隧道，最终重获自由。",
+    "posterUrl": "https://img1.doubanio.com/view/photo/l/public/p480747492.jpg",
+    "movements": [],
+    "isNowShowing": false,
+    "isComingSoon": false,
+    "releaseDate": "1994-09-23",
+    "tags": ["希望", "自由", "友谊", "经典", "人性"]
+  }
+]
