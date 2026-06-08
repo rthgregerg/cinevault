@@ -16,8 +16,8 @@ export const metadata: Metadata = {
   description: "发现电影之美，探索影史之深",
   manifest: "/manifest.json",
   icons: {
-    icon: "/icons/icon-192.svg",
-    apple: "/icons/icon-180.svg",
+    icon: "/icons/icon-192.png",
+    apple: "/icons/icon-180.png",
   },
   appleWebApp: {
     capable: true,
