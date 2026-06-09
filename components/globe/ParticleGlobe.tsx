@@ -34,19 +34,20 @@ function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
 
   useFrame(({ clock }, delta) => {
     const t = clock.getElapsedTime();
-    if (mainRef.current) mainRef.current.rotation.y += delta * 0.1;
+    // 诊断：主球旋转加速到一眼可见
+    if (mainRef.current) mainRef.current.rotation.y += delta * 0.5;
 
-    // 海洋：缩放呼吸 + 透明度闪烁
-    if (oceanGrp.current) oceanGrp.current.scale.setScalar(1 + Math.sin(t*0.8)*0.03);
-    oceanMat.opacity = 0.2 + (Math.sin(t*1.5)+1)*0.35;
+    // 海洋：极明显呼吸 + 频闪
+    oceanGrp.current?.scale.setScalar(1 + Math.sin(t*2)*0.08);
+    oceanMat.opacity = 0.05 + (Math.sin(t*3)+1)*0.45;
 
-    // 大陆：缩放呼吸 + 透明度闪烁
-    if (landGrp.current) landGrp.current.scale.setScalar(1 + Math.sin(t*1.1+1)*0.025);
-    landMat.opacity = 0.3 + (Math.sin(t*1.3)+1)*0.3;
+    // 大陆：极明显
+    landGrp.current?.scale.setScalar(1 + Math.sin(t*2.5)*0.06);
+    landMat.opacity = 0.1 + (Math.sin(t*2.8)+1)*0.4;
 
-    // 微光：大幅脉冲
-    if (glowGrp.current) glowGrp.current.scale.setScalar(1 + Math.sin(t*0.5)*0.08);
-    glowMat.opacity = 0.03 + (Math.sin(t*0.6)+1)*0.1;
+    // 微光：极明显
+    glowGrp.current?.scale.setScalar(1 + Math.sin(t*1.5)*0.15);
+    glowMat.opacity = 0.02 + (Math.sin(t*1.8)+1)*0.2;
   });
 
   useEffect(() => {
