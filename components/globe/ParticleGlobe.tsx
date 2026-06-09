@@ -14,7 +14,7 @@ import type { CountryFilmData } from "@/lib/types";
 
 const STAR_LAYERS: StarLayerConfig[] = [
   {
-    count: 200, radiusMin: 8, radiusMax: 12, size: 0.012, opacity: 0.5,
+    count: 400, radiusMin: 8, radiusMax: 13, size: 0.016, opacity: 0.6,
     colors: [
       { r: 0.7, g: 0.8, b: 1.0, weight: 2 },
       { r: 0.6, g: 0.7, b: 0.9, weight: 1 },
@@ -22,18 +22,18 @@ const STAR_LAYERS: StarLayerConfig[] = [
     rotateSpeedX: 0.001, rotateSpeedY: 0.003,
   },
   {
-    count: 250, radiusMin: 6, radiusMax: 9, size: 0.016, opacity: 0.65,
+    count: 500, radiusMin: 6, radiusMax: 9.5, size: 0.022, opacity: 0.75,
     colors: [
       { r: 0.85, g: 0.85, b: 0.95, weight: 2 },
-      { r: 1.0, g: 0.85, b: 0.65, weight: 1 },
+      { r: 1.0, g: 0.82, b: 0.6, weight: 1.5 },
     ],
     rotateSpeedX: 0.002, rotateSpeedY: 0.006,
   },
   {
-    count: 150, radiusMin: 4.5, radiusMax: 7, size: 0.022, opacity: 0.8,
+    count: 300, radiusMin: 4.5, radiusMax: 7, size: 0.03, opacity: 0.85,
     colors: [
-      { r: 1.0, g: 0.82, b: 0.55, weight: 2 },
-      { r: 1.0, g: 0.9, b: 0.7, weight: 1 },
+      { r: 1.0, g: 0.78, b: 0.5, weight: 2 },
+      { r: 1.0, g: 0.88, b: 0.65, weight: 1 },
     ],
     rotateSpeedX: 0.0015, rotateSpeedY: 0.004,
   },
@@ -115,19 +115,19 @@ function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
         <group ref={oceanGrp}>
           <points ref={oceanMesh}>
             <bufferGeometry><bufferAttribute attach="attributes-position" array={oceanGeo} count={particleData.ocean.length} itemSize={3} /></bufferGeometry>
-            <pointsMaterial color="#082244" size={0.012} transparent opacity={0.6} depthWrite={false} blending={THREE.AdditiveBlending} />
+            <pointsMaterial color="#041830" size={0.009} transparent opacity={0.55} depthWrite={false} blending={THREE.AdditiveBlending} />
           </points>
         </group>
         <group ref={landGrp}>
           <points ref={landMesh}>
             <bufferGeometry><bufferAttribute attach="attributes-position" array={landGeo} count={particleData.land.length} itemSize={3} /></bufferGeometry>
-            <pointsMaterial color="#1e5aaa" size={0.011} transparent opacity={0.8} depthWrite={false} blending={THREE.AdditiveBlending} />
+            <pointsMaterial color="#5ab0e8" size={0.014} transparent opacity={0.85} depthWrite={false} blending={THREE.AdditiveBlending} />
           </points>
         </group>
         <group ref={glowGrp}>
           <points ref={glowMesh}>
             <bufferGeometry><bufferAttribute attach="attributes-position" array={glowGeo} count={particleData.glow.length} itemSize={3} /></bufferGeometry>
-            <pointsMaterial color="#1a3a6a" size={0.018} transparent opacity={0.15} depthWrite={false} blending={THREE.AdditiveBlending} />
+            <pointsMaterial color="#3a6aaa" size={0.022} transparent opacity={0.2} depthWrite={false} blending={THREE.AdditiveBlending} />
           </points>
         </group>
         <CountryHighlights onClickCountry={onClickCountry} isActive={activeCountryCode} />

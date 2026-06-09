@@ -34,9 +34,9 @@ function generateNebulaTexture(color1: string, color2: string): THREE.CanvasText
 }
 
 const NEBULAE: NebulaConfig[] = [
-  { position: [0, 1.5, -5], color1: "#4a2a6a", color2: "#2a3a6a", scale: 4, opacity: 0.05, phase: 0 },
-  { position: [-3, -0.5, -4], color1: "#3a2a5a", color2: "#1a3a5a", scale: 3.5, opacity: 0.04, phase: Math.PI / 3 },
-  { position: [3.5, 0, -4.5], color1: "#4a3060", color2: "#2a4070", scale: 3.8, opacity: 0.045, phase: (Math.PI * 2) / 3 },
+  { position: [0, 1.5, -5], color1: "#5a3a7a", color2: "#3a4a7a", scale: 5, opacity: 0.12, phase: 0 },
+  { position: [-3.5, -0.5, -4.5], color1: "#4a3060", color2: "#2a4070", scale: 4.5, opacity: 0.10, phase: Math.PI / 3 },
+  { position: [3.5, 0.5, -5], color1: "#5a4070", color2: "#3a5080", scale: 4.8, opacity: 0.11, phase: (Math.PI * 2) / 3 },
 ];
 
 export default function NebulaGlow() {

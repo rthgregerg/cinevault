@@ -51,7 +51,7 @@ export default function CountryHighlights({ onClickCountry, isActive }: Props) {
       {points.map((p, i) => {
         const isHovered = hovered === p.countryCode;
         const active = isActive === p.countryCode;
-        const size = 0.03 + p.lightIntensity * 0.015;
+        const size = 0.018 + p.lightIntensity * 0.01;
         const highlight = isHovered || active;
 
         return (

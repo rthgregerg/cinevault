@@ -15,7 +15,8 @@ const path = require("path");
 
 const OUTPUT = path.join(__dirname, "..", "public", "globe-particles.json");
 const RADIUS = 1.5;
-const LAND_PARTICLES = 12000;
+const LAND_PARTICLES = 8000;
+const EDGE_PARTICLES = 5000;
 const OCEAN_PARTICLES = 20000;
 const GLOW_PARTICLES = 5000;
 const TOTAL = LAND_PARTICLES + OCEAN_PARTICLES;
@@ -185,7 +186,7 @@ function samplePolygonInterior(polygon, count) {
 // ============ 生成 ============
 
 function generate() {
-  // 1. 大陆粒子 — 多边形内部密集填充
+  // 1. 大陆粒子 — 边界 + 内部混合
   const landParticles = [];
   const areas = CONTINENTS.map(([, poly]) => {
     let area = 0;
@@ -199,9 +200,20 @@ function generate() {
 
   for (let ci = 0; ci < CONTINENTS.length; ci++) {
     const [, poly] = CONTINENTS[ci];
-    const count = Math.floor((areas[ci] / totalArea) * LAND_PARTICLES);
-    const pts = samplePolygonInterior(poly, count);
-    landParticles.push(...pts);
+    const interiorCount = Math.floor((areas[ci] / totalArea) * LAND_PARTICLES);
+    const edgeCount = Math.floor((areas[ci] / totalArea) * EDGE_PARTICLES);
+
+    // 内部填充
+    const interiorPts = samplePolygonInterior(poly, interiorCount);
+    landParticles.push(...interiorPts);
+
+    // 边界/海岸线 — 在边界上采样，稍微外扩让轮廓更清晰
+    const edgePts = samplePolygonBoundary(poly, edgeCount).map(p => {
+      const len = Math.sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
+      const scale = 1.52 / len; // 稍大于球体半径，海岸线微微浮起
+      return { x: p.x * scale, y: p.y * scale, z: p.z * scale };
+    });
+    landParticles.push(...edgePts);
   }
 
   // 2. 海洋粒子 — 球面均匀采样，排除陆地

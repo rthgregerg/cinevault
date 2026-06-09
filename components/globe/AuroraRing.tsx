@@ -10,7 +10,7 @@ export default function AuroraRing() {
     () => ({
       uColor1: { value: new THREE.Color("#f0c878") },
       uColor2: { value: new THREE.Color("#6a4a8a") },
-      uOpacity: { value: 0.06 },
+      uOpacity: { value: 0.14 },
     }),
     []
   );
@@ -27,7 +27,7 @@ export default function AuroraRing() {
       rotation={[Math.PI * 0.35, 0, 0]}
       renderOrder={0}
     >
-      <ringGeometry args={[2.1, 2.25, 128]} />
+      <ringGeometry args={[2.05, 2.35, 128]} />
       <shaderMaterial
         uniforms={uniforms}
         transparent
