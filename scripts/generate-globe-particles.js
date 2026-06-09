@@ -15,9 +15,10 @@ const path = require("path");
 
 const OUTPUT = path.join(__dirname, "..", "public", "globe-particles.json");
 const RADIUS = 1.5;
-const EDGE_PARTICLES = 3000;
-const LAND_INTERIOR_PARTICLES = 4000;
-const OCEAN_PARTICLES = 13000;
+const EDGE_PARTICLES = 4000;
+const LAND_INTERIOR_PARTICLES = 6000;
+const OCEAN_PARTICLES = 20000;
+const GLOW_PARTICLES = 5000;
 const TOTAL = EDGE_PARTICLES + LAND_INTERIOR_PARTICLES + OCEAN_PARTICLES;
 
 // ============ 大陆多边形 (经纬度坐标) ============
@@ -224,12 +225,21 @@ function generate() {
     }
   }
 
-  console.log(`Edge: ${edgeParticles.length} | Interior: ${interiorParticles.length} | Ocean: ${oceanParticles.length}`);
+  // 4. 外层微光粒子 — 球面外壳
+  const glowParticles = [];
+  const glowSpherePts = fibonacciSphere(GLOW_PARTICLES);
+  const GLOW_RADIUS = 1.7;
+  for (const pt of glowSpherePts) {
+    glowParticles.push({ x: pt.x * GLOW_RADIUS, y: pt.y * GLOW_RADIUS, z: pt.z * GLOW_RADIUS });
+  }
+
+  console.log(`Edge: ${edgeParticles.length} | Interior: ${interiorParticles.length} | Ocean: ${oceanParticles.length} | Glow: ${glowParticles.length}`);
 
   fs.writeFileSync(OUTPUT, JSON.stringify({
     ocean: oceanParticles,
     landInterior: interiorParticles,
     landEdge: edgeParticles,
+    glow: glowParticles,
   }));
   console.log(`Written to ${OUTPUT}`);
 }
