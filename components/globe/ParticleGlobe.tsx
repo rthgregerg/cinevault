@@ -5,7 +5,6 @@ import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import Starfield, { type StarLayerConfig } from "./Starfield";
 import NebulaGlow from "./NebulaGlow";
-import AuroraRing from "./AuroraRing";
 import CountryHighlights from "./CountryHighlights";
 import CountryGlowLayer from "./CountryGlowLayer";
 import CountryInfoPanel from "./CountryInfoPanel";
@@ -101,7 +100,6 @@ function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
     <>
       {STAR_LAYERS.map((cfg, i) => <Starfield key={i} config={cfg} />)}
       <NebulaGlow />
-      <AuroraRing />
       <mesh>
         <sphereGeometry args={[1.55,64,64]} />
         <shaderMaterial transparent depthWrite={false} blending={THREE.AdditiveBlending}
