@@ -24,15 +24,14 @@ function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
   const glowGrp = useRef<THREE.Group>(null);
   const controlsRef = useRef<any>(null);
 
+  const oceanMesh = useRef<THREE.Points>(null);
+  const landMesh = useRef<THREE.Points>(null);
+  const glowMesh = useRef<THREE.Points>(null);
+
   const oceanGeo = useMemo(() => buf(particleData.ocean), [particleData.ocean]);
   const landGeo = useMemo(() => buf(particleData.land), [particleData.land]);
   const glowGeo = useMemo(() => buf(particleData.glow), [particleData.glow]);
 
-  const oceanMat = useMemo(() => new THREE.PointsMaterial({ color:"#082244",size:0.012,transparent:true,opacity:0.6,depthWrite:false,blending:THREE.AdditiveBlending}),[]);
-  const landMat = useMemo(() => new THREE.PointsMaterial({ color:"#1e5aaa",size:0.011,transparent:true,opacity:0.8,depthWrite:false,blending:THREE.AdditiveBlending}),[]);
-  const glowMat = useMemo(() => new THREE.PointsMaterial({ color:"#1a3a6a",size:0.018,transparent:true,opacity:0.15,depthWrite:false,blending:THREE.AdditiveBlending}),[]);
-
-  // 用自己的 rAF 循环驱动动画
   useEffect(() => {
     let raf: number;
     const clock = new THREE.Clock();
@@ -43,13 +42,15 @@ function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
       if (mainRef.current) mainRef.current.rotation.y += delta * 0.5;
 
       oceanGrp.current?.scale.setScalar(1 + Math.sin(t*2)*0.08);
-      oceanMat.opacity = 0.05 + (Math.sin(t*3)+1)*0.45;
-
       landGrp.current?.scale.setScalar(1 + Math.sin(t*2.5)*0.06);
-      landMat.opacity = 0.1 + (Math.sin(t*2.8)+1)*0.4;
-
       glowGrp.current?.scale.setScalar(1 + Math.sin(t*1.5)*0.15);
-      glowMat.opacity = 0.02 + (Math.sin(t*1.8)+1)*0.2;
+
+      const om = oceanMesh.current?.material as THREE.PointsMaterial;
+      const lm = landMesh.current?.material as THREE.PointsMaterial;
+      const gm = glowMesh.current?.material as THREE.PointsMaterial;
+      if (om) { om.opacity = 0.05 + (Math.sin(t*3)+1)*0.45; om.needsUpdate = true; }
+      if (lm) { lm.opacity = 0.1 + (Math.sin(t*2.8)+1)*0.4; lm.needsUpdate = true; }
+      if (gm) { gm.opacity = 0.02 + (Math.sin(t*1.8)+1)*0.2; gm.needsUpdate = true; }
 
       raf = requestAnimationFrame(loop);
     }
@@ -81,21 +82,21 @@ function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
       <ambientLight intensity={0.1} />
       <group ref={mainRef}>
         <group ref={oceanGrp}>
-          <points>
+          <points ref={oceanMesh}>
             <bufferGeometry><bufferAttribute attach="attributes-position" array={oceanGeo} count={particleData.ocean.length} itemSize={3} /></bufferGeometry>
-            <primitive object={oceanMat} attach="material" />
+            <pointsMaterial color="#082244" size={0.012} transparent opacity={0.6} depthWrite={false} blending={THREE.AdditiveBlending} />
           </points>
         </group>
         <group ref={landGrp}>
-          <points>
+          <points ref={landMesh}>
             <bufferGeometry><bufferAttribute attach="attributes-position" array={landGeo} count={particleData.land.length} itemSize={3} /></bufferGeometry>
-            <primitive object={landMat} attach="material" />
+            <pointsMaterial color="#1e5aaa" size={0.011} transparent opacity={0.8} depthWrite={false} blending={THREE.AdditiveBlending} />
           </points>
         </group>
         <group ref={glowGrp}>
-          <points>
+          <points ref={glowMesh}>
             <bufferGeometry><bufferAttribute attach="attributes-position" array={glowGeo} count={particleData.glow.length} itemSize={3} /></bufferGeometry>
-            <primitive object={glowMat} attach="material" />
+            <pointsMaterial color="#1a3a6a" size={0.018} transparent opacity={0.15} depthWrite={false} blending={THREE.AdditiveBlending} />
           </points>
         </group>
         <CountryHighlights onClickCountry={onClickCountry} isActive={activeCountryCode} />
