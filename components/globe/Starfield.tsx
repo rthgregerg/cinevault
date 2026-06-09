@@ -3,37 +3,55 @@ import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-export default function Starfield({ count = 300 }: { count?: number }) {
+export interface StarLayerConfig {
+  count: number;
+  radiusMin: number;
+  radiusMax: number;
+  size: number;
+  opacity: number;
+  colors: Array<{ r: number; g: number; b: number; weight: number }>;
+  rotateSpeedX: number;
+  rotateSpeedY: number;
+}
+
+function pickColor(colors: StarLayerConfig["colors"]): { r: number; g: number; b: number } {
+  const totalWeight = colors.reduce((s, c) => s + c.weight, 0);
+  let r = Math.random() * totalWeight;
+  for (const c of colors) {
+    r -= c.weight;
+    if (r <= 0) return c;
+  }
+  return colors[colors.length - 1];
+}
+
+export default function Starfield({ config }: { config: StarLayerConfig }) {
   const pointsRef = useRef<THREE.Points>(null);
 
-  const positions = useMemo(() => {
-    const pos = new Float32Array(count * 3);
-    const colors = new Float32Array(count * 3);
+  const { pos, colors: colorArr } = useMemo(() => {
+    const p = new Float32Array(config.count * 3);
+    const c = new Float32Array(config.count * 3);
 
-    for (let i = 0; i < count; i++) {
-      // 随机散布在一个大球壳上
+    for (let i = 0; i < config.count; i++) {
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
-      const r = 6 + Math.random() * 4;
+      const r = config.radiusMin + Math.random() * (config.radiusMax - config.radiusMin);
 
-      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      pos[i * 3 + 2] = r * Math.cos(phi);
+      p[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      p[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      p[i * 3 + 2] = r * Math.cos(phi);
 
-      // 颜色：白色/淡蓝
-      const brightness = 0.4 + Math.random() * 0.6;
-      const blue = 0.7 + Math.random() * 0.3;
-      colors[i * 3] = brightness * 0.8;
-      colors[i * 3 + 1] = brightness * 0.85;
-      colors[i * 3 + 2] = brightness * blue;
+      const color = pickColor(config.colors);
+      c[i * 3] = color.r;
+      c[i * 3 + 1] = color.g;
+      c[i * 3 + 2] = color.b;
     }
-    return { pos, colors };
-  }, [count]);
+    return { pos: p, colors: c };
+  }, [config]);
 
   useFrame((_, delta) => {
     if (pointsRef.current) {
-      pointsRef.current.rotation.y += delta * 0.015;
-      pointsRef.current.rotation.x += delta * 0.005;
+      pointsRef.current.rotation.y += delta * config.rotateSpeedY;
+      pointsRef.current.rotation.x += delta * config.rotateSpeedX;
     }
   });
 
@@ -42,22 +60,22 @@ export default function Starfield({ count = 300 }: { count?: number }) {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          array={positions.pos}
-          count={count}
+          array={pos}
+          count={config.count}
           itemSize={3}
         />
         <bufferAttribute
           attach="attributes-color"
-          array={positions.colors}
-          count={count}
+          array={colorArr}
+          count={config.count}
           itemSize={3}
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.02}
+        size={config.size}
         vertexColors
         transparent
-        opacity={0.7}
+        opacity={config.opacity}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
       />

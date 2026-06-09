@@ -3,12 +3,41 @@ import { useRef, useMemo, useState, useEffect, Suspense, useCallback } from "rea
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
-import Starfield from "./Starfield";
+import Starfield, { type StarLayerConfig } from "./Starfield";
+import NebulaGlow from "./NebulaGlow";
+import AuroraRing from "./AuroraRing";
 import CountryHighlights from "./CountryHighlights";
 import CountryGlowLayer from "./CountryGlowLayer";
 import CountryInfoPanel from "./CountryInfoPanel";
 import { globeCamera } from "@/lib/globe-state";
 import type { CountryFilmData } from "@/lib/types";
+
+const STAR_LAYERS: StarLayerConfig[] = [
+  {
+    count: 200, radiusMin: 8, radiusMax: 12, size: 0.012, opacity: 0.5,
+    colors: [
+      { r: 0.7, g: 0.8, b: 1.0, weight: 2 },
+      { r: 0.6, g: 0.7, b: 0.9, weight: 1 },
+    ],
+    rotateSpeedX: 0.001, rotateSpeedY: 0.003,
+  },
+  {
+    count: 250, radiusMin: 6, radiusMax: 9, size: 0.016, opacity: 0.65,
+    colors: [
+      { r: 0.85, g: 0.85, b: 0.95, weight: 2 },
+      { r: 1.0, g: 0.85, b: 0.65, weight: 1 },
+    ],
+    rotateSpeedX: 0.002, rotateSpeedY: 0.006,
+  },
+  {
+    count: 150, radiusMin: 4.5, radiusMax: 7, size: 0.022, opacity: 0.8,
+    colors: [
+      { r: 1.0, g: 0.82, b: 0.55, weight: 2 },
+      { r: 1.0, g: 0.9, b: 0.7, weight: 1 },
+    ],
+    rotateSpeedX: 0.0015, rotateSpeedY: 0.004,
+  },
+];
 
 type Vec3 = { x: number; y: number; z: number };
 type ParticleData = { ocean: Vec3[]; land: Vec3[]; glow: Vec3[] };
@@ -39,7 +68,7 @@ function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
       const t = clock.getElapsedTime();
       const delta = Math.min(clock.getDelta(), 0.1);
 
-      if (mainRef.current) mainRef.current.rotation.y += delta * 0.5;
+      if (mainRef.current) mainRef.current.rotation.y += delta * 0.45;
 
       oceanGrp.current?.scale.setScalar(1 + Math.sin(t*2)*0.08);
       landGrp.current?.scale.setScalar(1 + Math.sin(t*2.5)*0.06);
@@ -50,7 +79,7 @@ function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
       const gm = glowMesh.current?.material as THREE.PointsMaterial;
       if (om) { om.opacity = 0.05 + (Math.sin(t*3)+1)*0.45; om.needsUpdate = true; }
       if (lm) { lm.opacity = 0.1 + (Math.sin(t*2.8)+1)*0.4; lm.needsUpdate = true; }
-      if (gm) { gm.opacity = 0.02 + (Math.sin(t*1.8)+1)*0.2; gm.needsUpdate = true; }
+      if (gm) { gm.opacity = 0.04 + (Math.sin(t*1.8)+1)*0.25; gm.needsUpdate = true; }
 
       raf = requestAnimationFrame(loop);
     }
@@ -70,7 +99,9 @@ function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
 
   return (
     <>
-      <Starfield count={300} />
+      {STAR_LAYERS.map((cfg, i) => <Starfield key={i} config={cfg} />)}
+      <NebulaGlow />
+      <AuroraRing />
       <mesh>
         <sphereGeometry args={[1.55,64,64]} />
         <shaderMaterial transparent depthWrite={false} blending={THREE.AdditiveBlending}
