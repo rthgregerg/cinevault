@@ -131,7 +131,7 @@ function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
         <group ref={edgeGrp}>
           <points ref={edgeMesh}>
             <bufferGeometry><bufferAttribute attach="attributes-position" array={edgeGeo} count={particleData.edges.length} itemSize={3} /></bufferGeometry>
-            <pointsMaterial color="#1a3a6a" size={0.008} transparent opacity={0.5} depthWrite={false} blending={THREE.AdditiveBlending} />
+            <pointsMaterial color="#00e5d0" size={0.008} transparent opacity={0.5} depthWrite={false} blending={THREE.AdditiveBlending} />
           </points>
         </group>
         <group ref={glowGrp}>
