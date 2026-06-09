@@ -58,30 +58,26 @@ function GlobeScene({
     // 主球体自转
     if (mainRef.current) mainRef.current.rotation.y += delta * 0.1;
 
-    // 海洋层：微旋转 + 缩放呼吸 + 透明度闪烁
+    // 海洋层：明显闪烁 + 呼吸
     if (oceanRef.current) {
-      oceanRef.current.rotation.y += delta * 0.03;
-      oceanRef.current.rotation.x += delta * 0.015;
-      const s = 1 + Math.sin(t * 0.8) * 0.003;
+      const s = 1 + Math.sin(t * 0.8) * 0.03;
       oceanRef.current.scale.setScalar(s);
     }
-    if (oceanOpRef.current) oceanOpRef.current.opacity = 0.45 + Math.sin(t * 1.5) * 0.1;
+    if (oceanOpRef.current) oceanOpRef.current.opacity = 0.2 + (Math.sin(t * 1.5) + 1) * 0.35;
 
-    // 大陆层：微旋转 + 缩放呼吸 + 透明度闪烁
+    // 大陆层：明显闪烁
     if (landRef.current) {
-      landRef.current.rotation.z += delta * 0.02;
-      const s = 1 + Math.sin(t * 1.1 + 1) * 0.002;
+      const s = 1 + Math.sin(t * 1.1 + 1) * 0.025;
       landRef.current.scale.setScalar(s);
     }
-    if (landOpRef.current) landOpRef.current.opacity = 0.65 + Math.sin(t * 1.3) * 0.12;
+    if (landOpRef.current) landOpRef.current.opacity = 0.3 + (Math.sin(t * 1.3) + 1) * 0.3;
 
-    // 微光层：大幅度浮动
+    // 微光层：大幅度脉冲
     if (glowRef.current) {
-      glowRef.current.rotation.y -= delta * 0.04;
-      const s = 1 + Math.sin(t * 0.5) * 0.015;
+      const s = 1 + Math.sin(t * 0.5) * 0.08;
       glowRef.current.scale.setScalar(s);
     }
-    if (glowOpRef.current) glowOpRef.current.opacity = 0.1 + Math.sin(t * 0.6) * 0.05;
+    if (glowOpRef.current) glowOpRef.current.opacity = 0.03 + (Math.sin(t * 0.6) + 1) * 0.1;
   });
 
   useEffect(() => {
