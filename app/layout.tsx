@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import BottomTabBar from "@/components/layout/BottomTabBar";
 import DesktopSidebar from "@/components/layout/DesktopSidebar";
+import AtmospherePanel from "@/components/layout/AtmospherePanel";
 
 export const viewport: Viewport = {
   themeColor: "#0a0a0a",
@@ -36,6 +37,7 @@ export default function RootLayout({
       <body className="min-h-screen">
         <DesktopSidebar />
         {children}
+        <AtmospherePanel />
         <BottomTabBar />
       </body>
     </html>
