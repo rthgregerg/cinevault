@@ -1,12 +1,21 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import PageWrapper from "@/components/layout/PageWrapper";
 import MovieGrid from "@/components/shared/MovieGrid";
 import LoadingSkeleton from "@/components/shared/LoadingSkeleton";
 import SearchOverlay from "@/components/search/SearchOverlay";
-import ParticleGlobe from "@/components/globe/ParticleGlobe";
 import type { TmdbMovie, TmdbGenre } from "@/lib/types";
+
+const ParticleGlobe = dynamic(() => import("@/components/globe/ParticleGlobe"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[360px] md:h-[420px] lg:h-[440px] bg-gradient-to-b from-[#0a1628] to-bg rounded-card flex items-center justify-center">
+      <div className="text-text-muted text-sm animate-pulse">加载地球仪...</div>
+    </div>
+  ),
+});
 
 type SortLabel = "popular" | "rating" | "date" | "title";
 const SORT_MAP: Record<SortLabel, string> = {
