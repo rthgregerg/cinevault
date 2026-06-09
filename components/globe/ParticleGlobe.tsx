@@ -41,16 +41,18 @@ function OceanLayer({ data }: { data: Vec3[] }) {
 
 // ============ 大陆内部粒子 ============
 
-function LandInteriorLayer({ data }: { data: Vec3[] }) {
+// ============ 大陆粒子层 (单一层，高密度) ============
+
+function LandLayer({ data }: { data: Vec3[] }) {
   const geo = useMemo(() => {
     const p = new Float32Array(data.length * 3);
     const c = new Float32Array(data.length * 3);
     for (let i = 0; i < data.length; i++) {
       p[i * 3] = data[i].x; p[i * 3 + 1] = data[i].y; p[i * 3 + 2] = data[i].z;
-      const b = 0.5 + Math.random() * 0.5;
-      c[i * 3] = 0.08 * b;
-      c[i * 3 + 1] = 0.28 * b;
-      c[i * 3 + 2] = 0.65 * b;
+      const b = 0.55 + Math.random() * 0.45;
+      c[i * 3] = 0.1 * b;
+      c[i * 3 + 1] = 0.32 * b;
+      c[i * 3 + 2] = 0.7 * b;
     }
     return { positions: p, colors: c };
   }, [data]);
@@ -61,31 +63,7 @@ function LandInteriorLayer({ data }: { data: Vec3[] }) {
         <bufferAttribute attach="attributes-position" array={geo.positions} count={data.length} itemSize={3} />
         <bufferAttribute attach="attributes-color" array={geo.colors} count={data.length} itemSize={3} />
       </bufferGeometry>
-      <pointsMaterial size={0.01} vertexColors transparent opacity={0.75} depthWrite={false} blending={THREE.AdditiveBlending} />
-    </points>
-  );
-}
-
-// ============ 大陆边缘粒子 (明亮大号) ============
-
-function LandEdgeLayer({ data }: { data: Vec3[] }) {
-  const geo = useMemo(() => {
-    const p = new Float32Array(data.length * 3);
-    const c = new Float32Array(data.length * 3);
-    for (let i = 0; i < data.length; i++) {
-      p[i * 3] = data[i].x; p[i * 3 + 1] = data[i].y; p[i * 3 + 2] = data[i].z;
-      c[i * 3] = 0.65; c[i * 3 + 1] = 0.82; c[i * 3 + 2] = 1.0;
-    }
-    return { positions: p, colors: c };
-  }, [data]);
-
-  return (
-    <points>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" array={geo.positions} count={data.length} itemSize={3} />
-        <bufferAttribute attach="attributes-color" array={geo.colors} count={data.length} itemSize={3} />
-      </bufferGeometry>
-      <pointsMaterial size={0.028} vertexColors transparent opacity={0.9} depthWrite={false} blending={THREE.AdditiveBlending} />
+      <pointsMaterial size={0.011} vertexColors transparent opacity={0.8} depthWrite={false} blending={THREE.AdditiveBlending} />
     </points>
   );
 }
@@ -148,7 +126,7 @@ function AtmosphereGlow() {
 
 // ============ 场景 ============
 
-type ParticleData = { ocean: Vec3[]; landInterior: Vec3[]; landEdge: Vec3[]; glow: Vec3[] };
+type ParticleData = { ocean: Vec3[]; land: Vec3[]; glow: Vec3[] };
 
 function GlobeScene({
   onClickCountry,
@@ -198,8 +176,7 @@ function GlobeScene({
       <ambientLight intensity={0.1} />
       <group ref={groupRef}>
         <OceanLayer data={particleData.ocean} />
-        <LandInteriorLayer data={particleData.landInterior} />
-        <LandEdgeLayer data={particleData.landEdge} />
+        <LandLayer data={particleData.land} />
         <CountryHighlights onClickCountry={onClickCountry} isActive={activeCountryCode} />
         <GlowLayer data={particleData.glow} />
         <CountryGlowLayer countryCode={activeCountryCode} />
@@ -220,7 +197,7 @@ function GlobeDataLoader(props: {
   useEffect(() => {
     fetch("/globe-particles.json")
       .then((res) => res.json())
-      .then((d) => setData({ ocean: d.ocean || [], landInterior: d.landInterior || [], landEdge: d.landEdge || [], glow: d.glow || [] }))
+      .then((d) => setData({ ocean: d.ocean || [], land: d.land || [], glow: d.glow || [] }))
       .catch(() => {});
   }, []);
 

@@ -26,19 +26,17 @@ function GoldLines() {
   return (
     <div className="absolute bottom-0 left-0 right-0 pointer-events-none overflow-hidden">
       {/* 主横线 */}
-      <div className="h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent mb-2" />
-      {/* 短金线阵列 */}
+      <div className="h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent mb-2" />
       <div className="flex justify-center gap-3 mb-3">
         {[60, 30, 80, 40, 70].map((w, i) => (
           <div
             key={i}
-            className="h-px bg-gold/35"
+            className="h-px bg-gold/45"
             style={{ width: w, transform: `rotate(${(i - 2) * 3}deg)` }}
           />
         ))}
       </div>
-      {/* 底部金色渐变带 */}
-      <div className="h-16 bg-gradient-to-t from-gold/10 to-transparent" />
+      <div className="h-16 bg-gradient-to-t from-gold/15 to-transparent" />
     </div>
   );
 }
@@ -67,7 +65,7 @@ function PosterFragments() {
   if (posters.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-2 gap-2 opacity-40">
+    <div className="grid grid-cols-2 gap-2 opacity-55">
       {posters.slice(0, 6).map((url, i) => (
         <div
           key={i}
@@ -112,14 +110,14 @@ export default function AtmospherePanel() {
       {/* 台词区 */}
       <div className="flex-1 flex flex-col justify-center">
         <div className={`transition-opacity duration-800 ${fading ? "opacity-0" : "opacity-100"}`}>
-          <p className="text-gold/65 text-[10px] tracking-widest mb-4">经典台词</p>
-          <p className="text-text-primary/75 text-sm leading-relaxed font-serif mb-3">
+          <p className="text-gold/80 text-[10px] tracking-widest mb-4">经典台词</p>
+          <p className="text-text-primary/90 text-sm leading-relaxed font-serif mb-3">
             {quote.zh}
           </p>
-          <p className="text-text-muted/55 text-xs leading-relaxed italic mb-2">
+          <p className="text-text-muted/70 text-xs leading-relaxed italic mb-2">
             {quote.en}
           </p>
-          <p className="text-text-muted/45 text-[10px]">{quote.from}</p>
+          <p className="text-text-muted/60 text-[10px]">{quote.from}</p>
         </div>
       </div>
 
@@ -133,8 +131,8 @@ export default function AtmospherePanel() {
 
       {/* 底部品牌 */}
       <div className="text-center mt-auto pt-4">
-        <p className="text-gold/35 text-[10px] tracking-widest">CineVault</p>
-        <p className="text-text-muted/25 text-[8px] mt-1">探索电影之美</p>
+        <p className="text-gold/50 text-[10px] tracking-widest">CineVault</p>
+        <p className="text-text-muted/40 text-[8px] mt-1">探索电影之美</p>
       </div>
     </aside>
   );

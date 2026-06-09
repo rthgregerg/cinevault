@@ -15,11 +15,10 @@ const path = require("path");
 
 const OUTPUT = path.join(__dirname, "..", "public", "globe-particles.json");
 const RADIUS = 1.5;
-const EDGE_PARTICLES = 4000;
-const LAND_INTERIOR_PARTICLES = 6000;
+const LAND_PARTICLES = 12000;
 const OCEAN_PARTICLES = 20000;
 const GLOW_PARTICLES = 5000;
-const TOTAL = EDGE_PARTICLES + LAND_INTERIOR_PARTICLES + OCEAN_PARTICLES;
+const TOTAL = LAND_PARTICLES + OCEAN_PARTICLES;
 
 // ============ 大陆多边形 (经纬度坐标) ============
 
@@ -186,17 +185,8 @@ function samplePolygonInterior(polygon, count) {
 // ============ 生成 ============
 
 function generate() {
-  // 1. 大陆边缘粒子 — 在每个多边形的边界上采样
-  const edgeParticles = [];
-  const edgePerContinent = Math.floor(EDGE_PARTICLES / CONTINENTS.length);
-  for (const [, poly] of CONTINENTS) {
-    const pts = samplePolygonBoundary(poly, edgePerContinent);
-    edgeParticles.push(...pts);
-  }
-
-  // 2. 大陆内部粒子
-  const interiorParticles = [];
-  // 计算每个大陆的面积比例来分配内部粒子数
+  // 1. 大陆粒子 — 多边形内部密集填充
+  const landParticles = [];
   const areas = CONTINENTS.map(([, poly]) => {
     let area = 0;
     for (let i = 0; i < poly.length; i++) {
@@ -209,14 +199,14 @@ function generate() {
 
   for (let ci = 0; ci < CONTINENTS.length; ci++) {
     const [, poly] = CONTINENTS[ci];
-    const count = Math.floor((areas[ci] / totalArea) * LAND_INTERIOR_PARTICLES);
+    const count = Math.floor((areas[ci] / totalArea) * LAND_PARTICLES);
     const pts = samplePolygonInterior(poly, count);
-    interiorParticles.push(...pts);
+    landParticles.push(...pts);
   }
 
-  // 3. 海洋粒子 — 球面均匀采样，排除陆地
+  // 2. 海洋粒子 — 球面均匀采样，排除陆地
   const oceanParticles = [];
-  const spherePts = fibonacciSphere(OCEAN_PARTICLES * 3); // 过采样
+  const spherePts = fibonacciSphere(OCEAN_PARTICLES * 3);
   for (const pt of spherePts) {
     if (oceanParticles.length >= OCEAN_PARTICLES) break;
     const { lat, lon } = vec3ToLatLon(pt);
@@ -225,7 +215,7 @@ function generate() {
     }
   }
 
-  // 4. 外层微光粒子 — 球面外壳
+  // 3. 外层微光粒子
   const glowParticles = [];
   const glowSpherePts = fibonacciSphere(GLOW_PARTICLES);
   const GLOW_RADIUS = 1.7;
@@ -233,12 +223,11 @@ function generate() {
     glowParticles.push({ x: pt.x * GLOW_RADIUS, y: pt.y * GLOW_RADIUS, z: pt.z * GLOW_RADIUS });
   }
 
-  console.log(`Edge: ${edgeParticles.length} | Interior: ${interiorParticles.length} | Ocean: ${oceanParticles.length} | Glow: ${glowParticles.length}`);
+  console.log(`Land: ${landParticles.length} | Ocean: ${oceanParticles.length} | Glow: ${glowParticles.length}`);
 
   fs.writeFileSync(OUTPUT, JSON.stringify({
     ocean: oceanParticles,
-    landInterior: interiorParticles,
-    landEdge: edgeParticles,
+    land: landParticles,
     glow: glowParticles,
   }));
   console.log(`Written to ${OUTPUT}`);
