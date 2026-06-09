@@ -49,7 +49,7 @@ export default async function MovieDetailPage({ params }: Props) {
           </div>
           {credits && <CastSection credits={credits} />}
           <SoundtrackSection movieId={String(movie.id)} />
-          <WatchProviders movieId={String(movie.id)} />
+          <WatchProviders movieId={String(movie.id)} movieTitle={movie.title} />
           <div className="flex flex-wrap gap-1.5">
             {movie.genres?.map((g: { id: number; name: string }) => (
               <span key={g.id} className="px-2.5 py-1 text-xs bg-bg-card rounded-full text-text-muted">
