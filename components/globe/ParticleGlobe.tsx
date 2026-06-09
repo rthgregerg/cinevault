@@ -12,120 +12,124 @@ import type { CountryFilmData } from "@/lib/types";
 
 type Vec3 = { x: number; y: number; z: number };
 
-// ============ 动态粒子着色器 (闪烁 + 浮动) ============
+// ============ 海洋 ============
 
-const vertexShader = `
-  attribute float aPhase;
-  attribute float aFreq;
-  uniform float uTime;
-  varying float vAlpha;
-
-  void main() {
-    vec3 pos = position;
-    // 浮动：沿径向微调
-    float floatAmp = 0.015;
-    float wave = sin(uTime * aFreq + aPhase);
-    pos += normalize(position) * wave * floatAmp;
-
-    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-    gl_PointSize = 1.0;
-    gl_Position = projectionMatrix * mvPosition;
-
-    // 闪烁：alpha 随正弦波动
-    vAlpha = 0.65 + 0.35 * sin(uTime * aFreq * 1.3 + aPhase + 1.0);
-  }
-`;
-
-const fragmentShader = `
-  uniform vec3 uColor;
-  uniform float uOpacity;
-  varying float vAlpha;
-
-  void main() {
-    float d = length(gl_PointCoord - 0.5) * 2.0;
-    float alpha = 1.0 - smoothstep(0.0, 1.0, d);
-    alpha = pow(alpha, 1.5);
-    gl_FragColor = vec4(uColor, alpha * uOpacity * vAlpha);
-  }
-`;
-
-// 外层微光着色器 (浮动幅度更大)
-const glowVertexShader = `
-  attribute float aPhase;
-  attribute float aFreq;
-  uniform float uTime;
-  varying float vAlpha;
-
-  void main() {
-    vec3 pos = position;
-    float floatAmp = 0.04;
-    float wave = sin(uTime * aFreq + aPhase);
-    pos += normalize(position) * wave * floatAmp;
-
-    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-    gl_PointSize = 1.0;
-    gl_Position = projectionMatrix * mvPosition;
-
-    vAlpha = 0.5 + 0.5 * sin(uTime * aFreq * 0.7 + aPhase + 2.0);
-  }
-`;
-
-// ============ 通用动态粒子组件 ============
-
-function DynamicParticles({
-  data,
-  color,
-  opacity,
-  size,
-  floatAmp,
-}: {
-  data: Vec3[];
-  color: [number, number, number];
-  opacity: number;
-  size: number;
-  floatAmp: number;
-}) {
-  const matRef = useRef<THREE.ShaderMaterial>(null);
-  const { positions, phases, freqs } = useMemo(() => {
+function OceanParticles({ data, timeRef }: { data: Vec3[]; timeRef: React.MutableRefObject<number> }) {
+  const ref = useRef<THREE.Points>(null);
+  const origPos = useMemo(() => {
     const p = new Float32Array(data.length * 3);
-    const ph = new Float32Array(data.length);
-    const fr = new Float32Array(data.length);
-    for (let i = 0; i < data.length; i++) {
-      p[i * 3] = data[i].x;
-      p[i * 3 + 1] = data[i].y;
-      p[i * 3 + 2] = data[i].z;
-      ph[i] = Math.random() * Math.PI * 2;
-      fr[i] = 0.3 + Math.random() * 1.2;
-    }
-    return { positions: p, phases: ph, freqs: fr };
+    for (let i = 0; i < data.length; i++) { p[i * 3] = data[i].x; p[i * 3 + 1] = data[i].y; p[i * 3 + 2] = data[i].z; }
+    return p;
   }, [data]);
+  const phases = useMemo(() => Array.from({ length: data.length }, () => Math.random() * Math.PI * 2), [data]);
 
-  useFrame(({ clock }) => {
-    if (matRef.current) {
-      matRef.current.uniforms.uTime.value = clock.getElapsedTime();
+  useFrame(() => {
+    const t = timeRef.current;
+    const pts = ref.current;
+    if (!pts) return;
+    // 闪烁: 整体 opacity 波动
+    const mat = pts.material as THREE.PointsMaterial;
+    mat.opacity = 0.45 + 0.15 * Math.sin(t * 1.5);
+    // 浮动: 更新 position buffer
+    const pos = pts.geometry.getAttribute("position") as THREE.BufferAttribute;
+    const arr = pos.array as Float32Array;
+    for (let i = 0; i < data.length; i++) {
+      const wave = Math.sin(t * 0.8 + phases[i]) * 0.012;
+      const d = data[i];
+      const len = Math.sqrt(d.x * d.x + d.y * d.y + d.z * d.z) || 1;
+      arr[i * 3] = d.x + (d.x / len) * wave;
+      arr[i * 3 + 1] = d.y + (d.y / len) * wave;
+      arr[i * 3 + 2] = d.z + (d.z / len) * wave;
     }
+    pos.needsUpdate = true;
   });
 
   return (
-    <points>
+    <points ref={ref}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" array={positions} count={data.length} itemSize={3} />
-        <bufferAttribute attach="attributes-aPhase" array={phases} count={data.length} itemSize={1} />
-        <bufferAttribute attach="attributes-aFreq" array={freqs} count={data.length} itemSize={1} />
+        <bufferAttribute attach="attributes-position" array={origPos} count={data.length} itemSize={3} />
       </bufferGeometry>
-      <shaderMaterial
-        ref={matRef}
-        vertexShader={floatAmp > 0.02 ? glowVertexShader : vertexShader}
-        fragmentShader={fragmentShader}
-        uniforms={{
-          uTime: { value: 0 },
-          uColor: { value: new THREE.Color(...color) },
-          uOpacity: { value: opacity },
-        }}
-        transparent
-        depthWrite={false}
-        blending={THREE.AdditiveBlending}
-      />
+      <pointsMaterial color="#061e3a" size={0.012} transparent opacity={0.6} depthWrite={false} blending={THREE.AdditiveBlending} />
+    </points>
+  );
+}
+
+// ============ 大陆 ============
+
+function LandParticles({ data, timeRef }: { data: Vec3[]; timeRef: React.MutableRefObject<number> }) {
+  const ref = useRef<THREE.Points>(null);
+  const origPos = useMemo(() => {
+    const p = new Float32Array(data.length * 3);
+    for (let i = 0; i < data.length; i++) { p[i * 3] = data[i].x; p[i * 3 + 1] = data[i].y; p[i * 3 + 2] = data[i].z; }
+    return p;
+  }, [data]);
+  const phases = useMemo(() => Array.from({ length: data.length }, () => Math.random() * Math.PI * 2), [data]);
+
+  useFrame(() => {
+    const t = timeRef.current;
+    const pts = ref.current;
+    if (!pts) return;
+    const mat = pts.material as THREE.PointsMaterial;
+    mat.opacity = 0.6 + 0.2 * Math.sin(t * 1.3 + 1);
+    const pos = pts.geometry.getAttribute("position") as THREE.BufferAttribute;
+    const arr = pos.array as Float32Array;
+    for (let i = 0; i < data.length; i++) {
+      const wave = Math.sin(t * 1.1 + phases[i]) * 0.01;
+      const d = data[i];
+      const len = Math.sqrt(d.x * d.x + d.y * d.y + d.z * d.z) || 1;
+      arr[i * 3] = d.x + (d.x / len) * wave;
+      arr[i * 3 + 1] = d.y + (d.y / len) * wave;
+      arr[i * 3 + 2] = d.z + (d.z / len) * wave;
+    }
+    pos.needsUpdate = true;
+  });
+
+  return (
+    <points ref={ref}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" array={origPos} count={data.length} itemSize={3} />
+      </bufferGeometry>
+      <pointsMaterial color="#1a52a0" size={0.011} transparent opacity={0.8} depthWrite={false} blending={THREE.AdditiveBlending} />
+    </points>
+  );
+}
+
+// ============ 外层微光 ============
+
+function GlowParticles({ data, timeRef }: { data: Vec3[]; timeRef: React.MutableRefObject<number> }) {
+  const ref = useRef<THREE.Points>(null);
+  const origPos = useMemo(() => {
+    const p = new Float32Array(data.length * 3);
+    for (let i = 0; i < data.length; i++) { p[i * 3] = data[i].x; p[i * 3 + 1] = data[i].y; p[i * 3 + 2] = data[i].z; }
+    return p;
+  }, [data]);
+  const phases = useMemo(() => Array.from({ length: data.length }, () => Math.random() * Math.PI * 2), [data]);
+
+  useFrame(() => {
+    const t = timeRef.current;
+    const pts = ref.current;
+    if (!pts) return;
+    const mat = pts.material as THREE.PointsMaterial;
+    mat.opacity = 0.1 + 0.08 * Math.sin(t * 0.6 + 2);
+    const pos = pts.geometry.getAttribute("position") as THREE.BufferAttribute;
+    const arr = pos.array as Float32Array;
+    for (let i = 0; i < data.length; i++) {
+      const wave = Math.sin(t * 0.5 + phases[i]) * 0.04;
+      const d = data[i];
+      const len = Math.sqrt(d.x * d.x + d.y * d.y + d.z * d.z) || 1;
+      arr[i * 3] = d.x + (d.x / len) * wave;
+      arr[i * 3 + 1] = d.y + (d.y / len) * wave;
+      arr[i * 3 + 2] = d.z + (d.z / len) * wave;
+    }
+    pos.needsUpdate = true;
+  });
+
+  return (
+    <points ref={ref}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" array={origPos} count={data.length} itemSize={3} />
+      </bufferGeometry>
+      <pointsMaterial color="#1a3a6a" size={0.018} transparent opacity={0.15} depthWrite={false} blending={THREE.AdditiveBlending} />
     </points>
   );
 }
@@ -143,8 +147,7 @@ function AtmosphereGlow() {
           varying vec3 vNormal; varying vec3 vPosition;
           void main() {
             vec4 wp = modelMatrix * vec4(position, 1.0);
-            vPosition = wp.xyz;
-            vNormal = normalize(mat3(modelMatrix) * normal);
+            vPosition = wp.xyz; vNormal = normalize(mat3(modelMatrix) * normal);
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
           }
         `}
@@ -177,8 +180,10 @@ function GlobeScene({
 }) {
   const groupRef = useRef<THREE.Group>(null);
   const controlsRef = useRef<any>(null);
+  const timeRef = useRef(0);
 
-  useFrame((_, delta) => {
+  useFrame(({ clock }, delta) => {
+    timeRef.current = clock.getElapsedTime();
     if (groupRef.current) groupRef.current.rotation.y += delta * 0.1;
   });
 
@@ -210,9 +215,9 @@ function GlobeScene({
       <AtmosphereGlow />
       <ambientLight intensity={0.1} />
       <group ref={groupRef}>
-        <DynamicParticles data={particleData.ocean} color={[0.02, 0.08, 0.2]} opacity={0.6} size={0.01} floatAmp={0.015} />
-        <DynamicParticles data={particleData.land} color={[0.1, 0.32, 0.7]} opacity={0.8} size={0.01} floatAmp={0.012} />
-        <DynamicParticles data={particleData.glow} color={[0.1, 0.2, 0.45]} opacity={0.18} size={0.01} floatAmp={0.04} />
+        <OceanParticles data={particleData.ocean} timeRef={timeRef} />
+        <LandParticles data={particleData.land} timeRef={timeRef} />
+        <GlowParticles data={particleData.glow} timeRef={timeRef} />
         <CountryHighlights onClickCountry={onClickCountry} isActive={activeCountryCode} />
         <CountryGlowLayer countryCode={activeCountryCode} />
       </group>
@@ -228,28 +233,22 @@ function GlobeDataLoader(props: {
   activeCountryCode: string | null;
 }) {
   const [data, setData] = useState<ParticleData | null>(null);
-
   useEffect(() => {
     fetch("/globe-particles.json")
-      .then((res) => res.json())
+      .then((r) => r.json())
       .then((d) => setData({ ocean: d.ocean || [], land: d.land || [], glow: d.glow || [] }))
       .catch(() => {});
   }, []);
-
   if (!data) return null;
   return <GlobeScene {...props} particleData={data} />;
 }
 
 // ============ 主组件 ============
 
-interface ParticleGlobeProps {
-  onMovieClick: (movieId: number) => void;
-}
+interface ParticleGlobeProps { onMovieClick: (movieId: number) => void; }
 
 export default function ParticleGlobe({ onMovieClick }: ParticleGlobeProps) {
   const [activeCountry, setActiveCountry] = useState<CountryFilmData | null>(null);
-  const handleClose = useCallback(() => setActiveCountry(null), []);
-
   return (
     <div className="relative w-full h-[360px] md:h-[420px] lg:h-[440px] bg-gradient-to-b from-[#0a1628] to-bg rounded-card overflow-hidden">
       <Canvas camera={{ position: [0, 0.3, 3.5], fov: 45, near: 0.1, far: 20 }} gl={{ antialias: true, alpha: true }} style={{ background: "transparent" }}>
@@ -262,7 +261,7 @@ export default function ParticleGlobe({ onMovieClick }: ParticleGlobeProps) {
           <p className="text-white/40 text-xs">拖拽旋转 · 滚轮缩放 · 点击金色光点探索</p>
         </div>
       )}
-      <CountryInfoPanel country={activeCountry} onClose={handleClose} onMovieClick={onMovieClick} />
+      <CountryInfoPanel country={activeCountry} onClose={() => setActiveCountry(null)} onMovieClick={onMovieClick} />
     </div>
   );
 }
