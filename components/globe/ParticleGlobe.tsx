@@ -70,7 +70,7 @@ function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
       const t = clock.getElapsedTime();
       const delta = Math.min(clock.getDelta(), 0.1);
 
-      if (mainRef.current) mainRef.current.rotation.y += delta * 0.45;
+      if (mainRef.current) mainRef.current.rotation.y += delta * 0.35;
 
       oceanGrp.current?.scale.setScalar(1 + Math.sin(t*2)*0.08);
       landGrp.current?.scale.setScalar(1 + Math.sin(t*2.5)*0.06);
