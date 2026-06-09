@@ -15,9 +15,9 @@ const path = require("path");
 
 const OUTPUT = path.join(__dirname, "..", "public", "globe-particles.json");
 const RADIUS = 1.5;
-const EDGE_PARTICLES = 1500;
-const LAND_INTERIOR_PARTICLES = 2500;
-const OCEAN_PARTICLES = 8000;
+const EDGE_PARTICLES = 3000;
+const LAND_INTERIOR_PARTICLES = 4000;
+const OCEAN_PARTICLES = 13000;
 const TOTAL = EDGE_PARTICLES + LAND_INTERIOR_PARTICLES + OCEAN_PARTICLES;
 
 // ============ 大陆多边形 (经纬度坐标) ============

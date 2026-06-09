@@ -19,8 +19,12 @@ function OceanLayer({ data }: { data: Vec3[] }) {
     const p = new Float32Array(data.length * 3);
     const c = new Float32Array(data.length * 3);
     for (let i = 0; i < data.length; i++) {
+      const y = data[i].y / 1.5; // 归一化纬度 (-1 ~ 1)
+      const brightness = 0.7 + 0.3 * (1 - Math.abs(y)); // 赤道更亮
       p[i * 3] = data[i].x; p[i * 3 + 1] = data[i].y; p[i * 3 + 2] = data[i].z;
-      c[i * 3] = 0.02; c[i * 3 + 1] = 0.06; c[i * 3 + 2] = 0.16;
+      c[i * 3] = 0.02 * brightness;
+      c[i * 3 + 1] = 0.08 * brightness;
+      c[i * 3 + 2] = (0.18 + Math.abs(y) * 0.1) * brightness;
     }
     return { positions: p, colors: c };
   }, [data]);
@@ -31,7 +35,7 @@ function OceanLayer({ data }: { data: Vec3[] }) {
         <bufferAttribute attach="attributes-position" array={geo.positions} count={data.length} itemSize={3} />
         <bufferAttribute attach="attributes-color" array={geo.colors} count={data.length} itemSize={3} />
       </bufferGeometry>
-      <pointsMaterial size={0.007} vertexColors transparent opacity={0.55} depthWrite={false} blending={THREE.AdditiveBlending} />
+      <pointsMaterial size={0.015} vertexColors transparent opacity={0.65} depthWrite={false} blending={THREE.AdditiveBlending} />
     </points>
   );
 }
@@ -43,9 +47,17 @@ function LandInteriorLayer({ data }: { data: Vec3[] }) {
     const p = new Float32Array(data.length * 3);
     const c = new Float32Array(data.length * 3);
     for (let i = 0; i < data.length; i++) {
-      p[i * 3] = data[i].x; p[i * 3 + 1] = data[i].y; p[i * 3 + 2] = data[i].z;
+      const y = data[i].y / 1.5;
+      const absLat = Math.abs(y);
       const b = 0.5 + Math.random() * 0.5;
-      c[i * 3] = 0.08 * b; c[i * 3 + 1] = 0.28 * b; c[i * 3 + 2] = 0.6 * b;
+      // 低纬度偏绿，高纬度偏棕，中间混合蓝
+      const greenMix = Math.max(0, 1 - absLat * 2.2); // 赤道绿
+      const brownMix = Math.max(0, absLat * 1.5 - 0.3); // 高纬度棕
+      const blueMix = 1 - greenMix - brownMix;
+      p[i * 3] = data[i].x; p[i * 3 + 1] = data[i].y; p[i * 3 + 2] = data[i].z;
+      c[i * 3] = (0.05 * greenMix + 0.3 * brownMix + 0.1 * blueMix) * b;
+      c[i * 3 + 1] = (0.35 * greenMix + 0.22 * brownMix + 0.3 * blueMix) * b;
+      c[i * 3 + 2] = (0.12 * greenMix + 0.08 * brownMix + 0.58 * blueMix) * b;
     }
     return { positions: p, colors: c };
   }, [data]);
@@ -56,7 +68,7 @@ function LandInteriorLayer({ data }: { data: Vec3[] }) {
         <bufferAttribute attach="attributes-position" array={geo.positions} count={data.length} itemSize={3} />
         <bufferAttribute attach="attributes-color" array={geo.colors} count={data.length} itemSize={3} />
       </bufferGeometry>
-      <pointsMaterial size={0.011} vertexColors transparent opacity={0.8} depthWrite={false} blending={THREE.AdditiveBlending} />
+      <pointsMaterial size={0.013} vertexColors transparent opacity={0.8} depthWrite={false} blending={THREE.AdditiveBlending} />
     </points>
   );
 }
@@ -69,7 +81,7 @@ function LandEdgeLayer({ data }: { data: Vec3[] }) {
     const c = new Float32Array(data.length * 3);
     for (let i = 0; i < data.length; i++) {
       p[i * 3] = data[i].x; p[i * 3 + 1] = data[i].y; p[i * 3 + 2] = data[i].z;
-      c[i * 3] = 0.35; c[i * 3 + 1] = 0.68; c[i * 3 + 2] = 0.95;
+      c[i * 3] = 0.65; c[i * 3 + 1] = 0.82; c[i * 3 + 2] = 1.0;
     }
     return { positions: p, colors: c };
   }, [data]);
@@ -80,7 +92,7 @@ function LandEdgeLayer({ data }: { data: Vec3[] }) {
         <bufferAttribute attach="attributes-position" array={geo.positions} count={data.length} itemSize={3} />
         <bufferAttribute attach="attributes-color" array={geo.colors} count={data.length} itemSize={3} />
       </bufferGeometry>
-      <pointsMaterial size={0.022} vertexColors transparent opacity={0.9} depthWrite={false} blending={THREE.AdditiveBlending} />
+      <pointsMaterial size={0.028} vertexColors transparent opacity={0.9} depthWrite={false} blending={THREE.AdditiveBlending} />
     </points>
   );
 }
@@ -93,7 +105,7 @@ function AtmosphereGlow() {
       <sphereGeometry args={[1.55, 64, 64]} />
       <shaderMaterial
         transparent depthWrite={false} blending={THREE.AdditiveBlending}
-        uniforms={{ uColor: { value: new THREE.Color("#0a2a4a") } }}
+        uniforms={{ uColor: { value: new THREE.Color("#2a5a9a") } }}
         vertexShader={`
           varying vec3 vNormal; varying vec3 vPosition;
           void main() {
@@ -109,7 +121,7 @@ function AtmosphereGlow() {
           void main() {
             float f = 1.0 - abs(dot(normalize(cameraPosition - vPosition), vNormal));
             f = pow(f, 2.5);
-            gl_FragColor = vec4(uColor, f * 0.15);
+            gl_FragColor = vec4(uColor, f * 0.3);
           }
         `}
       />
