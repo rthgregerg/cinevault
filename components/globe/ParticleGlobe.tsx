@@ -8,86 +8,124 @@ import CountryHighlights from "./CountryHighlights";
 import CountryGlowLayer from "./CountryGlowLayer";
 import CountryInfoPanel from "./CountryInfoPanel";
 import { globeCamera } from "@/lib/globe-state";
-import type { CountryFilmData, GlobeCameraState } from "@/lib/types";
+import type { CountryFilmData } from "@/lib/types";
 
 type Vec3 = { x: number; y: number; z: number };
 
-// ============ 海洋粒子 ============
+// ============ 动态粒子着色器 (闪烁 + 浮动) ============
 
-function OceanLayer({ data }: { data: Vec3[] }) {
-  const geo = useMemo(() => {
+const vertexShader = `
+  attribute float aPhase;
+  attribute float aFreq;
+  uniform float uTime;
+  varying float vAlpha;
+
+  void main() {
+    vec3 pos = position;
+    // 浮动：沿径向微调
+    float floatAmp = 0.015;
+    float wave = sin(uTime * aFreq + aPhase);
+    pos += normalize(position) * wave * floatAmp;
+
+    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+    gl_PointSize = 1.0;
+    gl_Position = projectionMatrix * mvPosition;
+
+    // 闪烁：alpha 随正弦波动
+    vAlpha = 0.65 + 0.35 * sin(uTime * aFreq * 1.3 + aPhase + 1.0);
+  }
+`;
+
+const fragmentShader = `
+  uniform vec3 uColor;
+  uniform float uOpacity;
+  varying float vAlpha;
+
+  void main() {
+    float d = length(gl_PointCoord - 0.5) * 2.0;
+    float alpha = 1.0 - smoothstep(0.0, 1.0, d);
+    alpha = pow(alpha, 1.5);
+    gl_FragColor = vec4(uColor, alpha * uOpacity * vAlpha);
+  }
+`;
+
+// 外层微光着色器 (浮动幅度更大)
+const glowVertexShader = `
+  attribute float aPhase;
+  attribute float aFreq;
+  uniform float uTime;
+  varying float vAlpha;
+
+  void main() {
+    vec3 pos = position;
+    float floatAmp = 0.04;
+    float wave = sin(uTime * aFreq + aPhase);
+    pos += normalize(position) * wave * floatAmp;
+
+    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+    gl_PointSize = 1.0;
+    gl_Position = projectionMatrix * mvPosition;
+
+    vAlpha = 0.5 + 0.5 * sin(uTime * aFreq * 0.7 + aPhase + 2.0);
+  }
+`;
+
+// ============ 通用动态粒子组件 ============
+
+function DynamicParticles({
+  data,
+  color,
+  opacity,
+  size,
+  floatAmp,
+}: {
+  data: Vec3[];
+  color: [number, number, number];
+  opacity: number;
+  size: number;
+  floatAmp: number;
+}) {
+  const matRef = useRef<THREE.ShaderMaterial>(null);
+  const { positions, phases, freqs } = useMemo(() => {
     const p = new Float32Array(data.length * 3);
-    const c = new Float32Array(data.length * 3);
+    const ph = new Float32Array(data.length);
+    const fr = new Float32Array(data.length);
     for (let i = 0; i < data.length; i++) {
-      p[i * 3] = data[i].x; p[i * 3 + 1] = data[i].y; p[i * 3 + 2] = data[i].z;
-      const flicker = 0.7 + Math.random() * 0.3;
-      c[i * 3] = 0.02 * flicker;
-      c[i * 3 + 1] = 0.08 * flicker;
-      c[i * 3 + 2] = 0.2 * flicker;
+      p[i * 3] = data[i].x;
+      p[i * 3 + 1] = data[i].y;
+      p[i * 3 + 2] = data[i].z;
+      ph[i] = Math.random() * Math.PI * 2;
+      fr[i] = 0.3 + Math.random() * 1.2;
     }
-    return { positions: p, colors: c };
+    return { positions: p, phases: ph, freqs: fr };
   }, [data]);
+
+  useFrame(({ clock }) => {
+    if (matRef.current) {
+      matRef.current.uniforms.uTime.value = clock.getElapsedTime();
+    }
+  });
 
   return (
     <points>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" array={geo.positions} count={data.length} itemSize={3} />
-        <bufferAttribute attach="attributes-color" array={geo.colors} count={data.length} itemSize={3} />
+        <bufferAttribute attach="attributes-position" array={positions} count={data.length} itemSize={3} />
+        <bufferAttribute attach="attributes-aPhase" array={phases} count={data.length} itemSize={1} />
+        <bufferAttribute attach="attributes-aFreq" array={freqs} count={data.length} itemSize={1} />
       </bufferGeometry>
-      <pointsMaterial size={0.012} vertexColors transparent opacity={0.6} depthWrite={false} blending={THREE.AdditiveBlending} />
-    </points>
-  );
-}
-
-// ============ 大陆内部粒子 ============
-
-// ============ 大陆粒子层 (单一层，高密度) ============
-
-function LandLayer({ data }: { data: Vec3[] }) {
-  const geo = useMemo(() => {
-    const p = new Float32Array(data.length * 3);
-    const c = new Float32Array(data.length * 3);
-    for (let i = 0; i < data.length; i++) {
-      p[i * 3] = data[i].x; p[i * 3 + 1] = data[i].y; p[i * 3 + 2] = data[i].z;
-      const b = 0.55 + Math.random() * 0.45;
-      c[i * 3] = 0.1 * b;
-      c[i * 3 + 1] = 0.32 * b;
-      c[i * 3 + 2] = 0.7 * b;
-    }
-    return { positions: p, colors: c };
-  }, [data]);
-
-  return (
-    <points>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" array={geo.positions} count={data.length} itemSize={3} />
-        <bufferAttribute attach="attributes-color" array={geo.colors} count={data.length} itemSize={3} />
-      </bufferGeometry>
-      <pointsMaterial size={0.011} vertexColors transparent opacity={0.8} depthWrite={false} blending={THREE.AdditiveBlending} />
-    </points>
-  );
-}
-
-// ============ 外层微光 ============
-
-function GlowLayer({ data }: { data: Vec3[] }) {
-  const geo = useMemo(() => {
-    const p = new Float32Array(data.length * 3);
-    const c = new Float32Array(data.length * 3);
-    for (let i = 0; i < data.length; i++) {
-      p[i * 3] = data[i].x; p[i * 3 + 1] = data[i].y; p[i * 3 + 2] = data[i].z;
-      c[i * 3] = 0.1; c[i * 3 + 1] = 0.2; c[i * 3 + 2] = 0.45;
-    }
-    return { positions: p, colors: c };
-  }, [data]);
-
-  return (
-    <points>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" array={geo.positions} count={data.length} itemSize={3} />
-        <bufferAttribute attach="attributes-color" array={geo.colors} count={data.length} itemSize={3} />
-      </bufferGeometry>
-      <pointsMaterial size={0.018} vertexColors transparent opacity={0.18} depthWrite={false} blending={THREE.AdditiveBlending} />
+      <shaderMaterial
+        ref={matRef}
+        vertexShader={floatAmp > 0.02 ? glowVertexShader : vertexShader}
+        fragmentShader={fragmentShader}
+        uniforms={{
+          uTime: { value: 0 },
+          uColor: { value: new THREE.Color(...color) },
+          uOpacity: { value: opacity },
+        }}
+        transparent
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+      />
     </points>
   );
 }
@@ -140,12 +178,10 @@ function GlobeScene({
   const groupRef = useRef<THREE.Group>(null);
   const controlsRef = useRef<any>(null);
 
-  // 自转
   useFrame((_, delta) => {
     if (groupRef.current) groupRef.current.rotation.y += delta * 0.1;
   });
 
-  // 恢复相机状态
   useEffect(() => {
     const saved = globeCamera.restore();
     if (saved && controlsRef.current) {
@@ -157,7 +193,6 @@ function GlobeScene({
     }
   }, []);
 
-  // 保存相机状态
   useEffect(() => () => {
     if (controlsRef.current) {
       const c = controlsRef.current;
@@ -175,10 +210,10 @@ function GlobeScene({
       <AtmosphereGlow />
       <ambientLight intensity={0.1} />
       <group ref={groupRef}>
-        <OceanLayer data={particleData.ocean} />
-        <LandLayer data={particleData.land} />
+        <DynamicParticles data={particleData.ocean} color={[0.02, 0.08, 0.2]} opacity={0.6} size={0.01} floatAmp={0.015} />
+        <DynamicParticles data={particleData.land} color={[0.1, 0.32, 0.7]} opacity={0.8} size={0.01} floatAmp={0.012} />
+        <DynamicParticles data={particleData.glow} color={[0.1, 0.2, 0.45]} opacity={0.18} size={0.01} floatAmp={0.04} />
         <CountryHighlights onClickCountry={onClickCountry} isActive={activeCountryCode} />
-        <GlowLayer data={particleData.glow} />
         <CountryGlowLayer countryCode={activeCountryCode} />
       </group>
       <OrbitControls ref={controlsRef} enableZoom zoomSpeed={0.8} minDistance={2.5} maxDistance={5} rotateSpeed={0.5} autoRotate={false} enablePan={false} />
@@ -213,30 +248,20 @@ interface ParticleGlobeProps {
 
 export default function ParticleGlobe({ onMovieClick }: ParticleGlobeProps) {
   const [activeCountry, setActiveCountry] = useState<CountryFilmData | null>(null);
-
   const handleClose = useCallback(() => setActiveCountry(null), []);
 
   return (
     <div className="relative w-full h-[360px] md:h-[420px] lg:h-[440px] bg-gradient-to-b from-[#0a1628] to-bg rounded-card overflow-hidden">
-      <Canvas
-        camera={{ position: [0, 0.3, 3.5], fov: 45, near: 0.1, far: 20 }}
-        gl={{ antialias: true, alpha: true }}
-        style={{ background: "transparent" }}
-      >
+      <Canvas camera={{ position: [0, 0.3, 3.5], fov: 45, near: 0.1, far: 20 }} gl={{ antialias: true, alpha: true }} style={{ background: "transparent" }}>
         <Suspense fallback={null}>
-          <GlobeDataLoader
-            onClickCountry={setActiveCountry}
-            activeCountryCode={activeCountry?.countryCode ?? null}
-          />
+          <GlobeDataLoader onClickCountry={setActiveCountry} activeCountryCode={activeCountry?.countryCode ?? null} />
         </Suspense>
       </Canvas>
-
       {!activeCountry && (
         <div className="absolute bottom-4 left-0 right-0 text-center pointer-events-none">
           <p className="text-white/40 text-xs">拖拽旋转 · 滚轮缩放 · 点击金色光点探索</p>
         </div>
       )}
-
       <CountryInfoPanel country={activeCountry} onClose={handleClose} onMovieClick={onMovieClick} />
     </div>
   );
