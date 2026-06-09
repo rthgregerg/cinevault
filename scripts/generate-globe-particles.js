@@ -15,9 +15,13 @@ const path = require("path");
 
 const OUTPUT = path.join(__dirname, "..", "public", "globe-particles.json");
 const RADIUS = 1.5;
-const LAND_PARTICLES = 13000;
-const OCEAN_PARTICLES = 20000;
+const LAND_PARTICLES = 8000;
+const EDGE_PARTICLES = 6000;
+const OCEAN_PARTICLES = 18000;
 const GLOW_PARTICLES = 5000;
+
+// 加载精确国界数据 (Natural Earth 50m, 每个国家~200顶点)
+const countryBorders = require(path.join(__dirname, "..", "data", "country-borders.json"));
 
 // ============ 大陆多边形 (经纬度坐标) ============
 
@@ -184,8 +188,9 @@ function samplePolygonInterior(polygon, count) {
 // ============ 生成 ============
 
 function generate() {
-  // 1. 大陆粒子 — 多边形内部密集填充
   const landParticles = [];
+
+  // 1a. 大陆内部填充 (使用粗糙多边形覆盖所有陆地)
   const areas = CONTINENTS.map(([, poly]) => {
     let area = 0;
     for (let i = 0; i < poly.length; i++) {
@@ -203,7 +208,22 @@ function generate() {
     landParticles.push(...pts);
   }
 
-  // 2. 海洋粒子 — 球面均匀采样，排除陆地
+  // 1b. 精确海岸线 — 使用 Natural Earth 国界数据
+  const allCountryPolys = Object.values(countryBorders);
+  const totalCountryPts = allCountryPolys.reduce((s, p) => s + p.length, 0);
+
+  for (const poly of allCountryPolys) {
+    // 按顶点数量比例分配采样点数
+    const count = Math.max(30, Math.floor((poly.length / totalCountryPts) * EDGE_PARTICLES));
+    const edgePts = samplePolygonBoundary(poly, count).map(p => {
+      const len = Math.sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
+      const scale = RADIUS / len;
+      return { x: p.x * scale, y: p.y * scale, z: p.z * scale };
+    });
+    landParticles.push(...edgePts);
+  }
+
+  // 2. 海洋粒子
   const oceanParticles = [];
   const spherePts = fibonacciSphere(OCEAN_PARTICLES * 3);
   for (const pt of spherePts) {
