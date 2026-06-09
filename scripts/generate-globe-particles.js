@@ -19,7 +19,6 @@ const LAND_PARTICLES = 8000;
 const EDGE_PARTICLES = 5000;
 const OCEAN_PARTICLES = 20000;
 const GLOW_PARTICLES = 5000;
-const TOTAL = LAND_PARTICLES + OCEAN_PARTICLES;
 
 // ============ 大陆多边形 (经纬度坐标) ============
 
