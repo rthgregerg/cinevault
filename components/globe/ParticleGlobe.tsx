@@ -39,7 +39,7 @@ const STAR_LAYERS: StarLayerConfig[] = [
 ];
 
 type Vec3 = { x: number; y: number; z: number };
-type ParticleData = { ocean: Vec3[]; land: Vec3[]; glow: Vec3[] };
+type ParticleData = { ocean: Vec3[]; land: Vec3[]; edges: Vec3[]; glow: Vec3[] };
 
 function buf(d: Vec3[]) { const p=new Float32Array(d.length*3); for(let i=0;i<d.length;i++){p[i*3]=d[i].x;p[i*3+1]=d[i].y;p[i*3+2]=d[i].z;} return p; }
 
@@ -50,14 +50,17 @@ function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
   const oceanGrp = useRef<THREE.Group>(null);
   const landGrp = useRef<THREE.Group>(null);
   const glowGrp = useRef<THREE.Group>(null);
+  const edgeGrp = useRef<THREE.Group>(null);
   const controlsRef = useRef<any>(null);
 
   const oceanMesh = useRef<THREE.Points>(null);
   const landMesh = useRef<THREE.Points>(null);
+  const edgeMesh = useRef<THREE.Points>(null);
   const glowMesh = useRef<THREE.Points>(null);
 
   const oceanGeo = useMemo(() => buf(particleData.ocean), [particleData.ocean]);
   const landGeo = useMemo(() => buf(particleData.land), [particleData.land]);
+  const edgeGeo = useMemo(() => buf(particleData.edges), [particleData.edges]);
   const glowGeo = useMemo(() => buf(particleData.glow), [particleData.glow]);
 
   useEffect(() => {
@@ -72,12 +75,15 @@ function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
       oceanGrp.current?.scale.setScalar(1 + Math.sin(t*2)*0.08);
       landGrp.current?.scale.setScalar(1 + Math.sin(t*2.5)*0.06);
       glowGrp.current?.scale.setScalar(1 + Math.sin(t*1.5)*0.15);
+      edgeGrp.current?.scale.setScalar(1 + Math.sin(t*2)*0.04);
 
       const om = oceanMesh.current?.material as THREE.PointsMaterial;
       const lm = landMesh.current?.material as THREE.PointsMaterial;
+      const em = edgeMesh.current?.material as THREE.PointsMaterial;
       const gm = glowMesh.current?.material as THREE.PointsMaterial;
       if (om) { om.opacity = 0.05 + (Math.sin(t*3)+1)*0.45; om.needsUpdate = true; }
       if (lm) { lm.opacity = 0.1 + (Math.sin(t*2.8)+1)*0.4; lm.needsUpdate = true; }
+      if (em) { em.opacity = 0.2 + (Math.sin(t*2.5)+1)*0.3; em.needsUpdate = true; }
       if (gm) { gm.opacity = 0.04 + (Math.sin(t*1.8)+1)*0.25; gm.needsUpdate = true; }
 
       raf = requestAnimationFrame(loop);
@@ -122,6 +128,12 @@ function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
             <pointsMaterial color="#5ab0e8" size={0.014} transparent opacity={0.85} depthWrite={false} blending={THREE.AdditiveBlending} />
           </points>
         </group>
+        <group ref={edgeGrp}>
+          <points ref={edgeMesh}>
+            <bufferGeometry><bufferAttribute attach="attributes-position" array={edgeGeo} count={particleData.edges.length} itemSize={3} /></bufferGeometry>
+            <pointsMaterial color="#c8e8ff" size={0.009} transparent opacity={0.5} depthWrite={false} blending={THREE.AdditiveBlending} />
+          </points>
+        </group>
         <group ref={glowGrp}>
           <points ref={glowMesh}>
             <bufferGeometry><bufferAttribute attach="attributes-position" array={glowGeo} count={particleData.glow.length} itemSize={3} /></bufferGeometry>
@@ -138,7 +150,7 @@ function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
 
 function GlobeDataLoader(props: { onClickCountry: (c: CountryFilmData) => void; activeCountryCode: string | null }) {
   const [d, set] = useState<ParticleData | null>(null);
-  useEffect(() => { fetch("/globe-particles.json").then(r=>r.json()).then(j=>set({ocean:j.ocean||[],land:j.land||[],glow:j.glow||[]})).catch(()=>{}); }, []);
+  useEffect(() => { fetch("/globe-particles.json").then(r=>r.json()).then(j=>set({ocean:j.ocean||[],land:j.land||[],edges:j.edges||[],glow:j.glow||[]})).catch(()=>{}); }, []);
   if (!d) return null;
   return <GlobeScene {...props} particleData={d} />;
 }

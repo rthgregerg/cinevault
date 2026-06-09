@@ -189,6 +189,7 @@ function samplePolygonInterior(polygon, count) {
 
 function generate() {
   const landParticles = [];
+  const edgeParticles = [];
 
   // 1a. 大陆内部填充 (使用粗糙多边形覆盖所有陆地)
   const areas = CONTINENTS.map(([, poly]) => {
@@ -208,19 +209,18 @@ function generate() {
     landParticles.push(...pts);
   }
 
-  // 1b. 精确海岸线 — 使用 Natural Earth 国界数据
+  // 1b. 精确海岸线 — 使用 Natural Earth 国界数据 (单独输出)
   const allCountryPolys = Object.values(countryBorders);
   const totalCountryPts = allCountryPolys.reduce((s, p) => s + p.length, 0);
 
   for (const poly of allCountryPolys) {
-    // 按顶点数量比例分配采样点数
     const count = Math.max(30, Math.floor((poly.length / totalCountryPts) * EDGE_PARTICLES));
-    const edgePts = samplePolygonBoundary(poly, count).map(p => {
+    const pts = samplePolygonBoundary(poly, count).map(p => {
       const len = Math.sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
       const scale = RADIUS / len;
       return { x: p.x * scale, y: p.y * scale, z: p.z * scale };
     });
-    landParticles.push(...edgePts);
+    edgeParticles.push(...pts);
   }
 
   // 2. 海洋粒子
@@ -242,11 +242,12 @@ function generate() {
     glowParticles.push({ x: pt.x * GLOW_RADIUS, y: pt.y * GLOW_RADIUS, z: pt.z * GLOW_RADIUS });
   }
 
-  console.log(`Land: ${landParticles.length} | Ocean: ${oceanParticles.length} | Glow: ${glowParticles.length}`);
+  console.log(`Land: ${landParticles.length} | Edge: ${edgeParticles.length} | Ocean: ${oceanParticles.length} | Glow: ${glowParticles.length}`);
 
   fs.writeFileSync(OUTPUT, JSON.stringify({
     ocean: oceanParticles,
     land: landParticles,
+    edges: edgeParticles,
     glow: glowParticles,
   }));
   console.log(`Written to ${OUTPUT}`);
