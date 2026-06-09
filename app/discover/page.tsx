@@ -1,9 +1,11 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import PageWrapper from "@/components/layout/PageWrapper";
 import MovieGrid from "@/components/shared/MovieGrid";
 import LoadingSkeleton from "@/components/shared/LoadingSkeleton";
 import SearchOverlay from "@/components/search/SearchOverlay";
+import ParticleGlobe from "@/components/globe/ParticleGlobe";
 import type { TmdbMovie, TmdbGenre } from "@/lib/types";
 
 type SortLabel = "popular" | "rating" | "date" | "title";
@@ -15,6 +17,7 @@ const SORT_MAP: Record<SortLabel, string> = {
 };
 
 export default function DiscoverPage() {
+  const router = useRouter();
   const [movies, setMovies] = useState<TmdbMovie[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -51,6 +54,13 @@ export default function DiscoverPage() {
   return (
     <PageWrapper>
       <div className="pt-4 lg:pt-8">
+        {/* 3D 粒子地球仪 */}
+        <div className="mb-6">
+          <ParticleGlobe
+            onMovieClick={(movieId) => router.push(`/movie/${movieId}`)}
+          />
+        </div>
+
         <div className="mb-4">
           <button onClick={() => setShowSearch(true)}
             className="w-full flex items-center gap-2 px-4 py-3 bg-bg-card rounded-card border border-white/5 text-text-muted text-sm hover:border-white/10 transition-colors"

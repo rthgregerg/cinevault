@@ -6,7 +6,7 @@ const navItems = [
   { label: "首页", href: "/" },
   { label: "发现", href: "/discover" },
   { label: "影史", href: "/history" },
-  { label: "喜欢", href: "/likes" },
+  { label: "收藏夹", href: "/collections" },
   { label: "我的", href: "/profile" },
 ];
 

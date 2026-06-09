@@ -1,4 +1,5 @@
 import PageWrapper from "@/components/layout/PageWrapper";
+import DailyRecommend from "@/components/home/DailyRecommend";
 import NowShowing from "@/components/home/NowShowing";
 import TopRated from "@/components/home/TopRated";
 import ComingSoon from "@/components/home/ComingSoon";
@@ -29,6 +30,8 @@ export default async function HomePage() {
   return (
     <PageWrapper>
       <div className="pt-6 lg:pt-10">
+        {/* 每日推荐专区 — 双维度筛选 */}
+        <DailyRecommend />
         {dailyPick && <DailyPick movie={dailyPick} />}
         {nowShowing.length > 0 && <NowShowing movies={nowShowing} />}
         {topRated.length > 0 && <TopRated movies={topRated} />}

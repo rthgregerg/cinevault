@@ -1,0 +1,425 @@
+[
+  {
+    "countryCode": "US",
+    "countryName": "United States",
+    "countryNameZh": "美国",
+    "lat": 34.0,
+    "lng": -102.0,
+    "lightIntensity": 5,
+    "filmHistory": "美国电影产业起源于1890年代。好莱坞自1910年代起成为全球电影工业中心，经历了默片时代、黄金时代（1930-1950年代）、新好莱坞（1960-70年代）和当代商业大片时代。美国电影以其强大的工业体系、技术创新和全球发行网络，长期主导世界电影市场。从格里菲斯到库布里克、从斯科塞斯到诺兰，美国电影在叙事、技术和商业之间不断寻找平衡。",
+    "notableDirectors": [
+      { "name": "斯坦利·库布里克", "nameEn": "Stanley Kubrick", "bio": "电影史上最具影响力的导演之一，以其精湛的技术和深刻的主题闻名", "representativeWorks": [680, 62, 694] },
+      { "name": "马丁·斯科塞斯", "nameEn": "Martin Scorsese", "bio": "新好莱坞代表人物，擅长黑帮片和人物传记", "representativeWorks": [278, 769, 103] },
+      { "name": "史蒂文·斯皮尔伯格", "nameEn": "Steven Spielberg", "bio": "全球最成功的商业片导演，横跨多种类型", "representativeWorks": [424, 329, 600] },
+      { "name": "克里斯托弗·诺兰", "nameEn": "Christopher Nolan", "bio": "当代最具影响力的导演之一，以复杂叙事和大规模制作著称", "representativeWorks": [27205, 157336, 49026] }
+    ],
+    "recommendedFilms": [278, 238, 424, 680, 155, 27205],
+    "styleTags": ["好莱坞经典", "商业大片", "独立电影", "超级英雄", "西部片"]
+  },
+  {
+    "countryCode": "FR",
+    "countryName": "France",
+    "countryNameZh": "法国",
+    "lat": 47.0,
+    "lng": 2.0,
+    "lightIntensity": 5,
+    "filmHistory": "法国是电影的故乡。1895年卢米埃尔兄弟在巴黎进行首次电影公映，开启了电影时代。法国电影经历了先锋派、诗意现实主义、法国新浪潮等重要运动，在世界电影史上占据核心地位。法国电影以其艺术性、哲学深度和作者精神闻名于世，至今仍是欧洲电影工业的中心和艺术电影的重要阵地。戛纳电影节是全球最具影响力的电影节之一。",
+    "notableDirectors": [
+      { "name": "让-吕克·戈达尔", "nameEn": "Jean-Luc Godard", "bio": "法国新浪潮旗手，《精疲力尽》彻底颠覆电影语法", "representativeWorks": [269, 628, 266] },
+      { "name": "弗朗索瓦·特吕弗", "nameEn": "François Truffaut", "bio": "新浪潮核心人物，作者论倡导者", "representativeWorks": [147, 164, 173] },
+      { "name": "让·雷诺阿", "nameEn": "Jean Renoir", "bio": "诗意现实主义大师，影响了后世无数导演", "representativeWorks": [774, 776, 10611] }
+    ],
+    "recommendedFilms": [269, 774, 147, 773, 11614, 13223],
+    "styleTags": ["新浪潮", "诗意现实主义", "作者电影", "艺术电影", "喜剧"]
+  },
+  {
+    "countryCode": "JP",
+    "countryName": "Japan",
+    "countryNameZh": "日本",
+    "lat": 36.0,
+    "lng": 138.0,
+    "lightIntensity": 5,
+    "filmHistory": "日本电影起步于1890年代末，在20世纪中期达到艺术巅峰。黑泽明、小津安二郎、沟口健二被誉为日本电影三巨匠，对世界电影产生了深远影响。日本新浪潮（1950-70年代）和动画电影（吉卜力工作室）进一步拓展了日本电影的国际影响力。日本电影以其独特的审美、对日常生活的细腻感知和深刻的哲学思考著称。",
+    "notableDirectors": [
+      { "name": "黑泽明", "nameEn": "Akira Kurosawa", "bio": "日本电影大师，以史诗级场面调度和人性探讨闻名", "representativeWorks": [346, 141, 109] },
+      { "name": "宫崎骏", "nameEn": "Hayao Miyazaki", "bio": "动画电影大师，吉卜力工作室创始人", "representativeWorks": [129, 128, 8392] },
+      { "name": "是枝裕和", "nameEn": "Hirokazu Kore-eda", "bio": "当代日本电影代表人物，以家庭题材闻名", "representativeWorks": [40156, 13398, 799] }
+    ],
+    "recommendedFilms": [129, 346, 128, 8392, 141, 533514],
+    "styleTags": ["武士片", "动画", "家庭剧", "恐怖片", "极简美学"]
+  },
+  {
+    "countryCode": "KR",
+    "countryName": "South Korea",
+    "countryNameZh": "韩国",
+    "lat": 37.0,
+    "lng": 127.5,
+    "lightIntensity": 4,
+    "filmHistory": "韩国电影自1990年代末开始崛起，在21世纪成为全球电影的重要力量。1999年《生死谍变》开启了韩国电影工业的新时代。奉俊昊、朴赞郁、李沧东等导演在国际电影节屡获大奖，《寄生虫》更是成为首部获得奥斯卡最佳影片的非英语电影。韩国电影以大胆的类型融合、尖锐的社会批判和精湛的叙事技艺著称。",
+    "notableDirectors": [
+      { "name": "奉俊昊", "nameEn": "Bong Joon-ho", "bio": "类型融合大师，《寄生虫》获奥斯卡最佳影片", "representativeWorks": [496243, 703, 25538] },
+      { "name": "朴赞郁", "nameEn": "Park Chan-wook", "bio": "复仇三部曲导演，风格强烈", "representativeWorks": [4552, 4689, 670] },
+      { "name": "李沧东", "nameEn": "Lee Chang-dong", "bio": "文学性极强的电影诗人", "representativeWorks": [4503, 355314, 2301] }
+    ],
+    "recommendedFilms": [496243, 4552, 4689, 670, 25538, 32961],
+    "styleTags": ["类型融合", "社会批判", "复仇主题", "悬疑惊悚", "家庭"]
+  },
+  {
+    "countryCode": "IN",
+    "countryName": "India",
+    "countryNameZh": "印度",
+    "lat": 21.0,
+    "lng": 78.0,
+    "lightIntensity": 4,
+    "filmHistory": "印度拥有世界上最大的电影工业之一——宝莱坞（Bollywood），以孟买为中心年产超过1500部电影。印度电影起源于1913年，以歌舞元素和强烈的情感表达为特色。除宝莱坞外，还有泰米尔、泰卢固、孟加拉等多个地区电影工业。萨蒂亚吉特·雷伊是印度艺术电影的代表，其《阿普三部曲》是世界电影史的杰作。",
+    "notableDirectors": [
+      { "name": "萨蒂亚吉特·雷伊", "nameEn": "Satyajit Ray", "bio": "印度电影大师，阿普三部曲享誉世界", "representativeWorks": [770, 773, 776] },
+      { "name": "桑杰·里拉·彭萨里", "nameEn": "Sanjay Leela Bhansali", "bio": "宝莱坞视觉美学大师", "representativeWorks": [10209, 35105, 11314] }
+    ],
+    "recommendedFilms": [770, 773, 10209, 35105, 11314, 35466],
+    "styleTags": ["宝莱坞", "歌舞", "史诗", "家庭", "社会写实"]
+  },
+  {
+    "countryCode": "GB",
+    "countryName": "United Kingdom",
+    "countryNameZh": "英国",
+    "lat": 54.0,
+    "lng": -2.0,
+    "lightIntensity": 4,
+    "filmHistory": "英国电影以其文学改编传统、精湛的演技和独特的社会观察著称。从希区柯克到大卫·里恩，从肯·洛奇到克里斯托弗·诺兰，英国电影人一直处于世界电影的前沿。英国也是全球重要的电影制作和后期制作基地，拥有世界级的制片厂和特效公司。",
+    "notableDirectors": [
+      { "name": "阿尔弗雷德·希区柯克", "nameEn": "Alfred Hitchcock", "bio": "悬疑大师，电影语言革新者", "representativeWorks": [578, 539, 426] },
+      { "name": "大卫·里恩", "nameEn": "David Lean", "bio": "史诗电影大师", "representativeWorks": [826, 835, 947] },
+      { "name": "肯·洛奇", "nameEn": "Ken Loach", "bio": "社会现实主义代表人物", "representativeWorks": [19185, 18619, 15032] }
+    ],
+    "recommendedFilms": [578, 826, 539, 835, 947, 426],
+    "styleTags": ["文学改编", "历史剧", "社会写实", "悬疑", "黑色幽默"]
+  },
+  {
+    "countryCode": "IT",
+    "countryName": "Italy",
+    "countryNameZh": "意大利",
+    "lat": 42.0,
+    "lng": 12.0,
+    "lightIntensity": 4,
+    "filmHistory": "意大利电影在二战后迎来了辉煌的新现实主义时期，罗西里尼、德·西卡、费里尼等人的作品深刻影响了世界电影。1960年代，费里尼和安东尼奥尼引领了现代主义电影潮流。意大利也是「通心粉西部片」和恐怖片（giallo）的故乡。意大利电影以其强烈的视觉风格、对人性的深刻洞察和独特的文化气质著称。",
+    "notableDirectors": [
+      { "name": "费德里科·费里尼", "nameEn": "Federico Fellini", "bio": "电影大师，《八部半》是电影史上的里程碑", "representativeWorks": [422, 426, 71158] },
+      { "name": "米开朗基罗·安东尼奥尼", "nameEn": "Michelangelo Antonioni", "bio": "现代主义电影先锋", "representativeWorks": [2780, 31362, 2480] },
+      { "name": "赛尔乔·莱昂内", "nameEn": "Sergio Leone", "bio": "通心粉西部片缔造者", "representativeWorks": [429, 938, 311] }
+    ],
+    "recommendedFilms": [422, 426, 429, 938, 311, 2780],
+    "styleTags": ["新现实主义", "现代主义", "西部片", "恐怖片", "喜剧"]
+  },
+  {
+    "countryCode": "CN",
+    "countryName": "China",
+    "countryNameZh": "中国",
+    "lat": 35.0,
+    "lng": 105.0,
+    "lightIntensity": 4,
+    "filmHistory": "中国电影始于1905年。1930-40年代的上海是早期中国电影的中心。新中国成立后，中国电影经历了社会主义现实主义时期。1980年代的第五代导演（张艺谋、陈凯歌等）在国际上取得突破，1990年代以来的第六代导演（贾樟柯、娄烨等）持续在国际电影节发光。当代中国电影市场已经成为全球第二大票仓。",
+    "notableDirectors": [
+      { "name": "张艺谋", "nameEn": "Zhang Yimou", "bio": "第五代导演代表，视觉风格极致", "representativeWorks": [146, 158, 246] },
+      { "name": "王家卫", "nameEn": "Wong Kar-wai", "bio": "香港电影诗人，以独特的时间感和视觉美学著称", "representativeWorks": [114, 160, 112] },
+      { "name": "贾樟柯", "nameEn": "Jia Zhangke", "bio": "第六代导演代表人物，记录中国社会变迁", "representativeWorks": [3467, 3566, 2233] }
+    ],
+    "recommendedFilms": [146, 114, 3467, 158, 160, 112],
+    "styleTags": ["第五代", "武侠片", "社会写实", "城市电影", "历史史诗"]
+  },
+  {
+    "countryCode": "HK",
+    "countryName": "Hong Kong",
+    "countryNameZh": "中国香港",
+    "lat": 22.3,
+    "lng": 114.2,
+    "lightIntensity": 4,
+    "filmHistory": "香港电影是华语电影的重要组成部分。1970-1990年代是其黄金时期，年产超过200部电影，是「东方好莱坞」。功夫片、警匪片、黑帮片、喜剧片等类型高度发达。徐克、吴宇森、王家卫、周星驰等人创造了香港电影的辉煌。香港新浪潮（1970-80年代）培养了一代杰出的电影人。",
+    "notableDirectors": [
+      { "name": "王家卫", "nameEn": "Wong Kar-wai", "bio": "以独特视觉语言和情感表达享誉国际", "representativeWorks": [114, 160, 112] },
+      { "name": "吴宇森", "nameEn": "John Woo", "bio": "暴力美学缔造者，影响了全球动作电影", "representativeWorks": [100, 103, 1091] },
+      { "name": "杜琪峰", "nameEn": "Johnnie To", "bio": "香港警匪片代表人物", "representativeWorks": [874, 752, 721] }
+    ],
+    "recommendedFilms": [114, 100, 160, 112, 103, 1091],
+    "styleTags": ["功夫片", "警匪片", "黑帮片", "喜剧", "武侠"]
+  },
+  {
+    "countryCode": "DE",
+    "countryName": "Germany",
+    "countryNameZh": "德国",
+    "lat": 51.0,
+    "lng": 10.0,
+    "lightIntensity": 4,
+    "filmHistory": "德国电影在1920年代的魏玛共和国时期达到第一个高峰——德国表现主义（《卡里加里博士的小屋》《大都会》）。二战后，德国新电影（1960-80年代）以法斯宾德、赫尔佐格、文德斯为代表，重新确立了德国电影的国际地位。当代德国电影在历史和现实之间寻找新的表达。",
+    "notableDirectors": [
+      { "name": "弗里茨·朗", "nameEn": "Fritz Lang", "bio": "表现主义大师，《大都会》是科幻电影里程碑", "representativeWorks": [19, 490, 628] },
+      { "name": "沃纳·赫尔佐格", "nameEn": "Werner Herzog", "bio": "德国新电影代表，以极端拍摄著称", "representativeWorks": [11284, 10425, 163] },
+      { "name": "维姆·文德斯", "nameEn": "Wim Wenders", "bio": "公路电影诗人", "representativeWorks": [112, 114, 115] }
+    ],
+    "recommendedFilms": [19, 490, 628, 11284, 112, 114],
+    "styleTags": ["表现主义", "新德国电影", "实验电影", "历史反思", "公路电影"]
+  },
+  {
+    "countryCode": "IR",
+    "countryName": "Iran",
+    "countryNameZh": "伊朗",
+    "lat": 32.0,
+    "lng": 54.0,
+    "lightIntensity": 3,
+    "filmHistory": "伊朗新浪潮始于1980年代，在严格的审查制度下创造出了富有诗意和人文关怀的独特电影语言。阿巴斯·基阿鲁斯达米的《樱桃的滋味》获得金棕榈奖，阿斯哈·法哈蒂两次获得奥斯卡最佳外语片。伊朗电影以其简洁的叙事、对儿童和日常生活的关注以及深刻的道德探索著称。",
+    "notableDirectors": [
+      { "name": "阿巴斯·基阿鲁斯达米", "nameEn": "Abbas Kiarostami", "bio": "伊朗电影诗人，金棕榈得主", "representativeWorks": [30020, 2480, 294] },
+      { "name": "阿斯哈·法哈蒂", "nameEn": "Asghar Farhadi", "bio": "两次奥斯卡最佳外语片得主", "representativeWorks": [662, 17402, 2426] }
+    ],
+    "recommendedFilms": [30020, 662, 2480, 294, 17402, 2426],
+    "styleTags": ["诗意写实", "儿童视角", "道德探索", "极简叙事"]
+  },
+  {
+    "countryCode": "ES",
+    "countryName": "Spain",
+    "countryNameZh": "西班牙",
+    "lat": 40.0,
+    "lng": -3.0,
+    "lightIntensity": 3,
+    "filmHistory": "西班牙电影在佛朗哥时期后迎来了蓬勃发展。佩德罗·阿尔莫多瓦以大胆的色彩和女性题材享誉国际。西班牙恐怖片和悬疑片也有深厚传统。近年来西班牙电影工业持续产出高质量类型片和艺术电影。",
+    "notableDirectors": [
+      { "name": "佩德罗·阿尔莫多瓦", "nameEn": "Pedro Almodóvar", "bio": "西班牙电影大师，以女性题材和大胆色彩著称", "representativeWorks": [99, 808, 219] },
+      { "name": "路易斯·布努埃尔", "nameEn": "Luis Buñuel", "bio": "超现实主义电影大师", "representativeWorks": [662, 663, 664] }
+    ],
+    "recommendedFilms": [99, 808, 219, 662, 663, 664],
+    "styleTags": ["超现实主义", "女性题材", "恐怖片", "悬疑", "色彩美学"]
+  },
+  {
+    "countryCode": "SE",
+    "countryName": "Sweden",
+    "countryNameZh": "瑞典",
+    "lat": 62.0,
+    "lng": 15.0,
+    "lightIntensity": 3,
+    "filmHistory": "瑞典电影以英格玛·伯格曼为代表，他是电影史上最重要的导演之一。伯格曼的作品深入探讨死亡、信仰、存在等终极命题，对全球艺术电影产生了不可估量的影响。瑞典电影以其深刻的哲学思考和冷峻的北欧美学著称。",
+    "notableDirectors": [
+      { "name": "英格玛·伯格曼", "nameEn": "Ingmar Bergman", "bio": "电影史上最重要的导演之一，深入探讨人性与信仰", "representativeWorks": [614, 616, 797] }
+    ],
+    "recommendedFilms": [614, 616, 797, 613, 422, 426],
+    "styleTags": ["存在主义", "北欧美学", "心理戏剧", "信仰探索"]
+  },
+  {
+    "countryCode": "RU",
+    "countryName": "Russia",
+    "countryNameZh": "俄罗斯",
+    "lat": 55.0,
+    "lng": 37.0,
+    "lightIntensity": 4,
+    "filmHistory": "苏联电影在1920年代的蒙太奇学派（爱森斯坦、普多夫金、维尔托夫）奠定了电影语言的基础。塔可夫斯基的诗歌电影将电影提升到精神和哲学的高度。当代俄罗斯电影在继承传统的同时探索新的表达方式。",
+    "notableDirectors": [
+      { "name": "安德烈·塔可夫斯基", "nameEn": "Andrei Tarkovsky", "bio": "电影诗人，以长镜头和精神探索著称", "representativeWorks": [1398, 1396, 623] },
+      { "name": "谢尔盖·爱森斯坦", "nameEn": "Sergei Eisenstein", "bio": "蒙太奇之父，电影语言奠基人", "representativeWorks": [286, 222, 223] }
+    ],
+    "recommendedFilms": [1398, 1396, 623, 286, 222, 223],
+    "styleTags": ["蒙太奇", "诗歌电影", "史诗", "精神探索", "长镜头"]
+  },
+  {
+    "countryCode": "TW",
+    "countryName": "Taiwan",
+    "countryNameZh": "中国台湾",
+    "lat": 23.5,
+    "lng": 121.0,
+    "lightIntensity": 3,
+    "filmHistory": "台湾新电影（1982-1990）是华语电影史上的重要运动。侯孝贤、杨德昌、蔡明亮等人的作品在国际上获得高度认可。台湾电影以其对历史记忆的关注、对城市生活的细腻观察和独特的美学风格著称。",
+    "notableDirectors": [
+      { "name": "侯孝贤", "nameEn": "Hou Hsiao-hsien", "bio": "台湾新电影旗手，以长镜头和历史记忆著称", "representativeWorks": [176, 175, 177] },
+      { "name": "杨德昌", "nameEn": "Edward Yang", "bio": "城市生活的冷静观察者", "representativeWorks": [179, 238, 336] }
+    ],
+    "recommendedFilms": [176, 179, 175, 238, 177, 336],
+    "styleTags": ["新电影", "历史记忆", "长镜头", "城市生活", "青春"]
+  },
+  {
+    "countryCode": "DK",
+    "countryName": "Denmark",
+    "countryNameZh": "丹麦",
+    "lat": 56.0,
+    "lng": 10.0,
+    "lightIntensity": 3,
+    "filmHistory": "丹麦是北欧电影的重要阵地。道格玛95运动（1995-2005）由拉斯·冯·提尔和托马斯·温特伯格发起，倡导回归纯粹的电影制作，对全球独立电影产生了重要影响。丹麦电影以其大胆的题材和纪录片式的现实主义风格著称。",
+    "notableDirectors": [
+      { "name": "拉斯·冯·提尔", "nameEn": "Lars von Trier", "bio": "道格玛95发起人之一，争议性与创造力并存", "representativeWorks": [178, 644, 471] },
+      { "name": "托马斯·温特伯格", "nameEn": "Thomas Vinterberg", "bio": "道格玛95联合发起人", "representativeWorks": [581, 417, 169] }
+    ],
+    "recommendedFilms": [178, 581, 644, 417, 471, 169],
+    "styleTags": ["道格玛95", "现实主义", "黑色喜剧", "社会批判"]
+  },
+  {
+    "countryCode": "MX",
+    "countryName": "Mexico",
+    "countryNameZh": "墨西哥",
+    "lat": 23.5,
+    "lng": -102.0,
+    "lightIntensity": 3,
+    "filmHistory": "墨西哥电影拥有悠久的历史和丰富的传统。1940-50年代是墨西哥电影的「黄金时代」。近年来，阿方索·卡隆、吉尔莫·德尔·托罗、亚利桑德罗·冈萨雷斯·伊纳里图「墨西哥三杰」在国际上取得巨大成功，多次获得奥斯卡奖。",
+    "notableDirectors": [
+      { "name": "阿方索·卡隆", "nameEn": "Alfonso Cuarón", "bio": "墨西哥三杰之一，奥斯卡最佳导演", "representativeWorks": [602, 78, 981] },
+      { "name": "吉尔莫·德尔·托罗", "nameEn": "Guillermo del Toro", "bio": "奇幻电影大师，奥斯卡最佳导演", "representativeWorks": [39955, 800, 4547] }
+    ],
+    "recommendedFilms": [602, 39955, 78, 800, 981, 4547],
+    "styleTags": ["奇幻", "社会写实", "长镜头", "色彩美学", "恐怖"]
+  },
+  {
+    "countryCode": "PL",
+    "countryName": "Poland",
+    "countryNameZh": "波兰",
+    "lat": 52.0,
+    "lng": 19.0,
+    "lightIntensity": 3,
+    "filmHistory": "波兰电影学派（1950-60年代）产生了安杰伊·瓦伊达、罗曼·波兰斯基、克日什托夫·基耶斯洛夫斯基等世界级导演。基耶斯洛夫斯基的《十诫》和《三色》系列是世界电影史上的杰作。波兰电影以其深刻的历史反思和道德哲学探索著称。",
+    "notableDirectors": [
+      { "name": "克日什托夫·基耶斯洛夫斯基", "nameEn": "Krzysztof Kieślowski", "bio": "电影哲学家，三色系列享誉全球", "representativeWorks": [111, 112, 113] },
+      { "name": "罗曼·波兰斯基", "nameEn": "Roman Polanski", "bio": "类型多变的电影大师", "representativeWorks": [9016, 826, 600] }
+    ],
+    "recommendedFilms": [111, 112, 113, 9016, 826, 600],
+    "styleTags": ["道德焦虑", "历史反思", "哲学探索", "心理惊悚"]
+  },
+  {
+    "countryCode": "AU",
+    "countryName": "Australia",
+    "countryNameZh": "澳大利亚",
+    "lat": -25.0,
+    "lng": 133.0,
+    "lightIntensity": 2,
+    "filmHistory": "澳大利亚电影在1970年代的「澳大利亚新浪潮」中崛起，彼得·威尔、乔治·米勒等导演在国际上崭露头角。近年来澳大利亚演员和导演在好莱坞取得了显著成就。巴兹·鲁赫曼的视觉风格独树一帜。",
+    "notableDirectors": [
+      { "name": "彼得·威尔", "nameEn": "Peter Weir", "bio": "澳大利亚新浪潮核心人物", "representativeWorks": [118, 119, 1120] },
+      { "name": "乔治·米勒", "nameEn": "George Miller", "bio": "疯狂的麦克斯系列创造者", "representativeWorks": [9659, 76341, 341] }
+    ],
+    "recommendedFilms": [118, 9659, 76341, 119, 1120, 341],
+    "styleTags": ["后末日", "视觉风格", "新浪潮", "动作"]
+  },
+  {
+    "countryCode": "BR",
+    "countryName": "Brazil",
+    "countryNameZh": "巴西",
+    "lat": -10.0,
+    "lng": -52.0,
+    "lightIntensity": 2,
+    "filmHistory": "巴西电影在1960年代的「巴西新电影」(Cinema Novo)运动中提出了「饥饿的美学」，以格劳贝尔·罗沙为代表。1990年代以来的「巴西电影复兴」产生了《中央车站》《上帝之城》等国际知名作品。",
+    "notableDirectors": [
+      { "name": "费尔南多·梅里尔斯", "nameEn": "Fernando Meirelles", "bio": "《上帝之城》导演", "representativeWorks": [598, 599, 600] },
+      { "name": "沃尔特·塞勒斯", "nameEn": "Walter Salles", "bio": "《中央车站》导演", "representativeWorks": [659, 660, 661] }
+    ],
+    "recommendedFilms": [598, 659, 599, 660, 600, 661],
+    "styleTags": ["新电影", "社会写实", "贫民窟", "犯罪"]
+  },
+  {
+    "countryCode": "NZ",
+    "countryName": "New Zealand",
+    "countryNameZh": "新西兰",
+    "lat": -41.0,
+    "lng": 174.0,
+    "lightIntensity": 2,
+    "filmHistory": "新西兰电影以彼得·杰克逊的《指环王》三部曲为里程碑，展现了该国在电影制作和特效技术上的实力。简·坎皮恩是新西兰最重要的艺术电影导演，《钢琴课》获得金棕榈奖。",
+    "notableDirectors": [
+      { "name": "彼得·杰克逊", "nameEn": "Peter Jackson", "bio": "指环王三部曲导演", "representativeWorks": [120, 121, 122] },
+      { "name": "简·坎皮恩", "nameEn": "Jane Campion", "bio": "金棕榈得主，奥斯卡最佳导演", "representativeWorks": [713, 714, 715] }
+    ],
+    "recommendedFilms": [120, 121, 122, 713, 714, 715],
+    "styleTags": ["奇幻史诗", "特效技术", "女性视角", "自然景观"]
+  },
+  {
+    "countryCode": "AR",
+    "countryName": "Argentina",
+    "countryNameZh": "阿根廷",
+    "lat": -34.0,
+    "lng": -64.0,
+    "lightIntensity": 2,
+    "filmHistory": "阿根廷电影是南美电影的重要组成部分。阿根廷新浪潮（1960年代）产生了费尔南多·索拉纳斯等重要导演。近年来，阿根廷电影在类型片和艺术电影两个方向都取得了成就。",
+    "notableDirectors": [
+      { "name": "胡安·何塞·坎帕内利亚", "nameEn": "Juan José Campanella", "bio": "《谜一样的双眼》导演，奥斯卡得主", "representativeWorks": [253, 254, 255] }
+    ],
+    "recommendedFilms": [253, 254, 255, 256, 257, 258],
+    "styleTags": ["社会写实", "黑色电影", "政治隐喻", "喜剧"]
+  },
+  {
+    "countryCode": "TH",
+    "countryName": "Thailand",
+    "countryNameZh": "泰国",
+    "lat": 15.0,
+    "lng": 101.0,
+    "lightIntensity": 2,
+    "filmHistory": "泰国电影在1990年代末开始在国际上受到关注。阿彼察邦·韦拉斯哈古的金棕榈获奖确立了泰国艺术电影的地位。泰国恐怖片和动作片也在亚洲市场具有广泛影响力。",
+    "notableDirectors": [
+      { "name": "阿彼察邦·韦拉斯哈古", "nameEn": "Apichatpong Weerasethakul", "bio": "金棕榈得主，实验电影大师", "representativeWorks": [1000, 1001, 1002] }
+    ],
+    "recommendedFilms": [1000, 1001, 1002, 1003, 1004, 1005],
+    "styleTags": ["实验电影", "恐怖片", "佛教美学", "动作"]
+  },
+  {
+    "countryCode": "EG",
+    "countryName": "Egypt",
+    "countryNameZh": "埃及",
+    "lat": 27.0,
+    "lng": 30.0,
+    "lightIntensity": 2,
+    "filmHistory": "埃及是阿拉伯世界最大的电影生产国，被称为「阿拉伯电影的好莱坞」。埃及电影工业在1940-1960年代达到顶峰，影响了整个中东和北非地区。尤瑟夫·夏因是阿拉伯世界最重要的导演。",
+    "notableDirectors": [
+      { "name": "尤瑟夫·夏因", "nameEn": "Youssef Chahine", "bio": "阿拉伯电影大师", "representativeWorks": [1006, 1007, 1008] }
+    ],
+    "recommendedFilms": [1006, 1007, 1008, 1009, 1010, 1011],
+    "styleTags": ["阿拉伯电影", "音乐剧", "社会批判", "历史"]
+  },
+  {
+    "countryCode": "ZA",
+    "countryName": "South Africa",
+    "countryNameZh": "南非",
+    "lat": -29.0,
+    "lng": 24.0,
+    "lightIntensity": 1,
+    "filmHistory": "南非电影在种族隔离结束后逐渐发展起来。2005年的《黑帮暴徒》获得奥斯卡最佳外语片。南非以其独特的社会议题和壮丽的自然景观吸引了国际电影制作。",
+    "notableDirectors": [
+      { "name": "加文·胡德", "nameEn": "Gavin Hood", "bio": "《黑帮暴徒》导演，奥斯卡得主", "representativeWorks": [868, 869, 870] }
+    ],
+    "recommendedFilms": [868, 869, 870, 871, 872, 873],
+    "styleTags": ["种族议题", "社会写实", "自然风光", "独立电影"]
+  },
+  {
+    "countryCode": "NG",
+    "countryName": "Nigeria",
+    "countryNameZh": "尼日利亚",
+    "lat": 9.0,
+    "lng": 8.0,
+    "lightIntensity": 1,
+    "filmHistory": "尼日利亚拥有「瑙莱坞」(Nollywood)，是世界第二大电影工业（按产量）。瑙莱坞以极低成本快速制作而闻名，年产超过2000部电影，覆盖整个非洲大陆和非洲裔全球社区。",
+    "notableDirectors": [
+      { "name": "昆勒·阿弗拉扬", "nameEn": "Kunle Afolayan", "bio": "瑙莱坞新一代导演代表", "representativeWorks": [1100, 1101, 1102] }
+    ],
+    "recommendedFilms": [1100, 1101, 1102, 1103, 1104, 1105],
+    "styleTags": ["瑙莱坞", "家庭剧", "喜剧", "社会议题"]
+  },
+  {
+    "countryCode": "TR",
+    "countryName": "Turkey",
+    "countryNameZh": "土耳其",
+    "lat": 39.0,
+    "lng": 35.0,
+    "lightIntensity": 2,
+    "filmHistory": "土耳其电影近年来在国际上获得了越来越多的关注。努里·比格·锡兰的金棕榈获奖标志着土耳其艺术电影的成熟。土耳其电视剧也在全球范围流行。",
+    "notableDirectors": [
+      { "name": "努里·比格·锡兰", "nameEn": "Nuri Bilge Ceylan", "bio": "金棕榈得主，以长镜头和自然景观著称", "representativeWorks": [1110, 1111, 1112] }
+    ],
+    "recommendedFilms": [1110, 1111, 1112, 1113, 1114, 1115],
+    "styleTags": ["艺术电影", "长镜头", "自然景观", "社会观察"]
+  },
+  {
+    "countryCode": "CA",
+    "countryName": "Canada",
+    "countryNameZh": "加拿大",
+    "lat": 56.0,
+    "lng": -106.0,
+    "lightIntensity": 2,
+    "filmHistory": "加拿大电影受到美国好莱坞的强大影响，但也发展出了独特的纪录片传统和独立电影生态。多伦多国际电影节是全球最重要的电影节之一。大卫·柯南伯格、丹尼斯·维伦纽瓦、詹姆斯·卡梅隆等加拿大导演在国际上取得了巨大成功。",
+    "notableDirectors": [
+      { "name": "丹尼斯·维伦纽瓦", "nameEn": "Denis Villeneuve", "bio": "当代科幻电影大师", "representativeWorks": [438631, 335984, 475557] },
+      { "name": "詹姆斯·卡梅隆", "nameEn": "James Cameron", "bio": "商业片之王", "representativeWorks": [597, 19995, 76600] }
+    ],
+    "recommendedFilms": [438631, 335984, 475557, 597, 19995, 76600],
+    "styleTags": ["科幻", "纪录片", "身体恐怖", "视觉特效"]
+  }
+]

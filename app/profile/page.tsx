@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 import PageWrapper from "@/components/layout/PageWrapper";
 import StatCards from "@/components/profile/StatCards";
 import RatingChart from "@/components/profile/RatingChart";
+import MonthlyChart from "@/components/profile/MonthlyChart";
 import MovieGrid from "@/components/shared/MovieGrid";
-import { getMarkedMovieIds } from "@/lib/storage";
+import { getMarkedMovieIds, getUserStats } from "@/lib/storage";
 import type { TmdbMovie } from "@/lib/types";
 
 async function fetchMoviesByIds(ids: string[]): Promise<TmdbMovie[]> {
@@ -28,12 +29,15 @@ export default function ProfilePage() {
   const [wantToWatch, setWantToWatch] = useState(0);
   const [collected, setCollected] = useState(0);
   const [liked, setLiked] = useState(0);
+  const [totalRuntime, setTotalRuntime] = useState(0);
 
   useEffect(() => {
     setWatched(getMarkedMovieIds("watched").length);
     setWantToWatch(getMarkedMovieIds("wantToWatch").length);
     setCollected(getMarkedMovieIds("collected").length);
     setLiked(getMarkedMovieIds("liked").length);
+    const stats = getUserStats();
+    setTotalRuntime(stats.totalRuntime);
   }, []);
 
   useEffect(() => {
@@ -53,9 +57,16 @@ export default function ProfilePage() {
     <PageWrapper>
       <div className="pt-6 lg:pt-10">
         <h1 className="text-xl font-display font-semibold text-text-primary mb-1">我的</h1>
-        <p className="text-text-muted text-sm mb-6">观影记录与统计</p>
+        <p className="text-text-muted text-sm mb-1">观影记录与统计</p>
+        {totalRuntime > 0 && (
+          <p className="text-gold text-xs mb-4">
+            累计观影 {(totalRuntime / 60).toFixed(0)} 小时 · {watched} 部作品
+          </p>
+        )}
+        {totalRuntime === 0 && <p className="text-text-muted text-xs mb-4">观影记录与统计</p>}
         <StatCards watched={watched} wantToWatch={wantToWatch} collected={collected} liked={liked} />
         <div className="mt-4"><RatingChart /></div>
+        <div className="mt-4"><MonthlyChart /></div>
         <div className="flex gap-2 mt-6 mb-4 overflow-x-auto">
           {tabs.map(({ key, label }) => (
             <button key={key} onClick={() => setActiveTab(key)}

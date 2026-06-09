@@ -5,6 +5,8 @@ import RatingDisplay from "@/components/movie/RatingDisplay";
 import ActionButtons from "@/components/movie/ActionButtons";
 import CastSection from "@/components/movie/CastSection";
 import RelatedMovies from "@/components/movie/RelatedMovies";
+import WatchProviders from "@/components/movie/WatchProviders";
+import SoundtrackSection from "@/components/movie/SoundtrackSection";
 import { getMovieDetail, getMovieCredits, getSimilarMovies } from "@/lib/tmdb";
 import type { TmdbMovie, TmdbCredits } from "@/lib/types";
 
@@ -35,14 +37,21 @@ export default async function MovieDetailPage({ params }: Props) {
       <MovieHero movie={movie} />
       <div className="px-4 md:px-6 lg:px-8 lg:grid lg:grid-cols-3 lg:gap-8">
         <div className="lg:col-span-2 space-y-6 py-4">
-          <ActionButtons movieId={String(movie.id)} />
+          <ActionButtons
+            movieId={String(movie.id)}
+            movieTitle={movie.title}
+            runtime={movie.runtime}
+            genres={movie.genres?.map((g: { name: string }) => g.name) ?? []}
+          />
           <div>
             <h3 className="text-base font-semibold text-text-primary font-display mb-2">剧情简介</h3>
             <p className="text-text-secondary text-sm leading-relaxed">{movie.overview || "暂无简介"}</p>
           </div>
           {credits && <CastSection credits={credits} />}
+          <SoundtrackSection movieId={String(movie.id)} />
+          <WatchProviders movieId={String(movie.id)} />
           <div className="flex flex-wrap gap-1.5">
-            {movie.genres?.map((g) => (
+            {movie.genres?.map((g: { id: number; name: string }) => (
               <span key={g.id} className="px-2.5 py-1 text-xs bg-bg-card rounded-full text-text-muted">
                 {g.name}
               </span>

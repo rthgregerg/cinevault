@@ -6,7 +6,7 @@ const tabs = [
   { label: "首页", href: "/", icon: HomeIcon },
   { label: "发现", href: "/discover", icon: SearchIcon },
   { label: "影史", href: "/history", icon: HistoryIcon },
-  { label: "喜欢", href: "/likes", icon: HeartIcon },
+  { label: "收藏夹", href: "/collections", icon: FolderIcon },
   { label: "我的", href: "/profile", icon: ProfileIcon },
 ];
 
@@ -65,10 +65,10 @@ function HistoryIcon({ active }: { active: boolean }) {
   );
 }
 
-function HeartIcon({ active }: { active: boolean }) {
+function FolderIcon({ active }: { active: boolean }) {
   return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? "#c8a951" : "none"} stroke={active ? "#c8a951" : "#6b7280"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={active ? "#c8a951" : "#6b7280"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
     </svg>
   );
 }

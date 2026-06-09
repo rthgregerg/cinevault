@@ -72,3 +72,92 @@ export interface UserMark {
 
 export type SortOption = "popular" | "rating" | "date" | "title";
 export type SortValue = "popularity.desc" | "vote_average.desc" | "primary_release_date.desc" | "original_title.asc";
+
+// ============ 每日推荐 - 心情/场景 ============
+
+export type Mood =
+  | "放松" | "感动" | "刺激" | "烧脑"
+  | "浪漫" | "怀旧" | "励志" | "暗黑";
+
+export type Scene =
+  | "独自观影" | "约会之夜" | "家庭时光" | "深夜电影"
+  | "周末放松" | "通勤路上" | "朋友聚会";
+
+export interface MoodSceneMapping {
+  mood: Mood;
+  scene: Scene;
+  genreIds: number[];
+  sortBy: string;
+  voteMin: number;
+  yearRange: [number, number];
+  label: string;
+}
+
+// ============ 收藏夹 ============
+
+export interface Collection {
+  id: string;
+  name: string;
+  description: string;
+  coverMovieId: string | null;
+  movieIds: string[];
+  createdAt: string;
+  order: number;
+}
+
+// ============ 观影统计 ============
+
+export interface UserStats {
+  totalRuntime: number;
+  totalWatched: number;
+  genreDistribution: Record<string, number>;
+  monthlyStats: Record<string, MonthlyStat>;
+}
+
+export interface MonthlyStat {
+  count: number;
+  runtime: number;
+  genres: Record<string, number>;
+  avgRating: number;
+}
+
+// ============ 3D 粒子地球仪 ============
+
+export interface CountryFilmData {
+  countryCode: string;
+  countryName: string;
+  countryNameZh: string;
+  lat: number;
+  lng: number;
+  lightIntensity: number;
+  filmHistory: string;
+  notableDirectors: Array<{
+    name: string;
+    nameEn: string;
+    bio: string;
+    representativeWorks: number[];
+  }>;
+  recommendedFilms: number[];
+  styleTags: string[];
+}
+
+export interface GlobeCameraState {
+  position: [number, number, number];
+  target: [number, number, number];
+  zoom: number;
+}
+
+// ============ 流媒体供应商 ============
+
+export interface WatchProvider {
+  provider_id: number;
+  provider_name: string;
+  logo_path: string;
+}
+
+export interface CountryWatchProviders {
+  link: string;
+  flatrate?: WatchProvider[];
+  rent?: WatchProvider[];
+  buy?: WatchProvider[];
+}
