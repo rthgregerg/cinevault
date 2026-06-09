@@ -13,6 +13,12 @@ import type { CountryFilmData } from "@/lib/types";
 type Vec3 = { x: number; y: number; z: number };
 type ParticleData = { ocean: Vec3[]; land: Vec3[]; glow: Vec3[] };
 
+function makeGeo(data: Vec3[]) {
+  const p = new Float32Array(data.length * 3);
+  for (let i = 0; i < data.length; i++) { p[i*3]=data[i].x; p[i*3+1]=data[i].y; p[i*3+2]=data[i].z; }
+  return p;
+}
+
 function AtmosphereGlow() {
   return (
     <mesh>
@@ -33,26 +39,49 @@ function GlobeScene({
   activeCountryCode: string | null;
   particleData: ParticleData;
 }) {
-  const groupRef = useRef<THREE.Group>(null);
+  const mainRef = useRef<THREE.Group>(null);
+  const oceanRef = useRef<THREE.Group>(null);
+  const landRef = useRef<THREE.Group>(null);
+  const glowRef = useRef<THREE.Group>(null);
   const controlsRef = useRef<any>(null);
-  const oceanMesh = useRef<THREE.Points>(null);
-  const landMesh = useRef<THREE.Points>(null);
-  const glowMesh = useRef<THREE.Points>(null);
+  const oceanOpRef = useRef<THREE.PointsMaterial>(null);
+  const landOpRef = useRef<THREE.PointsMaterial>(null);
+  const glowOpRef = useRef<THREE.PointsMaterial>(null);
 
   const oceanGeo = useMemo(() => makeGeo(particleData.ocean), [particleData.ocean]);
   const landGeo = useMemo(() => makeGeo(particleData.land), [particleData.land]);
   const glowGeo = useMemo(() => makeGeo(particleData.glow), [particleData.glow]);
-  const oceanPhases = useMemo(() => makePhases(particleData.ocean.length), [particleData.ocean.length]);
-  const landPhases = useMemo(() => makePhases(particleData.land.length), [particleData.land.length]);
-  const glowPhases = useMemo(() => makePhases(particleData.glow.length), [particleData.glow.length]);
 
   useFrame(({ clock }, delta) => {
     const t = clock.getElapsedTime();
-    if (groupRef.current) groupRef.current.rotation.y += delta * 0.1;
 
-    animateLayer(oceanMesh.current, particleData.ocean, oceanPhases, t, 0.5, 0.1, 0.012, 1.5, "#082244");
-    animateLayer(landMesh.current, particleData.land, landPhases, t, 0.65, 0.15, 0.01, 1.3, "#1e5aaa");
-    animateLayer(glowMesh.current, particleData.glow, glowPhases, t, 0.12, 0.06, 0.04, 0.6, "#1a3a6a");
+    // 主球体自转
+    if (mainRef.current) mainRef.current.rotation.y += delta * 0.1;
+
+    // 海洋层：微旋转 + 缩放呼吸 + 透明度闪烁
+    if (oceanRef.current) {
+      oceanRef.current.rotation.y += delta * 0.03;
+      oceanRef.current.rotation.x += delta * 0.015;
+      const s = 1 + Math.sin(t * 0.8) * 0.003;
+      oceanRef.current.scale.setScalar(s);
+    }
+    if (oceanOpRef.current) oceanOpRef.current.opacity = 0.45 + Math.sin(t * 1.5) * 0.1;
+
+    // 大陆层：微旋转 + 缩放呼吸 + 透明度闪烁
+    if (landRef.current) {
+      landRef.current.rotation.z += delta * 0.02;
+      const s = 1 + Math.sin(t * 1.1 + 1) * 0.002;
+      landRef.current.scale.setScalar(s);
+    }
+    if (landOpRef.current) landOpRef.current.opacity = 0.65 + Math.sin(t * 1.3) * 0.12;
+
+    // 微光层：大幅度浮动
+    if (glowRef.current) {
+      glowRef.current.rotation.y -= delta * 0.04;
+      const s = 1 + Math.sin(t * 0.5) * 0.015;
+      glowRef.current.scale.setScalar(s);
+    }
+    if (glowOpRef.current) glowOpRef.current.opacity = 0.1 + Math.sin(t * 0.6) * 0.05;
   });
 
   useEffect(() => {
@@ -75,25 +104,34 @@ function GlobeScene({
       <Starfield count={300} />
       <AtmosphereGlow />
       <ambientLight intensity={0.1} />
-      <group ref={groupRef}>
-        <points ref={oceanMesh}>
-          <bufferGeometry>
-            <bufferAttribute attach="attributes-position" array={oceanGeo} count={particleData.ocean.length} itemSize={3} />
-          </bufferGeometry>
-          <pointsMaterial color="#082244" size={0.012} transparent opacity={0.6} depthWrite={false} blending={THREE.AdditiveBlending} />
-        </points>
-        <points ref={landMesh}>
-          <bufferGeometry>
-            <bufferAttribute attach="attributes-position" array={landGeo} count={particleData.land.length} itemSize={3} />
-          </bufferGeometry>
-          <pointsMaterial color="#1e5aaa" size={0.011} transparent opacity={0.8} depthWrite={false} blending={THREE.AdditiveBlending} />
-        </points>
-        <points ref={glowMesh}>
-          <bufferGeometry>
-            <bufferAttribute attach="attributes-position" array={glowGeo} count={particleData.glow.length} itemSize={3} />
-          </bufferGeometry>
-          <pointsMaterial color="#1a3a6a" size={0.018} transparent opacity={0.15} depthWrite={false} blending={THREE.AdditiveBlending} />
-        </points>
+      <group ref={mainRef}>
+        {/* 海洋层 */}
+        <group ref={oceanRef}>
+          <points>
+            <bufferGeometry>
+              <bufferAttribute attach="attributes-position" array={oceanGeo} count={particleData.ocean.length} itemSize={3} />
+            </bufferGeometry>
+            <pointsMaterial ref={oceanOpRef} color="#082244" size={0.012} transparent opacity={0.6} depthWrite={false} blending={THREE.AdditiveBlending} />
+          </points>
+        </group>
+        {/* 大陆层 */}
+        <group ref={landRef}>
+          <points>
+            <bufferGeometry>
+              <bufferAttribute attach="attributes-position" array={landGeo} count={particleData.land.length} itemSize={3} />
+            </bufferGeometry>
+            <pointsMaterial ref={landOpRef} color="#1e5aaa" size={0.011} transparent opacity={0.8} depthWrite={false} blending={THREE.AdditiveBlending} />
+          </points>
+        </group>
+        {/* 微光层 */}
+        <group ref={glowRef}>
+          <points>
+            <bufferGeometry>
+              <bufferAttribute attach="attributes-position" array={glowGeo} count={particleData.glow.length} itemSize={3} />
+            </bufferGeometry>
+            <pointsMaterial ref={glowOpRef} color="#1a3a6a" size={0.018} transparent opacity={0.15} depthWrite={false} blending={THREE.AdditiveBlending} />
+          </points>
+        </group>
         <CountryHighlights onClickCountry={onClickCountry} isActive={activeCountryCode} />
         <CountryGlowLayer countryCode={activeCountryCode} />
       </group>
@@ -102,50 +140,12 @@ function GlobeScene({
   );
 }
 
-// ===== 工具函数（模块级，不依赖 React）=====
-
-function makeGeo(data: Vec3[]) {
-  const p = new Float32Array(data.length * 3);
-  for (let i = 0; i < data.length; i++) { p[i*3]=data[i].x; p[i*3+1]=data[i].y; p[i*3+2]=data[i].z; }
-  return p;
-}
-function makePhases(n: number) {
-  const ph = new Float32Array(n);
-  for (let i = 0; i < n; i++) ph[i] = Math.random() * Math.PI * 2;
-  return ph;
-}
-function animateLayer(
-  mesh: THREE.Points | null, orig: Vec3[], phases: Float32Array,
-  t: number, baseOp: number, rangeOp: number, amp: number, freq: number, color: string
-) {
-  if (!mesh) return;
-  (mesh.material as THREE.PointsMaterial).opacity = baseOp + rangeOp * Math.sin(t * freq);
-  const pos = mesh.geometry.getAttribute("position") as THREE.BufferAttribute;
-  const arr = pos.array as Float32Array;
-  for (let i = 0; i < orig.length; i++) {
-    const wave = Math.sin(t * 0.7 + phases[i]) * amp;
-    const d = orig[i];
-    const len = Math.sqrt(d.x*d.x+d.y*d.y+d.z*d.z) || 1;
-    arr[i*3] = d.x + (d.x/len)*wave;
-    arr[i*3+1] = d.y + (d.y/len)*wave;
-    arr[i*3+2] = d.z + (d.z/len)*wave;
-  }
-  pos.needsUpdate = true;
-}
-
-// ===== 数据加载 =====
-
-function GlobeDataLoader(props: {
-  onClickCountry: (c: CountryFilmData) => void;
-  activeCountryCode: string | null;
-}) {
+function GlobeDataLoader(props: { onClickCountry: (c: CountryFilmData) => void; activeCountryCode: string | null }) {
   const [d, set] = useState<ParticleData | null>(null);
   useEffect(() => { fetch("/globe-particles.json").then(r => r.json()).then(j => set({ ocean: j.ocean||[], land: j.land||[], glow: j.glow||[] })).catch(()=>{}); }, []);
   if (!d) return null;
   return <GlobeScene {...props} particleData={d} />;
 }
-
-// ===== 主组件 =====
 
 export default function ParticleGlobe({ onMovieClick }: { onMovieClick: (id: number) => void }) {
   const [active, setActive] = useState<CountryFilmData | null>(null);
