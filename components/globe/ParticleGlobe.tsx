@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useMemo, useState, useEffect, Suspense, useCallback } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import Starfield from "./Starfield";
@@ -32,23 +32,30 @@ function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
   const landMat = useMemo(() => new THREE.PointsMaterial({ color:"#1e5aaa",size:0.011,transparent:true,opacity:0.8,depthWrite:false,blending:THREE.AdditiveBlending}),[]);
   const glowMat = useMemo(() => new THREE.PointsMaterial({ color:"#1a3a6a",size:0.018,transparent:true,opacity:0.15,depthWrite:false,blending:THREE.AdditiveBlending}),[]);
 
-  useFrame(({ clock }, delta) => {
-    const t = clock.getElapsedTime();
-    // 诊断：主球旋转加速到一眼可见
-    if (mainRef.current) mainRef.current.rotation.y += delta * 0.5;
+  // 用自己的 rAF 循环驱动动画
+  useEffect(() => {
+    let raf: number;
+    const clock = new THREE.Clock();
+    function loop() {
+      const t = clock.getElapsedTime();
+      const delta = Math.min(clock.getDelta(), 0.1);
 
-    // 海洋：极明显呼吸 + 频闪
-    oceanGrp.current?.scale.setScalar(1 + Math.sin(t*2)*0.08);
-    oceanMat.opacity = 0.05 + (Math.sin(t*3)+1)*0.45;
+      if (mainRef.current) mainRef.current.rotation.y += delta * 0.5;
 
-    // 大陆：极明显
-    landGrp.current?.scale.setScalar(1 + Math.sin(t*2.5)*0.06);
-    landMat.opacity = 0.1 + (Math.sin(t*2.8)+1)*0.4;
+      oceanGrp.current?.scale.setScalar(1 + Math.sin(t*2)*0.08);
+      oceanMat.opacity = 0.05 + (Math.sin(t*3)+1)*0.45;
 
-    // 微光：极明显
-    glowGrp.current?.scale.setScalar(1 + Math.sin(t*1.5)*0.15);
-    glowMat.opacity = 0.02 + (Math.sin(t*1.8)+1)*0.2;
-  });
+      landGrp.current?.scale.setScalar(1 + Math.sin(t*2.5)*0.06);
+      landMat.opacity = 0.1 + (Math.sin(t*2.8)+1)*0.4;
+
+      glowGrp.current?.scale.setScalar(1 + Math.sin(t*1.5)*0.15);
+      glowMat.opacity = 0.02 + (Math.sin(t*1.8)+1)*0.2;
+
+      raf = requestAnimationFrame(loop);
+    }
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   useEffect(() => {
     const saved = globeCamera.restore();
