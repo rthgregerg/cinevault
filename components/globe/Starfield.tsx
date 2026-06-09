@@ -3,7 +3,7 @@ import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-export default function Starfield({ count = 1500 }: { count?: number }) {
+export default function Starfield({ count = 300 }: { count?: number }) {
   const pointsRef = useRef<THREE.Points>(null);
 
   const positions = useMemo(() => {

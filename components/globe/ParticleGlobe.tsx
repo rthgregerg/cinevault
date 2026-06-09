@@ -160,7 +160,7 @@ function GlobeScene({ onClickCountry, activeCountry, particleData }: {
 
   return (
     <>
-      <Starfield count={1500} />
+      <Starfield count={300} />
       <AtmosphereGlow />
       <ambientLight intensity={0.1} />
 

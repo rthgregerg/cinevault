@@ -8,7 +8,7 @@ const fs = require("fs");
 const path = require("path");
 
 const OUTPUT = path.join(__dirname, "..", "public", "globe-particles.json");
-const TOTAL = 28000;
+const TOTAL = 10000;
 const RADIUS = 1.5;
 
 // ============ 大陆多边形 (经纬度坐标) ============
