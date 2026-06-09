@@ -30,8 +30,28 @@ export default async function MovementDetailPage({ params }: Props) {
   return (
     <PageWrapper>
       <div className="pt-4 lg:pt-8">
-        <div className="relative -mx-4 md:-mx-6 lg:-mx-8 h-48 md:h-56 overflow-hidden" style={{ backgroundColor: movement.bannerColor }}>
-          <div className="absolute inset-0 bg-gradient-to-t from-bg to-transparent" />
+        {/* Banner 海报拼图 */}
+        <div className="relative -mx-4 md:-mx-6 lg:-mx-8 h-48 md:h-56 lg:h-64 overflow-hidden" style={{ backgroundColor: movement.bannerColor }}>
+          {/* 海报拼图背景 */}
+          {films.length > 0 && (
+            <div className="absolute inset-0 flex opacity-30">
+              {films.slice(0, 4).map((f, i) => (
+                <div key={f.id} className="flex-1 overflow-hidden">
+                  {f.poster_path ? (
+                    <img
+                      src={`https://image.tmdb.org/t/p/w342${f.poster_path}`}
+                      alt=""
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-full" style={{ backgroundColor: movement.bannerColor }} />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/80 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 lg:p-8">
             <h1 className="text-2xl md:text-3xl font-display font-semibold text-white">{movement.name}</h1>
             <p className="text-gold text-sm mt-1">{movement.nameEn}</p>
