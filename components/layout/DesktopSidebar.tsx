@@ -8,6 +8,7 @@ const navItems = [
   { label: "影史", href: "/history" },
   { label: "收藏夹", href: "/collections" },
   { label: "我的", href: "/profile" },
+  { label: "专注", href: "/focus" },
 ];
 
 export default function DesktopSidebar() {

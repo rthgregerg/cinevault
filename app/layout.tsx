@@ -3,6 +3,7 @@ import "./globals.css";
 import BottomTabBar from "@/components/layout/BottomTabBar";
 import DesktopSidebar from "@/components/layout/DesktopSidebar";
 import AtmospherePanel from "@/components/layout/AtmospherePanel";
+import CursorGlow from "@/components/shared/CursorGlow";
 
 export const viewport: Viewport = {
   themeColor: "#0a0a0a",
@@ -35,6 +36,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body className="min-h-screen">
+        <CursorGlow />
         <DesktopSidebar />
         {children}
         <AtmospherePanel />
