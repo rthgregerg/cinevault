@@ -1,4 +1,5 @@
 import PageWrapper from "@/components/layout/PageWrapper";
+import HeroBanner from "@/components/home/HeroBanner";
 import DailyRecommend from "@/components/home/DailyRecommend";
 import NowShowing from "@/components/home/NowShowing";
 import TopRated from "@/components/home/TopRated";
@@ -30,6 +31,7 @@ export default async function HomePage() {
   return (
     <PageWrapper>
       <div className="pt-6 lg:pt-10">
+        <HeroBanner />
         {/* 每日推荐专区 — 双维度筛选 */}
         <DailyRecommend />
         {dailyPick && <DailyPick movie={dailyPick} />}
