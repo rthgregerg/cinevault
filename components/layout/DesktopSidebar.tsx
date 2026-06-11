@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 const navItems = [
   { label: "首页", href: "/" },
@@ -41,9 +42,14 @@ export default function DesktopSidebar() {
         })}
       </nav>
 
-      <div className="mt-auto">
-        <p className="text-text-muted text-xs">© 2026 CineVault</p>
-        <p className="text-text-muted text-xs mt-1">探索电影之美</p>
+      {/* 主题切换 */}
+      <div className="mt-auto pt-4 border-t border-white/5">
+        <p className="text-[9px] tracking-[0.3em] text-text-muted mb-2 opacity-50">STYLE</p>
+        <ThemeSwitcher />
+        <div className="mt-4">
+          <p className="text-text-muted text-xs">© 2026 CineVault</p>
+          <p className="text-text-muted text-xs mt-1">探索电影之美</p>
+        </div>
       </div>
     </aside>
   );

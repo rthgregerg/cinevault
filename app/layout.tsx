@@ -4,6 +4,7 @@ import BottomTabBar from "@/components/layout/BottomTabBar";
 import DesktopSidebar from "@/components/layout/DesktopSidebar";
 import AtmospherePanel from "@/components/layout/AtmospherePanel";
 import CursorGlow from "@/components/shared/CursorGlow";
+import ThemeProvider from "@/components/layout/ThemeProvider";
 
 export const viewport: Viewport = {
   themeColor: "#0a0a0a",
@@ -34,13 +35,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" data-theme="classic">
       <body className="min-h-screen">
-        <CursorGlow />
-        <DesktopSidebar />
-        {children}
-        <AtmospherePanel />
-        <BottomTabBar />
+        <ThemeProvider>
+          <CursorGlow />
+          <DesktopSidebar />
+          {children}
+          <AtmospherePanel />
+          <BottomTabBar />
+        </ThemeProvider>
       </body>
     </html>
   );

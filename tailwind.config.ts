@@ -23,6 +23,18 @@ const config: Config = {
           secondary: "#9ca3af",
           muted: "#6b7280",
         },
+        // 动态主题色 — 通过 CSS 变量切换
+        theme: {
+          bg: "var(--theme-bg)",
+          surface: "var(--theme-surface)",
+          card: "var(--theme-card)",
+          text: "var(--theme-text)",
+          "text-secondary": "var(--theme-text-secondary)",
+          accent: "var(--theme-accent)",
+          "accent-light": "var(--theme-accent-light)",
+          border: "var(--theme-border)",
+          hero: "var(--theme-hero)",
+        },
       },
       fontFamily: {
         serif: ["Noto Serif SC", "Georgia", "serif"],
