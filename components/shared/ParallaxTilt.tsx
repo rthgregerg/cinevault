@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type ReactNode, type CSSProperties } from "react";
+import { useRef, useEffect, type ReactNode, type CSSProperties } from "react";
 
 /**
  * 视差倾斜卡片 — 3D 透视倾斜效果
@@ -70,15 +70,18 @@ export default function ParallaxTilt({
     rafRef.current = requestAnimationFrame(animate);
   };
 
-  // Start animation loop once
-  if (rafRef.current === 0) {
+  // 用 useEffect 管理动画生命周期
+  useEffect(() => {
     rafRef.current = requestAnimationFrame(animate);
-  }
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
 
   return (
     <div
       ref={ref}
-      className={`transition-transform duration-75 ${className}`}
+      className={`relative transition-transform duration-75 ${className}`}
       style={{ transformStyle: "preserve-3d", ...style }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
