@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import NeteasePlayer from "@/components/focus/NeteasePlayer";
+import { useTheme, themeList } from "@/components/layout/ThemeProvider";
 
-// ==================== 名言数据 ====================
+// ==================== 名言 + TMDB ID ====================
 interface Quote {
   id: string; quoteZh: string; quoteEn: string;
   film: string; filmEn: string; year: number; tmdbId: number;
@@ -31,145 +31,101 @@ const quotes: Quote[] = [
   { id: "q18", quoteZh: "你得决定自己是什么。别人给你贴的标签不重要。", quoteEn: "You have to decide what you are. The labels other people give you don't matter.", film: "月光男孩", filmEn: "Moonlight", year: 2016, tmdbId: 376867 },
 ];
 
-// ==================== 大卫雕塑 SVG (fallback) ====================
+// ==================== 计时器预设 ====================
+const TIMER_PRESETS = [
+  { label: "25分钟", minutes: 25 },
+  { label: "45分钟", minutes: 45 },
+  { label: "60分钟", minutes: 60 },
+];
 
-// ==================== 大卫雕像 SVG ====================
-function DavidSculpture({ mirror = false }: { mirror?: boolean }) {
-  const scale = mirror ? "scale(-1, 1)" : "";
+// ==================== 网易云 iframe 播放器 ====================
+const NETEASE_SCENES = [
+  { id: "jazz", label: "爵士", emoji: "🎷", songId: "431096211" },
+  { id: "piano", label: "钢琴", emoji: "🎹", songId: "5253888" },
+  { id: "rain", label: "雨声", emoji: "🌧", songId: "1456890009" },
+  { id: "ocean", label: "海浪", emoji: "🌊", songId: "523368028" },
+  { id: "forest", label: "森林", emoji: "🌿", songId: "523365555" },
+];
+
+// ==================== 主题侧边装饰 ====================
+function SideDecor({ side }: { side: "left" | "right" }) {
+  const { theme } = useTheme();
+  const isLeft = side === "left";
+
   return (
-    <svg
-      viewBox="0 0 160 400"
-      width="100%"
-      height="100%"
-      preserveAspectRatio="xMidYMax meet"
-      style={{ transform: scale, display: "block" }}
+    <div
+      className="hidden lg:block fixed bottom-0 z-10 pointer-events-none"
+      style={{
+        width: "min(120px, 10vw)",
+        height: "min(400px, 60vh)",
+        bottom: "60px",
+        [isLeft ? "left" : "right"]: "max(16px, 2vw)",
+      }}
     >
-      <defs>
-        <linearGradient id={`marble-${mirror ? "r" : "l"}`} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#e8e0d5" />
-          <stop offset="25%" stopColor="#f2ede6" />
-          <stop offset="50%" stopColor="#faf7f2" />
-          <stop offset="75%" stopColor="#f0ebe4" />
-          <stop offset="100%" stopColor="#ddd5c8" />
-        </linearGradient>
-        <linearGradient id={`shadow-${mirror ? "r" : "l"}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="rgba(0,0,0,0.05)" />
-          <stop offset="50%" stopColor="rgba(0,0,0,0)" />
-          <stop offset="100%" stopColor="rgba(0,0,0,0.08)" />
-        </linearGradient>
-        <filter id="marble-texture">
-          <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" result="noise" />
-          <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise" />
-          <feBlend in="SourceGraphic" in2="grayNoise" mode="overlay" result="textured" />
-        </filter>
-      </defs>
-
-      {/* 基座 */}
-      <rect x="20" y="380" width="120" height="20" rx="3" fill={`url(#marble-${mirror ? "r" : "l"})`} opacity="0.6" />
-      <rect x="30" y="372" width="100" height="10" rx="2" fill={`url(#marble-${mirror ? "r" : "l"})`} opacity="0.7" />
-      <rect x="40" y="366" width="80" height="7" rx="1.5" fill={`url(#marble-${mirror ? "r" : "l"})`} opacity="0.75" />
-
-      {/* 右脚（承重腿） */}
-      <path d="M48 366 L48 280 Q48 270 55 268 L72 268 Q78 270 78 280 L78 366"
-        fill={`url(#marble-${mirror ? "r" : "l"})`} opacity="0.85" />
-      {/* 右小腿 */}
-      <path d="M50 280 L52 235 Q54 228 60 226 L68 226 Q74 228 76 235 L76 280"
-        fill={`url(#marble-${mirror ? "r" : "l"})`} opacity="0.88" />
-      {/* 右大腿 */}
-      <path d="M54 235 L56 185 Q58 176 66 174 L76 174 Q80 178 78 190 L74 235"
-        fill={`url(#marble-${mirror ? "r" : "l"})`} opacity="0.9" />
-
-      {/* 左脚（放松腿，微屈） */}
-      <path d="M86 366 L86 295 Q88 288 94 286 L108 286 Q112 288 112 296 L112 366"
-        fill={`url(#marble-${mirror ? "r" : "l"})`} opacity="0.82" />
-      {/* 左小腿 */}
-      <path d="M88 295 L90 250 Q92 244 98 242 L106 242 Q110 246 110 252 L110 295"
-        fill={`url(#marble-${mirror ? "r" : "l"})`} opacity="0.85" />
-      {/* 左大腿 */}
-      <path d="M88 250 L86 200 Q88 192 96 190 L106 190 Q112 194 110 205 L108 250"
-        fill={`url(#marble-${mirror ? "r" : "l"})`} opacity="0.87" />
-
-      {/* 躯干 */}
-      <path d="M48 190 Q30 155 28 110 L120 110 Q122 155 110 190 Q100 210 80 215 Q60 210 48 190 Z"
-        fill={`url(#marble-${mirror ? "r" : "l"})`} opacity="0.92" />
-      {/* 胸部轮廓 */}
-      <path d="M50 130 Q74 118 98 130"
-        fill="none" stroke="rgba(200,190,175,0.3)" strokeWidth="1" />
-      <path d="M55 148 Q74 140 93 148"
-        fill="none" stroke="rgba(200,190,175,0.2)" strokeWidth="0.8" />
-      {/* 腹肌线 */}
-      <path d="M60 165 Q74 160 88 165" fill="none" stroke="rgba(200,190,175,0.15)" strokeWidth="0.6" />
-      <path d="M62 175 Q74 171 86 175" fill="none" stroke="rgba(200,190,175,0.12)" strokeWidth="0.6" />
-
-      {/* 右臂（自然下垂，微屈） */}
-      <path d="M48 120 Q28 150 26 190 Q24 210 30 218 Q36 215 38 205 Q40 185 44 170 Q50 145 52 130"
-        fill={`url(#marble-${mirror ? "r" : "l"})`} opacity="0.85" />
-      {/* 右手 */}
-      <ellipse cx="32" cy="216" rx="6" ry="8" fill={`url(#marble-${mirror ? "r" : "l"})`} opacity="0.82" />
-
-      {/* 左臂（弯曲，手搭在肩上 — 持弹弓的经典姿态） */}
-      <path d="M100 115 Q125 110 130 95 Q132 88 128 84"
-        fill="none" stroke={`url(#marble-${mirror ? "r" : "l"})`} strokeWidth="16" strokeLinecap="round" opacity="0.85" />
-      {/* 左前臂 */}
-      <path d="M128 84 Q120 75 110 72 Q100 70 95 72"
-        fill="none" stroke={`url(#marble-${mirror ? "r" : "l"})`} strokeWidth="12" strokeLinecap="round" opacity="0.83" />
-      {/* 左手 */}
-      <ellipse cx="94" cy="74" rx="6" ry="5" fill={`url(#marble-${mirror ? "r" : "l"})`} opacity="0.8" />
-      {/* 弹弓带（从左肩垂下） */}
-      <path d="M95 78 Q90 120 85 170 Q82 200 80 215"
-        fill="none" stroke="rgba(180,160,130,0.25)" strokeWidth="3" strokeDasharray="4,2" />
-
-      {/* 颈部 */}
-      <path d="M65 110 L65 95 Q68 88 74 86 Q80 88 83 95 L83 110"
-        fill={`url(#marble-${mirror ? "r" : "l"})`} opacity="0.9" />
-
-      {/* 头部 */}
-      <ellipse cx="74" cy="65" rx="22" ry="28" fill={`url(#marble-${mirror ? "r" : "l"})`} opacity="0.93" />
-      {/* 下颌轮廓 */}
-      <path d="M56 65 Q60 80 74 82 Q88 80 92 65"
-        fill="none" stroke="rgba(200,190,175,0.25)" strokeWidth="0.8" />
-
-      {/* 五官 */}
-      <circle cx="66" cy="60" r="2" fill="rgba(180,160,140,0.25)" />
-      <circle cx="80" cy="60" r="2" fill="rgba(180,160,140,0.25)" />
-      <path d="M70 70 Q74 74 78 70" fill="none" stroke="rgba(180,160,140,0.2)" strokeWidth="0.7" />
-
-      {/* 卷发 — David 的标志性卷发 */}
-      {[
-        { cx: 56, cy: 48, r: 8 },
-        { cx: 62, cy: 38, r: 9 },
-        { cx: 70, cy: 34, r: 9 },
-        { cx: 78, cy: 35, r: 8 },
-        { cx: 85, cy: 40, r: 7 },
-        { cx: 90, cy: 48, r: 6 },
-        { cx: 54, cy: 58, r: 6 },
-        { cx: 92, cy: 56, r: 5 },
-        { cx: 60, cy: 43, r: 6 },
-        { cx: 86, cy: 44, r: 5 },
-      ].map((c, i) => (
-        <circle key={i} cx={c.cx} cy={c.cy} r={c.r}
-          fill={`url(#marble-${mirror ? "r" : "l"})`} opacity={0.7 + Math.random() * 0.2} />
-      ))}
-
-      {/* 全身微妙阴影 */}
-      <rect x="0" y="0" width="160" height="400" fill={`url(#shadow-${mirror ? "r" : "l"})`} opacity="0.3" />
-    </svg>
+      {/* 主题几何装饰 */}
+      {theme === "classic" && (
+        <div className="flex flex-col items-center gap-4 h-full justify-end pb-8">
+          {[1,2,3].map(i => (
+            <div key={i} className="w-px" style={{
+              height: `${40 + i * 20}px`,
+              background: `linear-gradient(to bottom, var(--theme-accent), transparent)`,
+              opacity: 0.3 - i * 0.08,
+            }} />
+          ))}
+          <div className="w-2 h-2 rounded-full" style={{ background: "var(--theme-accent)", opacity: 0.4 }} />
+        </div>
+      )}
+      {theme === "nouvelle" && (
+        <div className="flex flex-col items-center gap-6 h-full justify-end pb-8">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="w-8 h-px" style={{
+              background: "var(--theme-text)",
+              opacity: 0.15 - i * 0.03,
+            }} />
+          ))}
+        </div>
+      )}
+      {theme === "noir" && (
+        <div className="flex flex-col items-center gap-4 h-full justify-end pb-8">
+          {[1,2,3].map(i => (
+            <div key={i} className="w-1 h-1 rounded-full" style={{
+              background: i % 2 === 0 ? "#ff2d78" : "#00d4ff",
+              boxShadow: `0 0 ${6 + i * 2}px ${i % 2 === 0 ? "#ff2d78" : "#00d4ff"}`,
+              opacity: 0.4 - i * 0.1,
+            }} />
+          ))}
+        </div>
+      )}
+      {theme === "deco" && (
+        <div className="flex flex-col items-center gap-3 h-full justify-end pb-8">
+          {[1,2,3].map(i => (
+            <div key={i} style={{
+              width: `${16 + i * 8}px`,
+              height: "1px",
+              background: "var(--theme-accent)",
+              opacity: 0.25 - i * 0.06,
+            }} />
+          ))}
+          <div className="w-2 h-2" style={{ border: "1px solid var(--theme-accent)", opacity: 0.3, transform: "rotate(45deg)" }} />
+        </div>
+      )}
+    </div>
   );
 }
 
-// ==================== 进度指示 ====================
+// ==================== 进度条 ====================
 function ProgressDots({ total, current }: { total: number; current: number }) {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-2">
       {Array.from({ length: Math.min(total, 18) }).map((_, i) => (
         <div
           key={i}
           className="transition-all duration-1000 rounded-full"
           style={{
-            width: i === current ? "4px" : "3px",
-            height: i === current ? "4px" : "3px",
-            background: i === current ? "#c8a951" : "#d0c8b8",
-            transform: i === current ? "scale(1.3)" : "scale(1)",
+            width: i === current ? "5px" : "3px",
+            height: i === current ? "5px" : "3px",
+            background: i === current ? "var(--theme-accent)" : "var(--theme-border)",
+            transform: i === current ? "scale(1.4)" : "scale(1)",
           }}
         />
       ))}
@@ -177,216 +133,396 @@ function ProgressDots({ total, current }: { total: number; current: number }) {
   );
 }
 
-// ==================== 主页面 ====================
-export default function FocusPage() {
-  const [current, setCurrent] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+// ==================== 计时器 ====================
+function FocusTimer({
+  onComplete,
+  isRunning,
+  onToggle,
+}: {
+  onComplete: () => void;
+  isRunning: boolean;
+  onToggle: () => void;
+}) {
+  const [totalSeconds, setTotalSeconds] = useState(25 * 60);
+  const [remaining, setRemaining] = useState(25 * 60);
+  const [preset, setPreset] = useState(25);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const quote = quotes[current];
 
-  // 进入专注模式 → 强制经典复古主题，离开时恢复
   useEffect(() => {
-    const prev = document.documentElement.getAttribute("data-theme") || "classic";
-    document.documentElement.setAttribute("data-theme", "classic");
-    return () => {
-      const saved = localStorage.getItem("cinevault-theme") || prev;
-      document.documentElement.setAttribute("data-theme", saved);
-    };
-  }, []);
-
-  const goTo = useCallback((index: number) => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrent(index);
-      setIsTransitioning(false);
-    }, 800);
-  }, []);
-
-  const next = useCallback(() => {
-    goTo((current + 1) % quotes.length);
-  }, [current, goTo]);
-
-  const prev = useCallback(() => {
-    goTo((current - 1 + quotes.length) % quotes.length);
-  }, [current, goTo]);
-
-  // 自动轮播
-  useEffect(() => {
-    if (!isPaused) {
-      intervalRef.current = setInterval(next, 10000);
+    if (isRunning && remaining > 0) {
+      intervalRef.current = setInterval(() => {
+        setRemaining((prev) => {
+          if (prev <= 1) {
+            onComplete();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
     }
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [next, isPaused]);
+  }, [isRunning, remaining, onComplete]);
 
-  const pauseTemporarily = () => {
-    setIsPaused(true);
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => setIsPaused(false), 8000);
+  const setPresetMinutes = (min: number) => {
+    setPreset(min);
+    setTotalSeconds(min * 60);
+    setRemaining(min * 60);
+  };
+
+  const mins = Math.floor(remaining / 60);
+  const secs = remaining % 60;
+  const progress = totalSeconds > 0 ? remaining / totalSeconds : 0;
+
+  return (
+    <div className="flex flex-col items-center gap-3">
+      {/* 预设选择 */}
+      {!isRunning && (
+        <div className="flex gap-2">
+          {TIMER_PRESETS.map((p) => (
+            <button
+              key={p.minutes}
+              onClick={() => setPresetMinutes(p.minutes)}
+              className="px-3 py-1 text-[10px] tracking-widest rounded-full border transition-all"
+              style={{
+                borderColor: preset === p.minutes ? "var(--theme-accent)" : "var(--theme-border)",
+                color: preset === p.minutes ? "var(--theme-accent)" : "var(--theme-text-secondary)",
+                background: preset === p.minutes ? "var(--theme-accent-light)" : "transparent",
+              }}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* 环形进度 */}
+      <div className="relative w-20 h-20 md:w-24 md:h-24">
+        <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="44" fill="none" stroke="var(--theme-border)" strokeWidth="3" />
+          <circle
+            cx="50" cy="50" r="44"
+            fill="none"
+            stroke="var(--theme-accent)"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeDasharray={`${progress * 276} 276`}
+            style={{ transition: "stroke-dasharray 1s linear" }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-lg md:text-xl font-mono tracking-wider" style={{ color: "var(--theme-text)" }}>
+            {String(mins).padStart(2, "0")}:{String(secs).padStart(2, "0")}
+          </span>
+        </div>
+      </div>
+
+      {/* 开始/暂停 */}
+      <button
+        onClick={onToggle}
+        className="px-5 py-1.5 rounded-full text-xs tracking-widest transition-all"
+        style={{
+          background: "var(--theme-accent)",
+          color: isRunning ? "var(--theme-text)" : "#fff",
+          opacity: isRunning ? 0.7 : 1,
+        }}
+      >
+        {isRunning ? "暂停" : remaining === 0 ? "重新开始" : "开始专注"}
+      </button>
+    </div>
+  );
+}
+
+// ==================== 网易云内嵌播放器 ====================
+function NeteaseEmbed() {
+  const [scene, setScene] = useState(NETEASE_SCENES[0]);
+  const [showMenu, setShowMenu] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const handlePlay = (s: typeof NETEASE_SCENES[0]) => {
+    setScene(s);
+    setIsPlaying(true);
+    setShowMenu(false);
   };
 
   return (
-    <div className="fixed inset-0 overflow-hidden"
-      style={{
-        background: "linear-gradient(180deg, #faf8f5 0%, #f3efe8 35%, #e8e2d8 100%)",
-        fontFamily: '"Noto Serif SC", Georgia, "Songti SC", serif',
-      }}
-    >
-      {/* ========== 背景装饰 ========== */}
-      {/* 顶光 */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
-        style={{
-          width: "min(600px, 80vw)", height: "min(300px, 40vh)",
-          background: "radial-gradient(ellipse, rgba(210,180,130,0.08) 0%, transparent 60%)",
-        }}
-      />
-      {/* 水平金线 */}
-      <div className="absolute top-14 left-4 right-4 md:left-[10%] md:right-[10%]"
-        style={{ height: "0.5px", background: "linear-gradient(to right, transparent, rgba(180,150,100,0.3), rgba(180,150,100,0.3), transparent)" }}
-      />
-      <div className="absolute bottom-20 md:bottom-16 left-4 right-4 md:left-[12%] md:right-[12%]"
-        style={{ height: "0.5px", background: "linear-gradient(to right, transparent, rgba(180,150,100,0.12), transparent)" }}
-      />
+    <div className="flex flex-col items-center gap-2">
+      {/* 隐藏 iframe — 网易云网页外链播放器 */}
+      {isPlaying && (
+        <iframe
+          frameBorder="no"
+          marginWidth={0}
+          marginHeight={0}
+          width={0}
+          height={0}
+          src={`https://music.163.com/outchain/player?type=2&id=${scene.songId}&auto=1&height=0`}
+          className="hidden"
+          allow="autoplay"
+        />
+      )}
 
-      {/* ========== 返回按钮 ========== */}
-      <Link
-        href="/"
-        className="fixed top-5 left-5 md:top-7 md:left-8 z-50 flex items-center gap-2 group"
-        style={{ color: "#b0a090" }}
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-          <path d="M19 12H5M12 19l-7-7 7-7" />
-        </svg>
-        <span className="text-[10px] tracking-[0.2em] hidden sm:inline group-hover:opacity-70 transition-opacity">返回</span>
-      </Link>
-
-      {/* ========== 桌面端：左右大卫雕像 ========== */}
-      {/* 左雕塑 */}
-      <div className="hidden lg:block fixed left-0 bottom-0 z-10 pointer-events-none"
-        style={{ width: "min(160px, 12vw)", height: "min(520px, 75vh)", bottom: "40px", left: "max(20px, 3vw)" }}>
-        <DavidSculpture />
-      </div>
-      {/* 右雕塑（镜像） */}
-      <div className="hidden lg:block fixed right-0 bottom-0 z-10 pointer-events-none"
-        style={{ width: "min(160px, 12vw)", height: "min(520px, 75vh)", bottom: "40px", right: "max(20px, 3vw)" }}>
-        <DavidSculpture mirror />
-      </div>
-
-      {/* ========== 移动端：小型雕塑 ========== */}
-      <div className="lg:hidden fixed left-1 bottom-0 z-10 pointer-events-none"
-        style={{ width: "48px", height: "200px", bottom: "30px", left: "4px" }}>
-        <DavidSculpture />
-      </div>
-      <div className="lg:hidden fixed right-1 bottom-0 z-10 pointer-events-none"
-        style={{ width: "48px", height: "200px", bottom: "30px", right: "4px" }}>
-        <DavidSculpture mirror />
-      </div>
-
-      {/* ========== 主内容区 ========== */}
-      <main className="relative z-20 h-full flex flex-col items-center justify-center px-6 sm:px-10 md:px-16">
-        {/* FOCUS 标头 */}
-        <div className="text-center mb-3 md:mb-4">
-          <span className="text-[8px] md:text-[10px] tracking-[0.4em] md:tracking-[0.5em] uppercase"
-            style={{ color: "#b8a070" }}>
-            Focus Mode
-          </span>
-          <div className="mx-auto mt-2 md:mt-3"
-            style={{ width: "4px", height: "4px", background: "#c8a951", transform: "rotate(45deg)", opacity: 0.5 }}
-          />
+      {/* 音景选择 */}
+      {showMenu && !isPlaying && (
+        <div className="flex flex-wrap justify-center gap-1 px-4 mb-1 animate-in fade-in duration-200">
+          {NETEASE_SCENES.map((s) => (
+            <button
+              key={s.id}
+              onClick={() => handlePlay(s)}
+              className="flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-[10px] transition-all"
+              style={{
+                background: scene.id === s.id ? "var(--theme-accent-light)" : "transparent",
+                color: "var(--theme-text-secondary)",
+              }}
+            >
+              <span className="text-base">{s.emoji}</span>
+              <span className="tracking-widest">{s.label}</span>
+            </button>
+          ))}
         </div>
+      )}
 
-        {/* 进度 */}
-        <div className="mb-4 md:mb-6">
-          <ProgressDots total={quotes.length} current={current} />
-        </div>
-
-        {/* 名言主体 */}
-        <div
-          className="relative max-w-md w-full transition-all duration-800"
+      {/* 控制按钮 */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => {
+            if (isPlaying) {
+              setIsPlaying(false);
+            } else {
+              setShowMenu(!showMenu);
+            }
+          }}
+          className="flex items-center gap-2 px-4 py-2 rounded-full text-xs tracking-widest transition-all"
           style={{
-            opacity: isTransitioning ? 0 : 1,
-            transform: isTransitioning ? "translateY(12px)" : "translateY(0)",
-            filter: isTransitioning ? "blur(2px)" : "blur(0)",
-            transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-            transitionDuration: "800ms",
+            background: "var(--theme-card)",
+            border: "1px solid var(--theme-border)",
+            color: isPlaying ? "var(--theme-accent)" : "var(--theme-text-secondary)",
           }}
         >
-          {/* 金框卡片 */}
-          <div className="relative text-center px-5 py-6 md:px-8 md:py-8"
+          <span>{isPlaying ? "🎵" : scene.emoji}</span>
+          <span>{isPlaying ? "播放中" : scene.label}</span>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </button>
+        {isPlaying && (
+          <button
+            onClick={() => setIsPlaying(false)}
+            className="text-[10px] tracking-widest px-3 py-2 rounded-full transition-all"
+            style={{ color: "var(--theme-text-secondary)", background: "var(--theme-accent-light)" }}
+          >
+            停止
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ==================== 电影海报 ====================
+function MoviePoster({ tmdbId }: { tmdbId: number }) {
+  const [posterUrl, setPosterUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const ac = new AbortController();
+    fetch(`/api/movie/${tmdbId}`, { signal: ac.signal })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.poster_path) {
+          setPosterUrl(`https://image.tmdb.org/t/p/w342${data.poster_path}`);
+        }
+      })
+      .catch(() => {});
+    return () => ac.abort();
+  }, [tmdbId]);
+
+  if (!posterUrl) {
+    return (
+      <div
+        className="w-24 h-36 md:w-32 md:h-48 rounded-sm flex items-center justify-center"
+        style={{ background: "var(--theme-accent-light)" }}
+      >
+        <span className="text-xs" style={{ color: "var(--theme-text-secondary)" }}>🎬</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={posterUrl}
+      alt=""
+      className="w-24 h-36 md:w-32 md:h-48 object-cover rounded-sm shadow-lg animate-in fade-in duration-500"
+      style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.15)" }}
+    />
+  );
+}
+
+// ==================== 主页面 ====================
+export default function FocusPage() {
+  const { theme } = useTheme();
+  const [current, setCurrent] = useState(0);
+  const [animStage, setAnimStage] = useState<"enter" | "hold" | "exit">("enter");
+  const [timerRunning, setTimerRunning] = useState(false);
+  const quote = quotes[current];
+
+  // 定时切换
+  useEffect(() => {
+    if (timerRunning) return; // 计时器运行时不轮播
+    const t = setInterval(() => {
+      setAnimStage("exit");
+      setTimeout(() => {
+        setCurrent((c) => (c + 1) % quotes.length);
+        setAnimStage("enter");
+      }, 600);
+    }, 12000);
+    return () => clearInterval(t);
+  }, [timerRunning]);
+
+  const goTo = (index: number) => {
+    setAnimStage("exit");
+    setTimeout(() => {
+      setCurrent(index);
+      setAnimStage("enter");
+    }, 600);
+  };
+
+  useEffect(() => { setAnimStage("enter"); }, []);
+
+  const isNoir = theme === "noir";
+
+  return (
+    <div
+      className="fixed inset-0 overflow-hidden flex flex-col transition-all duration-700"
+      style={{
+        background: "var(--theme-bg)",
+        fontFamily: theme === "nouvelle"
+          ? "'Courier New', monospace"
+          : "'Noto Serif SC', Georgia, serif",
+      }}
+    >
+      {/* ===== 背景顶光 ===== */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
+        style={{
+          width: "min(600px, 80vw)",
+          height: "min(250px, 35vh)",
+          background: `radial-gradient(ellipse, var(--theme-accent-light) 0%, transparent 60%)`,
+        }}
+      />
+
+      {/* ===== 主题侧边装饰 ===== */}
+      <SideDecor side="left" />
+      <SideDecor side="right" />
+
+      {/* ===== 返回 ===== */}
+      <Link
+        href="/"
+        className="fixed top-5 left-5 md:top-7 md:left-8 z-50 flex items-center gap-2"
+        style={{ color: "var(--theme-text-secondary)" }}
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        <span className="text-[10px] tracking-[0.2em] hidden sm:inline">返回</span>
+      </Link>
+
+      {/* ===== 主布局 ===== */}
+      <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-8 gap-4 md:gap-6">
+
+        {/* 标题 */}
+        <div className="text-center">
+          <span className="text-[9px] tracking-[0.4em] uppercase" style={{ color: "var(--theme-text-secondary)" }}>
+            Focus Mode
+          </span>
+        </div>
+
+        {/* 计时器 */}
+        <FocusTimer
+          isRunning={timerRunning}
+          onToggle={() => setTimerRunning(!timerRunning)}
+          onComplete={() => setTimerRunning(false)}
+        />
+
+        {/* 海报 + 名言卡片（水平排列桌面 / 垂直排列手机） */}
+        <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 max-w-lg">
+          {/* 海报 — 带动画 */}
+          <div
+            className="shrink-0 transition-all duration-600"
             style={{
-              background: "rgba(255,255,255,0.45)",
-              backdropFilter: "blur(8px)",
-              border: "1px solid rgba(200,169,81,0.1)",
-              borderTop: "2px solid rgba(200,169,81,0.22)",
-              borderBottom: "2px solid rgba(200,169,81,0.22)",
-              boxShadow: "0 4px 24px rgba(30,20,10,0.03)",
+              opacity: animStage === "exit" ? 0 : 1,
+              transform: animStage === "exit"
+                ? "translateY(-16px) scale(0.95)"
+                : animStage === "enter"
+                ? "translateY(8px) scale(1.02)"
+                : "translateY(0) scale(1)",
+              transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
             }}
           >
-            {/* 上引号 */}
-            <div className="text-3xl md:text-4xl leading-none mb-2 md:mb-3"
-              style={{ color: "#c8a951", opacity: 0.4, fontFamily: "Georgia, serif" }}>
+            <MoviePoster tmdbId={quote.tmdbId} />
+          </div>
+
+          {/* 名言卡片 — 带动画 */}
+          <div
+            className="text-center px-5 py-5 md:px-7 md:py-6 max-w-xs transition-all duration-600"
+            style={{
+              opacity: animStage === "exit" ? 0 : 1,
+              transform: animStage === "exit"
+                ? "translateY(12px)"
+                : animStage === "enter"
+                ? "translateY(-4px)"
+                : "translateY(0)",
+              transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+              background: "var(--theme-card)",
+              backdropFilter: "blur(10px)",
+              border: "1px solid var(--theme-border)",
+              borderTop: `2px solid var(--theme-accent)`,
+              borderBottom: `2px solid var(--theme-accent)`,
+              borderRadius: "4px",
+              boxShadow: isNoir
+                ? "0 4px 24px rgba(255,45,120,0.05)"
+                : "0 4px 20px rgba(0,0,0,0.04)",
+            }}
+          >
+            <div className="text-2xl md:text-3xl leading-none mb-2"
+              style={{ color: "var(--theme-accent)", opacity: 0.4, fontFamily: "Georgia, serif" }}>
               &ldquo;
             </div>
-
-            {/* 中文名言 */}
-            <p className="text-[#3a2f30] leading-[2.1] md:leading-[2.2] mb-3 md:mb-4 tracking-wide"
-              style={{ fontSize: "clamp(1rem, 2.2vw, 1.3rem)" }}>
+            <p className="leading-[2] md:leading-[2.1] mb-3 tracking-wide"
+              style={{
+                color: "var(--theme-text)",
+                fontSize: "clamp(0.95rem, 2vw, 1.2rem)",
+              }}>
               {quote.quoteZh}
             </p>
-
-            {/* 英文 */}
-            <p className="text-[#a09080] italic leading-relaxed mb-3 md:mb-4 text-xs md:text-sm font-light">
+            <p className="italic leading-relaxed mb-3 text-xs md:text-sm font-light"
+              style={{ color: "var(--theme-text-secondary)" }}>
               "{quote.quoteEn}"
             </p>
-
-            {/* 金色分隔 */}
-            <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
-              <div style={{ width: "14px", height: "0.5px", background: "#c8a951", opacity: 0.3 }} />
-              <div style={{ width: "3px", height: "3px", background: "#c8a951", transform: "rotate(45deg)", opacity: 0.5 }} />
-              <div style={{ width: "14px", height: "0.5px", background: "#c8a951", opacity: 0.3 }} />
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <div style={{ width: "12px", height: "0.5px", background: "var(--theme-accent)", opacity: 0.3 }} />
+              <div style={{ width: "3px", height: "3px", background: "var(--theme-accent)", transform: "rotate(45deg)", opacity: 0.5 }} />
+              <div style={{ width: "12px", height: "0.5px", background: "var(--theme-accent)", opacity: 0.3 }} />
             </div>
-
-            {/* 电影信息 */}
-            <p className="text-[#8a7060] text-xs md:text-sm tracking-[0.2em] md:tracking-[0.25em] mb-1">
-              《{quote.film}》
-            </p>
-            <p className="text-[#b0a090] text-[10px] md:text-xs tracking-[0.15em]">
-              {quote.filmEn} · {quote.year}
+            <p className="text-xs tracking-[0.2em]" style={{ color: "var(--theme-text-secondary)" }}>
+              《{quote.film}》· {quote.year}
             </p>
           </div>
         </div>
 
-        {/* 导航按钮 */}
-        <div className="flex items-center gap-8 md:gap-12 mt-6 md:mt-8">
-          <button
-            onClick={() => { pauseTemporarily(); prev(); }}
-            className="p-2 transition-colors duration-300 hover:opacity-60"
-            style={{ color: "#b0a090" }}
-            aria-label="上一句"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
+        {/* 进度 + 导航 */}
+        <div className="flex items-center gap-6">
+          <button onClick={() => goTo((current - 1 + quotes.length) % quotes.length)} className="p-2 transition-opacity hover:opacity-50" style={{ color: "var(--theme-text-secondary)" }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15 18l-6-6 6-6" /></svg>
           </button>
-          <button
-            onClick={() => { pauseTemporarily(); next(); }}
-            className="p-2 transition-colors duration-300 hover:opacity-60"
-            style={{ color: "#b0a090" }}
-            aria-label="下一句"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-              <path d="M9 18l6-6-6-6" />
-            </svg>
+          <ProgressDots total={quotes.length} current={current} />
+          <button onClick={() => goTo((current + 1) % quotes.length)} className="p-2 transition-opacity hover:opacity-50" style={{ color: "var(--theme-text-secondary)" }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 18l6-6-6-6" /></svg>
           </button>
         </div>
-      </main>
+      </div>
 
-      {/* ========== 底部音乐控制 ========== */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 pb-4 md:pb-6 safe-bottom">
-        <NeteasePlayer />
+      {/* ===== 底部音乐 ===== */}
+      <div className="pb-4 md:pb-6 safe-bottom">
+        <NeteaseEmbed />
       </div>
     </div>
   );
