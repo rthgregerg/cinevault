@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import NeteasePlayer from "@/components/focus/NeteasePlayer";
 
 // ==================== 名言数据 ====================
 interface Quote {
@@ -30,14 +31,7 @@ const quotes: Quote[] = [
   { id: "q18", quoteZh: "你得决定自己是什么。别人给你贴的标签不重要。", quoteEn: "You have to decide what you are. The labels other people give you don't matter.", film: "月光男孩", filmEn: "Moonlight", year: 2016, tmdbId: 376867 },
 ];
 
-// ==================== 环境音 ====================
-const SOUND_SCENES = [
-  { id: "piano", label: "钢琴", emoji: "🎹", neteaseId: "5156234253" },
-  { id: "rain", label: "雨声", emoji: "🌧", neteaseId: "4934514985" },
-  { id: "ocean", label: "海浪", emoji: "🌊", neteaseId: "4993526879" },
-  { id: "forest", label: "森林", emoji: "🌿", neteaseId: "4951122676" },
-  { id: "cafe", label: "咖啡", emoji: "☕", neteaseId: "5086114461" },
-];
+// ==================== 大卫雕塑 SVG (fallback) ====================
 
 // ==================== 大卫雕像 SVG ====================
 function DavidSculpture({ mirror = false }: { mirror?: boolean }) {
@@ -187,12 +181,20 @@ function ProgressDots({ total, current }: { total: number; current: number }) {
 export default function FocusPage() {
   const [current, setCurrent] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [soundScene, setSoundScene] = useState(SOUND_SCENES[0]);
-  const [showSoundMenu, setShowSoundMenu] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const quote = quotes[current];
+
+  // 进入专注模式 → 强制经典复古主题，离开时恢复
+  useEffect(() => {
+    const prev = document.documentElement.getAttribute("data-theme") || "classic";
+    document.documentElement.setAttribute("data-theme", "classic");
+    return () => {
+      const saved = localStorage.getItem("cinevault-theme") || prev;
+      document.documentElement.setAttribute("data-theme", saved);
+    };
+  }, []);
 
   const goTo = useCallback((index: number) => {
     setIsTransitioning(true);
@@ -384,60 +386,7 @@ export default function FocusPage() {
 
       {/* ========== 底部音乐控制 ========== */}
       <div className="fixed bottom-0 left-0 right-0 z-50 pb-4 md:pb-6 safe-bottom">
-        {/* 音景选择面板 */}
-        {showSoundMenu && (
-          <div className="flex justify-center gap-1 md:gap-2 mb-2 px-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-            {SOUND_SCENES.map((scene) => (
-              <button
-                key={scene.id}
-                onClick={() => { setSoundScene(scene); setShowSoundMenu(false); pauseTemporarily(); }}
-                className="flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-[10px] transition-all duration-300"
-                style={{
-                  background: soundScene.id === scene.id ? "rgba(255,255,255,0.5)" : "transparent",
-                  color: soundScene.id === scene.id ? "#8a7060" : "#b0a090",
-                }}
-              >
-                <span className="text-base md:text-lg">{scene.emoji}</span>
-                <span className="tracking-wide whitespace-nowrap">{scene.label}</span>
-              </button>
-            ))}
-          </div>
-        )}
-
-        {/* 当前音景 */}
-        <div className="flex items-center justify-center gap-3">
-          <button
-            onClick={() => { setShowSoundMenu(!showSoundMenu); pauseTemporarily(); }}
-            className="flex items-center gap-2 px-4 py-2 rounded-full text-xs tracking-widest transition-all duration-300"
-            style={{
-              background: "rgba(255,255,255,0.35)",
-              backdropFilter: "blur(6px)",
-              border: "1px solid rgba(200,169,81,0.06)",
-              color: "#8a7060",
-            }}
-          >
-            <span>{soundScene.emoji}</span>
-            <span>{soundScene.label}</span>
-          </button>
-          <a
-            href={`https://music.163.com/#/playlist?id=${soundScene.neteaseId}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={pauseTemporarily}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-full text-[10px] tracking-widest transition-all duration-300"
-            style={{
-              background: "rgba(255,255,255,0.25)",
-              backdropFilter: "blur(4px)",
-              border: "1px solid rgba(200,169,81,0.04)",
-              color: "#b0a090",
-            }}
-          >
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" opacity="0.6">
-              <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm5.6 17.6c-.2.4-.7.5-1.1.3-3-1.8-6.8-2.2-11.2-1.2-.4.1-.8-.2-.9-.6-.1-.4.2-.8.6-.9 4.8-1.1 8.9-.6 12.4 1.4.4.2.5.7.2 1zm1.5-3.4c-.3.5-.9.6-1.4.4-3.4-2.1-8.6-2.7-12.7-1.5-.5.1-1-.1-1.2-.6-.1-.5.1-1 .6-1.2 4.7-1.4 10.5-.7 14.5 1.8.5.3.7.8.2 1.1z"/>
-            </svg>
-            <span>网易云</span>
-          </a>
-        </div>
+        <NeteasePlayer />
       </div>
     </div>
   );
