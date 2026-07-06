@@ -35,14 +35,12 @@ export default async function MovieDetailPage({ params }: Props) {
 
   return (
     <PageWrapper withPadding={false}>
-      {"_play_url" in movie && movie._play_url && (
-        <div className="px-4 md:px-6 lg:px-8 pt-4">
-          <TencentPlayer
-            playUrl={movie._play_url!}
-            movieTitle={movie.title}
-          />
-        </div>
-      )}
+      <div className="px-4 md:px-6 lg:px-8 pt-4">
+        <TencentPlayer
+          playUrl={"_play_url" in movie ? (movie as any)._play_url : undefined}
+          movieTitle={movie.title}
+        />
+      </div>
       <MovieHero movie={movie} />
       <div className="px-4 md:px-6 lg:px-8 lg:grid lg:grid-cols-3 lg:gap-8">
         <div className="lg:col-span-2 space-y-6 py-4">
