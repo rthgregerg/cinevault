@@ -186,8 +186,8 @@ function ElectronPlayer({ autoPlay }: { autoPlay: boolean }) {
           {qrUrl ? (
             <div className="flex flex-col items-center gap-2 p-3 rounded-lg"
               style={{ background: "var(--theme-card)", border: "1px solid var(--theme-border)" }}>
-              <img src={qrUrl} alt="扫码登录" className="w-36 h-36 rounded" />
-              <p className="text-[10px]" style={{ color: "var(--theme-text-secondary)" }}>
+              <img src={qrUrl} alt="扫码登录" className="w-48 h-48 md:w-56 md:h-56 rounded-lg" />
+              <p className="text-xs mt-2" style={{ color: "var(--theme-text-secondary)" }}>
                 请用网易云音乐 APP 扫码登录
               </p>
             </div>
