@@ -29,7 +29,7 @@ function BrowserPlayer() {
   );
 }
 
-function ElectronPlayer({ autoPlay }: { autoPlay: boolean }) {
+function ElectronPlayer({ autoPlay, compact = false }: { autoPlay: boolean; compact?: boolean }) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [checkingLogin, setCheckingLogin] = useState(true);
   const [qrUrl, setQrUrl] = useState<string | null>(null);
@@ -219,96 +219,96 @@ function ElectronPlayer({ autoPlay }: { autoPlay: boolean }) {
       {/* 已登录 */}
       {loggedIn && (
         <>
-          {/* 用户栏 */}
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-2">
-              <span className="text-xs" style={{ color: "var(--theme-text)" }}>👤 {nickname || '用户'}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <button onClick={() => { setViewMode("playlists"); fetchPlaylists(); }}
-                className="text-[10px] px-2 py-1 rounded-full transition-all"
-                style={{ background: viewMode === "playlists" ? "var(--theme-accent-light)" : "var(--theme-card)", color: "var(--theme-text-secondary)" }}>
-                我的歌单
+          {compact ? (
+            /* ====== 专注模式 — 极简播放条 ====== */
+            <div className="flex items-center gap-4 px-6 py-3 rounded-full"
+              style={{ background: "var(--theme-card)", border: "1px solid var(--theme-border)" }}>
+              <button onClick={togglePlay}
+                className="w-10 h-10 rounded-full flex items-center justify-center text-xl transition-all hover:scale-110"
+                style={{ background: "var(--theme-accent)", color: "#fff" }}>
+                {isPlaying ? "⏸" : "▶"}
               </button>
-              <button onClick={() => setViewMode("search")}
-                className="text-[10px] px-2 py-1 rounded-full transition-all"
-                style={{ background: viewMode === "search" ? "var(--theme-accent-light)" : "var(--theme-card)", color: "var(--theme-text-secondary)" }}>
-                搜索
-              </button>
-              <button onClick={logout}
-                className="text-[10px] px-2 py-1 rounded-full" style={{ color: "var(--theme-text-secondary)", background: "var(--theme-card)" }}>
-                退出
-              </button>
-            </div>
-          </div>
-
-          {/* 搜索框 */}
-          {viewMode === "search" && (
-            <form onSubmit={(e) => { e.preventDefault(); if (searchQuery.trim()) searchSongs(searchQuery.trim()); }} className="w-full">
-              <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="搜索歌曲..." className="w-full px-3 py-1.5 rounded-full text-xs outline-none"
-                style={{ background: "var(--theme-card)", border: "1px solid var(--theme-border)", color: "var(--theme-text)" }} />
-            </form>
-          )}
-
-          {/* 歌单列表 */}
-          {viewMode === "playlists" && (
-            <div className="w-full max-h-56 overflow-y-auto space-y-1">
-              {playlists.length === 0 ? (
-                <p className="text-center text-xs py-4" style={{ color: "var(--theme-text-secondary)" }}>暂无歌单</p>
+              {currentSong ? (
+                <div className="flex flex-col min-w-0">
+                  <span className="text-sm truncate max-w-[200px]" style={{ color: "var(--theme-text)" }}>{currentSong.name}</span>
+                  <span className="text-[10px] truncate" style={{ color: "var(--theme-text-secondary)" }}>{currentSong.ar?.[0]?.name || ''}</span>
+                </div>
               ) : (
-                playlists.map((pl) => (
-                  <button key={pl.id} onClick={() => loadPlaylistSongs(pl)}
-                    className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-xs transition-all hover:opacity-70"
-                    style={{ background: activePlaylist === pl.id.toString() ? "var(--theme-accent-light)" : "var(--theme-card)" }}>
-                    <span>📋</span>
-                    <span className="truncate flex-1" style={{ color: "var(--theme-text)" }}>{pl.name}</span>
-                    <span className="text-[10px]" style={{ color: "var(--theme-text-secondary)" }}>{pl.trackCount}首</span>
-                  </button>
-                ))
+                <span className="text-xs" style={{ color: "var(--theme-text-secondary)" }}>未在播放</span>
               )}
             </div>
-          )}
-
-          {/* 歌曲列表 */}
-          {(viewMode === "songs" || viewMode === "search") && (
-            <div className="w-full max-h-48 overflow-y-auto space-y-0.5">
-              {loading ? (
-                <p className="text-center text-xs py-4" style={{ color: "var(--theme-text-secondary)" }}>加载中...</p>
-              ) : songs.length === 0 ? (
-                <p className="text-center text-xs py-4" style={{ color: "var(--theme-text-secondary)" }}>暂无歌曲</p>
-              ) : (
-                songs.slice(0, 30).map((song) => (
-                  <button key={song.id} onClick={() => playSong(song)}
-                    className="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-left text-xs transition-all hover:opacity-70"
-                    style={{ background: currentSong?.id === song.id ? "var(--theme-accent-light)" : "transparent" }}>
-                    <span className="truncate flex-1" style={{ color: currentSong?.id === song.id ? "var(--theme-accent)" : "var(--theme-text)" }}>{song.name}</span>
-                    <span className="text-[10px] truncate opacity-60" style={{ color: "var(--theme-text-secondary)" }}>{song.ar?.[0]?.name || ''}</span>
-                  </button>
-                ))
+          ) : (
+            /* ====== 完整模式 — 歌单/搜索/播放 ====== */
+            <div className="flex flex-col items-center gap-3 w-full">
+              <div className="flex items-center justify-between w-full">
+                <span className="text-xs" style={{ color: "var(--theme-text)" }}>👤 {nickname || '用户'}</span>
+                <div className="flex items-center gap-2">
+                  <button onClick={() => { setViewMode("playlists"); fetchPlaylists(); }}
+                    className="text-[10px] px-2 py-1 rounded-full transition-all"
+                    style={{ background: viewMode === "playlists" ? "var(--theme-accent-light)" : "var(--theme-card)", color: "var(--theme-text-secondary)" }}>我的歌单</button>
+                  <button onClick={() => setViewMode("search")}
+                    className="text-[10px] px-2 py-1 rounded-full transition-all"
+                    style={{ background: viewMode === "search" ? "var(--theme-accent-light)" : "var(--theme-card)", color: "var(--theme-text-secondary)" }}>搜索</button>
+                  <button onClick={logout}
+                    className="text-[10px] px-2 py-1 rounded-full" style={{ color: "var(--theme-text-secondary)", background: "var(--theme-card)" }}>退出</button>
+                </div>
+              </div>
+              {viewMode === "search" && (
+                <form onSubmit={(e) => { e.preventDefault(); if (searchQuery.trim()) searchSongs(searchQuery.trim()); }} className="w-full">
+                  <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="搜索歌曲..." className="w-full px-3 py-1.5 rounded-full text-xs outline-none"
+                    style={{ background: "var(--theme-card)", border: "1px solid var(--theme-border)", color: "var(--theme-text)" }} />
+                </form>
               )}
+              {viewMode === "playlists" && (
+                <div className="w-full max-h-56 overflow-y-auto space-y-1">
+                  {playlists.length === 0 ? (
+                    <p className="text-center text-xs py-4" style={{ color: "var(--theme-text-secondary)" }}>暂无歌单</p>
+                  ) : playlists.map((pl) => (
+                    <button key={pl.id} onClick={() => loadPlaylistSongs(pl)}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-xs transition-all hover:opacity-70"
+                      style={{ background: activePlaylist === pl.id.toString() ? "var(--theme-accent-light)" : "var(--theme-card)" }}>
+                      <span>📋</span>
+                      <span className="truncate flex-1" style={{ color: "var(--theme-text)" }}>{pl.name}</span>
+                      <span className="text-[10px]" style={{ color: "var(--theme-text-secondary)" }}>{pl.trackCount}首</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+              {(viewMode === "songs" || viewMode === "search") && (
+                <div className="w-full max-h-48 overflow-y-auto space-y-0.5">
+                  {loading ? (
+                    <p className="text-center text-xs py-4" style={{ color: "var(--theme-text-secondary)" }}>加载中...</p>
+                  ) : songs.length === 0 ? (
+                    <p className="text-center text-xs py-4" style={{ color: "var(--theme-text-secondary)" }}>暂无歌曲</p>
+                  ) : songs.slice(0, 30).map((song) => (
+                    <button key={song.id} onClick={() => playSong(song)}
+                      className="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-left text-xs transition-all hover:opacity-70"
+                      style={{ background: currentSong?.id === song.id ? "var(--theme-accent-light)" : "transparent" }}>
+                      <span className="truncate flex-1" style={{ color: currentSong?.id === song.id ? "var(--theme-accent)" : "var(--theme-text)" }}>{song.name}</span>
+                      <span className="text-[10px] truncate opacity-60" style={{ color: "var(--theme-text-secondary)" }}>{song.ar?.[0]?.name || ''}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+              <div className="flex items-center gap-3 mt-1">
+                <button onClick={togglePlay} className="w-8 h-8 rounded-full flex items-center justify-center text-base transition-all hover:scale-110"
+                  style={{ background: "var(--theme-accent)", color: "#fff" }}>{isPlaying ? "⏸" : "▶"}</button>
+                {currentSong && (
+                  <span className="text-xs truncate max-w-[200px]" style={{ color: "var(--theme-text)" }}>♪ {currentSong.name} - {currentSong.ar?.[0]?.name || '未知'}</span>
+                )}
+              </div>
             </div>
           )}
-
-          {/* 播放控制 */}
-          <div className="flex items-center gap-3 mt-1">
-            <button onClick={togglePlay} className="text-lg transition-all hover:scale-110" style={{ color: "var(--theme-accent)" }}>{isPlaying ? "⏸" : "▶"}</button>
-            {currentSong && (
-              <span className="text-xs truncate max-w-[200px]" style={{ color: "var(--theme-text)" }}>♪ {currentSong.name} - {currentSong.ar?.[0]?.name || '未知'}</span>
-            )}
-            {!currentSong && songs.length > 0 && (
-              <span className="text-xs" style={{ color: "var(--theme-text-secondary)" }}>选择歌曲开始播放</span>
-            )}
-          </div>
         </>
       )}
     </div>
   );
 }
 
-export default function NeteasePlayer({ autoPlay = false }: { autoPlay?: boolean }) {
+export default function NeteasePlayer({ autoPlay = false, compact = false }: { autoPlay?: boolean; compact?: boolean }) {
   const [isElectron, setIsElectron] = useState(false);
   useEffect(() => { setIsElectron(typeof window !== 'undefined' && !!window.electronAPI?.isElectron); }, []);
   if (!isElectron) return <BrowserPlayer />;
-  return <ElectronPlayer autoPlay={autoPlay} />;
+  return <ElectronPlayer autoPlay={autoPlay} compact={compact} />;
 }
