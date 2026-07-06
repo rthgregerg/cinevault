@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useTheme } from "@/components/layout/ThemeProvider";
 import Starfield from "@/components/focus/Starfield";
@@ -12,6 +12,34 @@ import NeteasePlayer from "@/components/focus/NeteasePlayer";
 export default function FocusPage() {
   const { theme } = useTheme();
   const [timerRunning, setTimerRunning] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const isElectron = typeof window !== 'undefined' && !!window.electronAPI?.isElectron;
+
+  // 监听全屏状态变化
+  useEffect(() => {
+    if (!isElectron) return;
+    window.electronAPI!.onFullscreenChange(setIsFullscreen);
+  }, [isElectron]);
+
+  // 计时器切换 → 控制全屏
+  const handleTimerToggle = useCallback(() => {
+    if (!timerRunning && isElectron) {
+      // 开始专注 → 全屏
+      window.electronAPI!.enterFullscreen();
+    } else if (timerRunning && isElectron) {
+      // 暂停 → 退出全屏
+      window.electronAPI!.exitFullscreen();
+    }
+    setTimerRunning(!timerRunning);
+  }, [timerRunning, isElectron]);
+
+  // 计时完成
+  const handleTimerComplete = useCallback(() => {
+    setTimerRunning(false);
+    if (isElectron) {
+      window.electronAPI!.exitFullscreen();
+    }
+  }, [isElectron]);
 
   return (
     <div
@@ -35,21 +63,27 @@ export default function FocusPage() {
         }}
       />
 
-      {/* ===== 主题侧边装饰 ===== */}
-      <SideDecor side="left" />
-      <SideDecor side="right" />
+      {/* ===== 主题侧边装饰 — 全屏时隐藏 ===== */}
+      {!isFullscreen && (
+        <>
+          <SideDecor side="left" />
+          <SideDecor side="right" />
+        </>
+      )}
 
-      {/* ===== 返回 ===== */}
-      <Link
-        href="/"
-        className="fixed top-5 left-5 md:top-7 md:left-8 z-50 flex items-center gap-2"
-        style={{ color: "var(--theme-text-secondary)" }}
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M19 12H5M12 19l-7-7 7-7" />
-        </svg>
-        <span className="text-[10px] tracking-[0.2em] hidden sm:inline">返回</span>
-      </Link>
+      {/* ===== 返回 — 全屏时隐藏 ===== */}
+      {!isFullscreen && (
+        <Link
+          href="/"
+          className="fixed top-5 left-5 md:top-7 md:left-8 z-50 flex items-center gap-2"
+          style={{ color: "var(--theme-text-secondary)" }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          <span className="text-[10px] tracking-[0.2em] hidden sm:inline">返回</span>
+        </Link>
+      )}
 
       {/* ===== 主布局 ===== */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-8 gap-4 md:gap-6">
@@ -63,17 +97,17 @@ export default function FocusPage() {
         {/* 计时器 */}
         <FocusTimer
           isRunning={timerRunning}
-          onToggle={() => setTimerRunning(!timerRunning)}
-          onComplete={() => setTimerRunning(false)}
+          onToggle={handleTimerToggle}
+          onComplete={handleTimerComplete}
         />
 
         {/* 名言轮播 */}
         <QuoteCarousel timerRunning={timerRunning} />
       </div>
 
-      {/* ===== 底部音乐 ===== */}
+      {/* ===== 底部音乐 — 计时器启动时自动播放 ===== */}
       <div className="relative z-10 pb-4 md:pb-6 safe-bottom">
-        <NeteasePlayer />
+        <NeteasePlayer autoPlay={timerRunning && isElectron} />
       </div>
     </div>
   );
