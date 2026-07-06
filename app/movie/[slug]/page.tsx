@@ -5,6 +5,7 @@ import RatingDisplay from "@/components/movie/RatingDisplay";
 import ActionButtons from "@/components/movie/ActionButtons";
 import CastSection from "@/components/movie/CastSection";
 import RelatedMovies from "@/components/movie/RelatedMovies";
+import TencentPlayer from "@/components/movie/TencentPlayer";
 import WatchProviders from "@/components/movie/WatchProviders";
 import SoundtrackSection from "@/components/movie/SoundtrackSection";
 import { getMovieDetail, getMovieCredits, getSimilarMovies } from "@/lib/tmdb";
@@ -34,6 +35,14 @@ export default async function MovieDetailPage({ params }: Props) {
 
   return (
     <PageWrapper withPadding={false}>
+      {"_play_url" in movie && movie._play_url && (
+        <div className="px-4 md:px-6 lg:px-8 pt-4">
+          <TencentPlayer
+            playUrl={movie._play_url!}
+            movieTitle={movie.title}
+          />
+        </div>
+      )}
       <MovieHero movie={movie} />
       <div className="px-4 md:px-6 lg:px-8 lg:grid lg:grid-cols-3 lg:gap-8">
         <div className="lg:col-span-2 space-y-6 py-4">

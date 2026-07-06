@@ -14,10 +14,13 @@ export function formatRatingCount(count: number): string {
 const IMG_BASE = "https://image.tmdb.org/t/p";
 export function posterUrl(path: string | null, size: "w185" | "w342" | "w500" = "w342"): string {
   if (!path) return "/icons/placeholder-poster.svg";
+  // 如果已经是完整 URL（资源站直链），直接返回
+  if (path.startsWith("http://") || path.startsWith("https://")) return path;
   return `${IMG_BASE}/${size}${path}`;
 }
 export function backdropUrl(path: string | null): string {
   if (!path) return "";
+  if (path.startsWith("http://") || path.startsWith("https://")) return path;
   return `${IMG_BASE}/w1280${path}`;
 }
 

@@ -18,6 +18,7 @@ export interface TmdbMovie {
   credits?: TmdbCredits;
   production_countries?: { iso_3166_1: string; name: string }[];
   spoken_languages?: { iso_639_1: string; name: string }[];
+  _play_url?: string;
 }
 
 export interface TmdbListResponse {
@@ -160,4 +161,35 @@ export interface CountryWatchProviders {
   flatrate?: WatchProvider[];
   rent?: WatchProvider[];
   buy?: WatchProvider[];
+}
+
+// ============ 苹果CMS 资源站类型 ============
+
+/** 资源站返回的单条视频 */
+export interface ResourceStationMovie {
+  vod_id: number;
+  vod_name: string;
+  vod_pic: string;
+  vod_remarks: string;       // e.g. "HD", "TC"
+  vod_year: string;
+  vod_director: string;
+  vod_actor: string;          // comma-separated
+  vod_content: string;        // overview
+  vod_play_url: string;       // "腾讯视频$url$$爱奇艺$url"
+  vod_score?: string;
+  vod_lang?: string;
+  vod_area?: string;
+  type_id?: number;
+  type_name?: string;
+}
+
+/** 资源站列表响应 */
+export interface ResourceStationListResponse {
+  code: number;
+  msg: string;
+  page: string;
+  pagecount: number;
+  limit: string;
+  total: number;
+  list: ResourceStationMovie[];
 }
