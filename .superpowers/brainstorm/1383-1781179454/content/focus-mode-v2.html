@@ -1,0 +1,97 @@
+<h2>专注模式 — 蓝白高雅 · 三种方案</h2>
+<p class="subtitle">配色：乳白 / 雾蓝 / 靛青 — 安静、克制、有呼吸感</p>
+
+<div class="cards">
+  <!-- Option A: Full-screen carousel -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:linear-gradient(180deg,#e8edf2,#dce4ec,#c8d6e5);padding:20px;border-radius:8px;text-align:center">
+        <div style="max-width:260px;margin:0 auto;min-height:400px;display:flex;flex-direction:column;justify-content:center;position:relative">
+          <!-- Progress dots top -->
+          <div style="display:flex;gap:12px;justify-content:center;margin-bottom:28px">
+            <div style="width:24px;height:2px;background:#3b5998"></div>
+            <div style="width:24px;height:2px;background:#c0cdd8"></div>
+            <div style="width:24px;height:2px;background:#c0cdd8"></div>
+            <div style="width:24px;height:2px;background:#c0cdd8"></div>
+          </div>
+          <!-- Image placeholder -->
+          <div style="width:200px;height:140px;background:linear-gradient(135deg,#b8c9db,#92a8c0,#6b8aab);border-radius:2px;margin:0 auto 24px;box-shadow:0 4px 20px rgba(59,89,152,0.12);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);font-size:11px;letter-spacing:2px">FILM STILL</div>
+          <!-- Quote -->
+          <p style="color:#2c3e50;font-size:16px;font-family:Georgia,serif;line-height:2;margin:0 0 6px;letter-spacing:0.5px">"我们读诗写诗，<br/>并不是因为它们好玩，<br/>而是因为我们是<br/>人类的一分子。"</p>
+          <div style="width:20px;height:1px;background:#3b5998;margin:12px auto"></div>
+          <p style="color:#7f8fa6;font-size:11px;margin:0;letter-spacing:1px">《死亡诗社》· 1989</p>
+          <!-- Ambient sound indicator -->
+          <div style="margin-top:28px;display:flex;align-items:center;justify-content:center;gap:8px;color:#92a8c0;font-size:10px">
+            <span>♪</span><span style="width:40px;height:1px;background:#c0cdd8"></span><span>雨声 · 钢琴</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>全屏呼吸</h3>
+      <p>满屏剧照 + 名言淡入淡出，节奏极慢，像在美术馆看画。底部显示环境音名称。</p>
+    </div>
+  </div>
+
+  <!-- Option B: Vertical flow -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:linear-gradient(180deg,#f4f6f9,#e8edf2,#dce4ec);padding:20px;border-radius:8px">
+        <div style="max-width:260px;margin:0 auto;min-height:400px;overflow:hidden;position:relative">
+          <!-- Top gradient fade -->
+          <div style="position:absolute;top:0;left:0;right:0;height:48px;background:linear-gradient(to bottom,rgba(244,246,249,1),rgba(244,246,249,0));z-index:2"></div>
+          <!-- Flowing items -->
+          <div style="padding:40px 0">
+            <div style="padding:16px 0;opacity:0.4">
+              <p style="color:#7f8fa6;font-size:12px;font-family:Georgia,serif;line-height:1.8;margin:0">"人生就像一盒巧克力，你永远不知道下一颗是什么味道。"</p>
+              <p style="color:#b0bec5;font-size:9px;margin:4px 0 0">阿甘正传</p>
+            </div>
+            <div style="border-left:1px solid #cdd6e0;padding:20px 0 20px 16px;margin:8px 0">
+              <div style="width:140px;height:90px;background:linear-gradient(135deg,#a8bbcf,#7d9bc0,#5a7da8);border-radius:1px;margin-bottom:12px;box-shadow:0 2px 12px rgba(59,89,152,0.08)"></div>
+              <p style="color:#2c3e50;font-size:15px;font-family:Georgia,serif;line-height:1.9;margin:0">"希望是美好的，也许是人间至善，而美好的事物永不消逝。"</p>
+              <div style="width:16px;height:1px;background:#7d9bc0;margin:10px 0"></div>
+              <p style="color:#8b9dc3;font-size:10px;margin:0;letter-spacing:1px">肖申克的救赎 · 1994</p>
+            </div>
+            <div style="padding:16px 0;opacity:0.4">
+              <p style="color:#7f8fa6;font-size:12px;font-family:Georgia,serif;line-height:1.8;margin:0">"每个人都会死，但不是每个人都真正活过。"</p>
+              <p style="color:#b0bec5;font-size:9px;margin:4px 0 0">勇敢的心</p>
+            </div>
+          </div>
+          <!-- Bottom fade -->
+          <div style="position:absolute;bottom:0;left:0;right:0;height:48px;background:linear-gradient(to top,rgba(232,237,242,1),rgba(232,237,242,0));z-index:2"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>时间流</h3>
+      <p>名言与剧照从下往上缓缓流动，当前句左侧有细线标记。像阅读一本无限的诗集。</p>
+    </div>
+  </div>
+
+  <!-- Option C: Zen card -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:linear-gradient(180deg,#e8edf2,#dee6ef,#d0dbe8);padding:20px;border-radius:8px;text-align:center">
+        <div style="max-width:260px;margin:0 auto;min-height:400px;display:flex;align-items:center;justify-content:center;position:relative">
+          <!-- Ambient particles hint -->
+          <div style="position:absolute;top:30px;left:40px;width:3px;height:3px;border-radius:50%;background:#7d9bc0;opacity:0.4"></div>
+          <div style="position:absolute;top:80px;right:50px;width:2px;height:2px;border-radius:50%;background:#a0b8d0;opacity:0.3"></div>
+          <div style="position:absolute;bottom:60px;left:60px;width:2px;height:2px;border-radius:50%;background:#8ba5c4;opacity:0.3"></div>
+          <!-- Central card -->
+          <div style="background:rgba(255,255,255,0.7);backdrop-filter:blur(12px);border:1px solid rgba(180,200,220,0.3);border-radius:4px;padding:28px 20px;max-width:220px;box-shadow:0 8px 40px rgba(59,89,152,0.06)">
+            <div style="width:160px;height:100px;background:linear-gradient(135deg,#c5d5e8,#9ab4d0,#7a9cc0);border-radius:1px;margin:0 auto 20px;box-shadow:0 2px 10px rgba(59,89,152,0.08)"></div>
+            <p style="color:#2c3e50;font-size:15px;font-family:Georgia,serif;line-height:2;margin:0 0 8px">"我们一路奋战，<br/>不是为了改变世界，<br/>而是为了不让<br/>世界改变我们。"</p>
+            <div style="width:16px;height:1px;background:#8ba5c4;margin:12px auto"></div>
+            <p style="color:#8b9dc3;font-size:10px;margin:0;letter-spacing:1px">《熔炉》· 2011</p>
+          </div>
+          <!-- Tap hint -->
+          <p style="position:absolute;bottom:24px;left:0;right:0;text-align:center;color:#b0c0d0;font-size:9px;letter-spacing:1px">轻触任意位置 · 切换下一句</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>禅意卡片</h3>
+      <p>单张毛玻璃卡片居中悬浮，背景微粒缓慢飘动。轻触切换，像翻一页诗集。</p>
+    </div>
+  </div>
+</div>

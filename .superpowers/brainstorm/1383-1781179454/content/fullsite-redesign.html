@@ -1,0 +1,132 @@
+<h2>CineVault 全站改造方案 — 借鉴 madebywild 风格</h2>
+<p class="subtitle">三个核心方向 · 高级有层次 · 电影感</p>
+
+<div class="cards">
+  <!-- Direction 1: Hero Transformation -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:linear-gradient(180deg,#0a0a0a,#1a1525,#0a0a0a);padding:24px 16px;min-height:340px;text-align:center;position:relative;overflow:hidden">
+        <!-- 3D floating elements hint -->
+        <div style="position:absolute;top:30px;left:20px;width:30px;height:30px;border:1px solid rgba(200,169,81,0.3);border-radius:50%;animation:pulse 3s infinite"></div>
+        <div style="position:absolute;bottom:60px;right:30px;width:20px;height:20px;border:1px solid rgba(200,169,81,0.2);border-radius:50%"></div>
+        <div style="position:absolute;top:100px;right:40px;width:8px;height:8px;background:rgba(200,169,81,0.4);border-radius:50%"></div>
+        <!-- Hero text with surround effect -->
+        <div style="padding-top:40px">
+          <span style="color:#c8a951;font-size:9px;letter-spacing:6px;display:block;margin-bottom:20px">C I N E V A U L T</span>
+          <p style="color:#fff;font-size:22px;font-family:serif;line-height:1.5;margin:0 0 8px">发现电影之美</p>
+          <p style="color:#c8a951;font-size:13px;font-family:serif;line-height:1.5;margin:0">探索影史之深</p>
+          <div style="width:30px;height:1px;background:#c8a951;margin:20px auto"></div>
+        </div>
+        <!-- Floating film elements orbiting -->
+        <div style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;gap:20px">
+          <div style="width:40px;height:25px;border:1px solid rgba(200,169,81,0.25);border-radius:3px;display:flex;align-items:center;justify-content:center">
+            <span style="color:#c8a951;font-size:6px">🎬</span>
+          </div>
+          <div style="width:25px;height:25px;border:1px solid rgba(200,169,81,0.2);border-radius:50%"></div>
+          <div style="width:35px;height:20px;border:1px solid rgba(200,169,81,0.2);border-radius:2px"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>方向一：首页 Hero 重构</h3>
+      <p>全屏电影感首屏 — 3D 电影元素（胶片框、场记板、奖杯）绕标题旋转漂浮。金色粒子从下升腾。滚动时元素散去进入内容区。</p>
+    </div>
+  </div>
+
+  <!-- Direction 2: Cinematic Scroll -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:linear-gradient(180deg,#0a0a0a,#141414,#0a0a0a);padding:24px 16px;min-height:340px;position:relative;overflow:hidden">
+        <!-- Parallax layers hint -->
+        <div style="padding:20px 0">
+          <!-- Layer 1: far -->
+          <div style="width:100%;height:40px;background:linear-gradient(to right,transparent,rgba(200,169,81,0.05),transparent);margin-bottom:8px;border-radius:20px"></div>
+          <!-- Layer 2: mid -->
+          <div style="display:flex;gap:8px;margin-bottom:8px">
+            <div style="flex:2;height:80px;background:linear-gradient(135deg,rgba(30,25,40,0.8),rgba(20,15,30,0.6));border:1px solid rgba(200,169,81,0.1);border-radius:4px;position:relative">
+              <div style="position:absolute;bottom:8px;left:8px;color:#c8a951;font-size:7px;letter-spacing:1px">MOVIE CARD</div>
+            </div>
+            <div style="flex:1;height:80px;background:linear-gradient(135deg,rgba(25,20,35,0.7),rgba(15,10,25,0.5));border:1px solid rgba(200,169,81,0.06);border-radius:4px"></div>
+          </div>
+          <!-- Layer 3: close -->
+          <div style="width:90%;height:100px;background:linear-gradient(135deg,rgba(40,30,50,0.9),rgba(25,18,35,0.7));border:1px solid rgba(200,169,81,0.15);border-radius:6px;margin-left:5%;position:relative">
+            <div style="position:absolute;bottom:10px;left:10px">
+              <div style="color:#fff;font-size:10px;font-family:serif;margin-bottom:2px">星际穿越</div>
+              <div style="color:#c8a951;font-size:7px">INTERSTELLAR · 9.4</div>
+            </div>
+          </div>
+        </div>
+        <!-- Scroll indicator -->
+        <div style="text-align:center;margin-top:12px">
+          <div style="width:1px;height:30px;background:linear-gradient(to bottom,rgba(200,169,81,0.4),transparent);margin:0 auto"></div>
+          <span style="color:rgba(200,169,81,0.4);font-size:6px;letter-spacing:3px">SCROLL</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>方向二：电影化视差滚动</h3>
+      <p>内容分远-中-近三层，滚动时以不同速度移动。卡片从画面外滑入，标题大字横穿全屏。金色引导线串联各区块。</p>
+    </div>
+  </div>
+
+  <!-- Direction 3: Surreal Interactions -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:linear-gradient(180deg,#0a0a0a,#141414,#0a0a0a);padding:24px 16px;min-height:340px;text-align:center;position:relative;overflow:hidden">
+        <!-- Mouse trail hint -->
+        <div style="position:absolute;top:60px;left:50%;width:80px;height:80px;background:radial-gradient(circle,rgba(200,169,81,0.08),transparent 60%);border-radius:50%;transform:translate(-50%,-50%)"></div>
+        <!-- 3D tilt card -->
+        <div style="margin:50px auto 20px;width:140px;height:180px;background:linear-gradient(135deg,#2a2035,#1a1525);border:1px solid rgba(200,169,81,0.2);border-radius:6px;transform:perspective(600px) rotateY(-8deg) rotateX(5deg);box-shadow:-8px 8px 24px rgba(0,0,0,0.4);position:relative">
+          <div style="position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(200,169,81,0.05) 100%);border-radius:6px"></div>
+          <div style="position:absolute;bottom:10px;left:10px;color:#c8a951;font-size:7px;letter-spacing:1px">HOVER ME</div>
+        </div>
+        <!-- Glow dots -->
+        <div style="display:flex;gap:12px;justify-content:center;margin-bottom:20px">
+          <div style="width:4px;height:4px;background:#c8a951;border-radius:50%;box-shadow:0 0 8px rgba(200,169,81,0.5)"></div>
+          <div style="width:3px;height:3px;background:rgba(200,169,81,0.4);border-radius:50%"></div>
+          <div style="width:3px;height:3px;background:rgba(200,169,81,0.3);border-radius:50%"></div>
+        </div>
+        <p style="color:rgba(200,169,81,0.5);font-size:8px;letter-spacing:2px">✦ 鼠标跟随 ✦ 3D 倾斜 ✦ 光晕反应 ✦</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>方向三：超现实交互层</h3>
+      <p>鼠标移动时金色光晕跟随（已有 CursorGlow）。卡片 hover 时 3D 倾斜 + 光晕（已有 ParallaxTilt）。页面间过渡动画。随机彩蛋（电影冷知识弹窗）。</p>
+    </div>
+  </div>
+</div>
+
+<!-- CONCLUSION -->
+<div style="margin-top:24px;padding:20px 24px;background:rgba(200,169,81,0.06);border:1px solid rgba(200,169,81,0.15);border-radius:8px">
+  <h3 style="color:#c8a951;font-size:13px;letter-spacing:3px;margin:0 0 12px">🎯 推荐策略：三层递进</h3>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:24px;height:24px;background:rgba(200,169,81,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <span style="color:#c8a951;font-size:10px;font-weight:bold">1</span>
+      </div>
+      <div>
+        <strong style="color:#c8a951;font-size:10px">交互层（立即可做）</strong>
+        <p style="color:#a09080;font-size:9px;margin:2px 0 0">CursorGlow 已就位 + ParallaxTilt 集成到所有卡片 + 加页面过渡动画</p>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:24px;height:24px;background:rgba(200,169,81,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <span style="color:#c8a951;font-size:10px;font-weight:bold">2</span>
+      </div>
+      <div>
+        <strong style="color:#c8a951;font-size:10px">视差层（核心改造）</strong>
+        <p style="color:#a09080;font-size:9px;margin:2px 0 0">首页 Hero 加入浮动 3D 元素 + 各区块滚动视差 + 金色引导线</p>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:24px;height:24px;background:rgba(200,169,81,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <span style="color:#c8a951;font-size:10px;font-weight:bold">3</span>
+      </div>
+      <div>
+        <strong style="color:#c8a951;font-size:10px">沉浸层（专注模式）</strong>
+        <p style="color:#a09080;font-size:9px;margin:2px 0 0">独立 /focus 页面，大卫雕塑 + 名言轮播 + 网易云音景</p>
+      </div>
+    </div>
+  </div>
+</div>

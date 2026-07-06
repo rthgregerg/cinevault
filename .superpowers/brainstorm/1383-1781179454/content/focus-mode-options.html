@@ -1,0 +1,77 @@
+<h2>专注模式 — 三种呈现方式</h2>
+<p class="subtitle">沉浸式电影名言 + 剧照，暗黑金配色，移动端优先</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#0a0a0a;padding:20px;border-radius:8px;text-align:center">
+        <div style="border:1px solid #c8a951;border-radius:12px;padding:24px 16px;max-width:280px;margin:0 auto;position:relative;min-height:380px;display:flex;flex-direction:column;justify-content:center">
+          <div style="position:absolute;top:12px;right:16px;color:#c8a951;font-size:10px;letter-spacing:2px">1/5</div>
+          <div style="width:200px;height:120px;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);border-radius:6px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;color:#555;font-size:11px">🎬 电影剧照</div>
+          <p style="color:#fff;font-size:15px;font-family:serif;line-height:1.8;margin:0 0 8px">"人生就像一盒巧克力，<br/>你永远不知道下一颗<br/>是什么味道。"</p>
+          <p style="color:#c8a951;font-size:11px;margin:0">— 《阿甘正传》1994</p>
+          <div style="display:flex;gap:4px;justify-content:center;margin-top:16px">
+            <div style="width:6px;height:6px;border-radius:50%;background:#c8a951"></div>
+            <div style="width:6px;height:6px;border-radius:50%;background:#333"></div>
+            <div style="width:6px;height:6px;border-radius:50%;background:#333"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>全屏轮播</h3>
+      <p>满屏大图 + 名言自动轮播，像 Apple TV 屏保，最纯粹沉浸</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#0a0a0a;padding:20px;border-radius:8px">
+        <div style="max-width:280px;margin:0 auto;position:relative;min-height:380px;overflow:hidden">
+          <div style="position:absolute;top:0;left:0;right:0;height:40px;background:linear-gradient(to bottom,rgba(10,10,10,1),rgba(10,10,10,0))"></div>
+          <div style="padding:50px 0">
+            <div style="background:linear-gradient(135deg,#1a1a1a,#141414);border-left:2px solid #c8a951;padding:16px;margin-bottom:12px;border-radius:0 8px 8px 0;opacity:0.5">
+              <p style="color:#999;font-size:12px;font-family:serif;margin:0 0 4px">"生命可以归结为一种简单的选择：要么忙于生存，要么赶着去死。"</p>
+              <p style="color:#666;font-size:10px;margin:0">— 《肖申克的救赎》</p>
+            </div>
+            <div style="background:linear-gradient(135deg,#1a1a1a,#141414);border-left:2px solid #c8a951;padding:16px;margin-bottom:12px;border-radius:0 8px 8px 0">
+              <p style="color:#fff;font-size:14px;font-family:serif;margin:0 0 4px">"我们读诗写诗，并不是因为它们好玩，而是因为我们是人类的一分子。"</p>
+              <p style="color:#c8a951;font-size:10px;margin:0">— 《死亡诗社》</p>
+              <div style="width:80px;height:50px;background:linear-gradient(135deg,#2d1b69,#1a1a2e);border-radius:4px;margin-top:8px;display:flex;align-items:center;justify-content:center;color:#555;font-size:9px">🎬 剧照</div>
+            </div>
+            <div style="background:linear-gradient(135deg,#1a1a1a,#141414);border-left:2px solid #c8a951;padding:16px;margin-bottom:12px;border-radius:0 8px 8px 0;opacity:0.5">
+              <p style="color:#999;font-size:12px;font-family:serif;margin:0 0 4px">"希望是美好的，也许是人间至善，而美好的事物永不消逝。"</p>
+              <p style="color:#666;font-size:10px;margin:0">— 《肖申克的救赎》</p>
+            </div>
+          </div>
+          <div style="position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(to top,rgba(10,10,10,1),rgba(10,10,10,0))"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>时间线流动</h3>
+      <p>名言从下往上缓缓流动，左右滑动切歌，像音乐播放器般从容</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#0a0a0a;padding:20px;border-radius:8px;text-align:center">
+        <div style="position:relative;max-width:280px;margin:0 auto;min-height:380px;display:flex;align-items:center;justify-content:center">
+          <div style="position:absolute;width:200px;height:260px;background:linear-gradient(135deg,#1a1a1a,#111);border:1px solid rgba(200,169,81,0.15);border-radius:12px;transform:rotate(-6deg);top:40px;left:10px;display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">🎬</div>
+          <div style="position:absolute;width:200px;height:260px;background:linear-gradient(135deg,#141414,#1a1a1a);border:1px solid rgba(200,169,81,0.3);border-radius:12px;transform:rotate(2deg);top:50px;right:10px;display:flex;align-items:center;justify-content:center;color:#444;font-size:10px">🎬</div>
+          <div style="position:relative;width:200px;height:260px;background:linear-gradient(135deg,#1a1a2e,#0a0a0a);border:1px solid #c8a951;border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:center;z-index:2;box-shadow:0 8px 32px rgba(200,169,81,0.1)">
+            <div style="width:120px;height:70px;background:linear-gradient(135deg,#2d1b69,#0f3460);border-radius:4px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;color:#555;font-size:9px">🎬 剧照</div>
+            <p style="color:#fff;font-size:13px;font-family:serif;line-height:1.7;margin:0 0 8px">"每个人都会死，<br/>但不是每个人都<br/>真正活过。"</p>
+            <p style="color:#c8a951;font-size:10px;margin:0">— 《勇敢的心》</p>
+            <p style="color:#666;font-size:9px;margin:4px 0 0">点击翻牌 →</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>卡片叠层</h3>
+      <p>多张卡片不同深度浮动，点击翻牌，parallax 视差 + 惊喜感</p>
+    </div>
+  </div>
+</div>

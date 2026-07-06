@@ -16,9 +16,18 @@ export default function DesktopSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden lg:flex flex-col fixed left-0 top-0 bottom-0 w-56 bg-bg/80 backdrop-blur-lg border-r border-white/5 px-6 py-8 z-40">
+    <aside
+      className="hidden lg:flex flex-col fixed left-0 top-0 bottom-0 w-56 backdrop-blur-lg px-6 py-8 z-40"
+      style={{
+        backgroundColor: "color-mix(in srgb, var(--theme-surface) 85%, transparent)",
+        borderRight: "1px solid var(--theme-border)",
+      }}
+    >
       <Link href="/" className="mb-12">
-        <h1 className="text-xl font-display font-semibold text-gold tracking-wider">
+        <h1
+          className="text-xl font-display font-semibold tracking-wider"
+          style={{ color: "var(--theme-accent)" }}
+        >
           CineVault
         </h1>
       </Link>
@@ -32,9 +41,17 @@ export default function DesktopSidebar() {
               href={href}
               className={`px-4 py-2.5 rounded-btn text-sm transition-all
                 ${active
-                  ? "bg-gold/10 text-gold font-medium"
-                  : "text-text-secondary hover:text-text-primary hover:bg-bg-card"
+                  ? "font-medium"
+                  : "hover:bg-[var(--theme-accent-light)]"
                 }`}
+              style={
+                active
+                  ? {
+                      backgroundColor: "var(--theme-accent-light)",
+                      color: "var(--theme-accent)",
+                    }
+                  : { color: "var(--theme-text-secondary)" }
+              }
             >
               {label}
             </Link>
@@ -43,12 +60,30 @@ export default function DesktopSidebar() {
       </nav>
 
       {/* 主题切换 */}
-      <div className="mt-auto pt-4 border-t border-white/5">
-        <p className="text-[9px] tracking-[0.3em] text-text-muted mb-2 opacity-50">STYLE</p>
+      <div
+        className="mt-auto pt-4"
+        style={{ borderTop: "1px solid var(--theme-border)" }}
+      >
+        <p
+          className="text-[9px] tracking-[0.3em] mb-2"
+          style={{ color: "var(--theme-text-secondary)", opacity: 0.5 }}
+        >
+          STYLE
+        </p>
         <ThemeSwitcher />
         <div className="mt-4">
-          <p className="text-text-muted text-xs">© 2026 CineVault</p>
-          <p className="text-text-muted text-xs mt-1">探索电影之美</p>
+          <p
+            className="text-xs"
+            style={{ color: "var(--theme-text-secondary)", opacity: 0.6 }}
+          >
+            © 2026 CineVault
+          </p>
+          <p
+            className="text-xs mt-1"
+            style={{ color: "var(--theme-text-secondary)", opacity: 0.5 }}
+          >
+            探索电影之美
+          </p>
         </div>
       </div>
     </aside>

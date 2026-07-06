@@ -1,0 +1,173 @@
+<h2>CineVault 全站改造 — 白蓝金配色</h2>
+<p class="subtitle">乳白底 · 雾蓝层次 · 金色点缀 · madebywild 风格</p>
+
+<div class="cards">
+  <!-- Direction 1: Hero -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:linear-gradient(180deg,#f8f9fb,#edf1f7,#e2e8f0);padding:24px 16px;min-height:340px;text-align:center;position:relative;overflow:hidden">
+        <!-- Floating geometric elements (madebywild style) -->
+        <div style="position:absolute;top:25px;left:20px;width:28px;height:28px;border:1.5px solid rgba(59,89,152,0.25);border-radius:50%"></div>
+        <div style="position:absolute;top:50px;right:35px;width:16px;height:16px;border:1px solid rgba(200,169,81,0.35);border-radius:2px;transform:rotate(25deg)"></div>
+        <div style="position:absolute;bottom:70px;right:25px;width:10px;height:10px;background:rgba(59,89,152,0.15);border-radius:50%"></div>
+        <div style="position:absolute;bottom:100px;left:30px;width:6px;height:6px;background:rgba(200,169,81,0.35);border-radius:50%"></div>
+
+        <!-- Hero content -->
+        <div style="padding-top:50px">
+          <span style="color:#6b8ab0;font-size:9px;letter-spacing:6px;display:block;margin-bottom:16px">C I N E V A U L T</span>
+          <p style="color:#1e2a3a;font-size:22px;font-family:'Noto Serif SC',Georgia,serif;line-height:1.5;margin:0 0 6px">发现电影之美</p>
+          <p style="color:#5a7d9e;font-size:13px;font-family:'Noto Serif SC',Georgia,serif;line-height:1.5;margin:0">探索影史之深</p>
+          <div style="width:24px;height:1px;background:#c8a951;margin:18px auto"></div>
+        </div>
+
+        <!-- Floating film elements -->
+        <div style="position:absolute;bottom:35px;left:50%;transform:translateX(-50%);display:flex;gap:16px">
+          <div style="width:36px;height:22px;border:1px solid rgba(59,89,152,0.2);border-radius:3px;display:flex;align-items:center;justify-content:center">
+            <span style="font-size:8px">🎬</span>
+          </div>
+          <div style="width:20px;height:20px;border:1.5px solid rgba(200,169,81,0.3);border-radius:50%"></div>
+          <div style="width:30px;height:4px;background:linear-gradient(to right,rgba(59,89,152,0.2),rgba(200,169,81,0.3))"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Hero 首屏</h3>
+      <p>乳白底 + 雾蓝几何元素漂浮。衬线大字深蓝，金色分隔线。3D 胶片框/场记板绕标题。</p>
+    </div>
+  </div>
+
+  <!-- Direction 2: Cards -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:linear-gradient(180deg,#f8f9fb,#eef2f7,#e4eaf2);padding:20px 12px;min-height:340px">
+        <!-- Section title -->
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+          <div style="width:3px;height:16px;background:#c8a951;border-radius:2px"></div>
+          <span style="color:#1e2a3a;font-size:12px;font-family:'Noto Serif SC',serif;letter-spacing:1px">正在热映</span>
+          <div style="flex:1;height:0.5px;background:rgba(59,89,152,0.12)"></div>
+        </div>
+
+        <!-- Card grid -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <!-- Card 1 -->
+          <div style="background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);border:1px solid rgba(180,200,220,0.2);border-radius:6px;overflow:hidden;box-shadow:0 2px 10px rgba(30,40,60,0.04)">
+            <div style="height:70px;background:linear-gradient(135deg,#a0b8d4,#6b8db5,#4a7099)"></div>
+            <div style="padding:8px">
+              <div style="color:#1e2a3a;font-size:9px;font-weight:500">肖申克的救赎</div>
+              <div style="color:#8b9db8;font-size:7px;margin-top:2px">1994</div>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div style="background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);border:1px solid rgba(180,200,220,0.2);border-radius:6px;overflow:hidden;box-shadow:0 2px 10px rgba(30,40,60,0.04)">
+            <div style="height:70px;background:linear-gradient(135deg,#c0cfe0,#8da8c8,#5a7d9e)"></div>
+            <div style="padding:8px">
+              <div style="color:#1e2a3a;font-size:9px;font-weight:500">阿甘正传</div>
+              <div style="color:#8b9db8;font-size:7px;margin-top:2px">1994</div>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div style="background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);border:1px solid rgba(180,200,220,0.2);border-radius:6px;overflow:hidden;box-shadow:0 2px 10px rgba(30,40,60,0.04)">
+            <div style="height:70px;background:linear-gradient(135deg,#b5c8dd,#8ba5c4,#4e7095)"></div>
+            <div style="padding:8px">
+              <div style="color:#1e2a3a;font-size:9px;font-weight:500">星际穿越</div>
+              <div style="color:#8b9db8;font-size:7px;margin-top:2px">2014</div>
+            </div>
+          </div>
+          <!-- Card 4 -->
+          <div style="background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);border:1px solid rgba(180,200,220,0.2);border-radius:6px;overflow:hidden;box-shadow:0 2px 10px rgba(30,40,60,0.04)">
+            <div style="height:70px;background:linear-gradient(135deg,#c8d4e5,#9ab4d0,#5c80a5)"></div>
+            <div style="padding:8px">
+              <div style="color:#1e2a3a;font-size:9px;font-weight:500">死亡诗社</div>
+              <div style="color:#8b9db8;font-size:7px;margin-top:2px">1989</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>卡片体系</h3>
+      <p>毛玻璃白卡片，雾蓝渐变色海报占位，金色竖条章节标题。3D 倾斜 hover 效果。</p>
+    </div>
+  </div>
+
+  <!-- Direction 3: Focus -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:linear-gradient(180deg,#faf8f5,#f3efe8,#e8e2d8);padding:20px 12px;min-height:340px;text-align:center;position:relative;overflow:hidden">
+        <!-- Top light -->
+        <div style="position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:180px;height:100px;background:radial-gradient(ellipse,rgba(200,170,130,0.1),transparent 60%)"></div>
+
+        <!-- FOCUS header -->
+        <span style="color:#8a90a8;font-size:7px;letter-spacing:5px">FOCUS</span>
+
+        <!-- Statues + quote -->
+        <div style="display:flex;align-items:flex-end;justify-content:center;gap:4px;margin-top:8px">
+          <!-- Left statue -->
+          <div style="width:38px;height:160px;background:linear-gradient(180deg,rgba(210,205,195,0.6),rgba(190,183,170,0.5));border-radius:4px 4px 2px 2px;border:0.5px solid rgba(180,170,150,0.2)"></div>
+
+          <!-- Center: poster + quote -->
+          <div>
+            <div style="width:60px;height:85px;background:linear-gradient(135deg,#2a2a40,#1a1a35);border:1px solid rgba(200,169,81,0.25);margin:0 auto;box-shadow:0 0 0 2px #faf8f5,0 0 0 3px rgba(200,169,81,0.1)"></div>
+          </div>
+
+          <!-- Right statue -->
+          <div style="width:38px;height:160px;background:linear-gradient(180deg,rgba(210,205,195,0.6),rgba(190,183,170,0.5));border-radius:4px 4px 2px 2px;border:0.5px solid rgba(180,170,150,0.2);transform:scale(-1,1)"></div>
+        </div>
+
+        <!-- Quote -->
+        <div style="margin-top:8px;background:rgba(255,255,255,0.45);backdrop-filter:blur(6px);border:1px solid rgba(200,169,81,0.08);border-top:1px solid rgba(200,169,81,0.18);border-bottom:1px solid rgba(200,169,81,0.18);padding:10px 12px;max-width:200px;margin-left:auto;margin-right:auto">
+          <div style="color:#c8a951;font-size:16px;font-family:Georgia,serif;opacity:0.4">&ldquo;</div>
+          <p style="color:#3a2f30;font-size:10px;font-family:'Noto Serif SC',serif;line-height:1.8;margin:0 0 4px">希望是美好的，也许是人间至善，而美好的事物永不消逝。</p>
+          <div style="display:flex;align-items:center;gap:4px;justify-content:center;margin-bottom:3px">
+            <div style="width:6px;height:0.5px;background:#c8a951;opacity:0.3"></div>
+            <div style="width:2px;height:2px;background:#c8a951;transform:rotate(45deg)"></div>
+            <div style="width:6px;height:0.5px;background:#c8a951;opacity:0.3"></div>
+          </div>
+          <p style="color:#8a7060;font-size:7px;letter-spacing:2px">《肖申克的救赎》·1994</p>
+        </div>
+
+        <!-- Music -->
+        <div style="margin-top:8px;display:flex;align-items:center;justify-content:center;gap:4px;background:rgba(255,255,255,0.35);border-radius:10px;padding:2px 8px;width:fit-content;margin-left:auto;margin-right:auto">
+          <span style="font-size:9px">🎹</span>
+          <span style="color:#8a7060;font-size:6px;letter-spacing:1px">钢琴</span>
+          <span style="color:#b0a090;font-size:5px">网易云</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>专注模式</h3>
+      <p>暖白大理石底，两侧大卫雕塑，中央金框海报+名言卡。底部音景切换+网易云。</p>
+    </div>
+  </div>
+</div>
+
+<!-- Color Palette -->
+<div style="margin-top:24px;padding:16px 20px;background:rgba(255,255,255,0.5);border:1px solid rgba(180,200,220,0.15);border-radius:8px">
+  <h3 style="color:#4a7099;font-size:12px;letter-spacing:3px;margin:0 0 10px">🎨 配色方案</h3>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:6px">
+      <div style="width:18px;height:18px;background:#f8f9fb;border:0.5px solid #d0d8e0;border-radius:3px"></div>
+      <span style="color:#5a7d9e;font-size:8px">乳白底</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <div style="width:18px;height:18px;background:#dce4f0;border-radius:3px"></div>
+      <span style="color:#5a7d9e;font-size:8px">雾蓝</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <div style="width:18px;height:18px;background:#3b5998;border-radius:3px"></div>
+      <span style="color:#5a7d9e;font-size:8px">靛蓝</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <div style="width:18px;height:18px;background:#c8a951;border-radius:3px"></div>
+      <span style="color:#5a7d9e;font-size:8px">金色</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <div style="width:18px;height:18px;background:#1e2a3a;border-radius:3px"></div>
+      <span style="color:#5a7d9e;font-size:8px">深蓝字</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <div style="width:18px;height:18px;background:#8b9db8;border-radius:3px"></div>
+      <span style="color:#5a7d9e;font-size:8px">灰蓝辅</span>
+    </div>
+  </div>
+</div>

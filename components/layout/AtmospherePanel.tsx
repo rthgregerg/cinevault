@@ -20,23 +20,39 @@ const QUOTES: { zh: string; en: string; from: string }[] = [
   { zh: "时光易逝，光影永恒。", en: "Time flies, cinema endures.", from: "CineVault" },
 ];
 
-// ============ 金色装饰线 ============
+// ============ 主题装饰线 ============
 
-function GoldLines() {
+function AccentLines() {
   return (
     <div className="absolute bottom-0 left-0 right-0 pointer-events-none overflow-hidden">
       {/* 主横线 */}
-      <div className="h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent mb-2" />
+      <div
+        className="h-px mb-2"
+        style={{
+          background:
+            "linear-gradient(to right, transparent, color-mix(in srgb, var(--theme-accent) 60%, transparent), transparent)",
+        }}
+      />
       <div className="flex justify-center gap-3 mb-3">
         {[60, 30, 80, 40, 70].map((w, i) => (
           <div
             key={i}
-            className="h-px bg-gold/45"
-            style={{ width: w, transform: `rotate(${(i - 2) * 3}deg)` }}
+            className="h-px"
+            style={{
+              width: w,
+              transform: `rotate(${(i - 2) * 3}deg)`,
+              background: "color-mix(in srgb, var(--theme-accent) 45%, transparent)",
+            }}
           />
         ))}
       </div>
-      <div className="h-16 bg-gradient-to-t from-gold/15 to-transparent" />
+      <div
+        className="h-16"
+        style={{
+          background:
+            "linear-gradient(to top, color-mix(in srgb, var(--theme-accent) 15%, transparent), transparent)",
+        }}
+      />
     </div>
   );
 }
@@ -69,15 +85,16 @@ function PosterFragments() {
       {posters.slice(0, 6).map((url, i) => (
         <div
           key={i}
-          className="aspect-[2/3] rounded-sm overflow-hidden bg-bg-elevated"
+          className="aspect-[2/3] rounded-sm overflow-hidden"
           style={{
             transform: `rotate(${(i % 2 === 0 ? 2 : -2)}deg) translateY(${i * 2}px)`,
+            backgroundColor: "var(--theme-surface)",
           }}
         >
           <img
             src={url}
             alt=""
-            className="w-full h-full object-cover grayscale"
+            className="w-full h-full object-cover"
             loading="lazy"
           />
         </div>
@@ -106,18 +123,40 @@ export default function AtmospherePanel() {
   const quote = QUOTES[quoteIdx];
 
   return (
-    <aside className="hidden xl:flex flex-col fixed right-0 top-0 bottom-0 w-60 bg-bg/50 border-l border-white/5 px-5 py-8 z-30 pointer-events-none select-none">
+    <aside
+      className="hidden xl:flex flex-col fixed right-0 top-0 bottom-0 w-60 px-5 py-8 z-30 pointer-events-none select-none"
+      style={{
+        backgroundColor: "color-mix(in srgb, var(--theme-surface) 90%, transparent)",
+        borderLeft: "1px solid var(--theme-border)",
+      }}
+    >
       {/* 台词区 */}
       <div className="flex-1 flex flex-col justify-center">
         <div className={`transition-opacity duration-800 ${fading ? "opacity-0" : "opacity-100"}`}>
-          <p className="text-gold/80 text-[10px] tracking-widest mb-4">经典台词</p>
-          <p className="text-text-primary/90 text-sm leading-relaxed font-serif mb-3">
+          <p
+            className="text-[10px] tracking-widest mb-4"
+            style={{ color: "var(--theme-accent)", opacity: 0.8 }}
+          >
+            经典台词
+          </p>
+          <p
+            className="text-sm leading-relaxed font-serif mb-3"
+            style={{ color: "var(--theme-text)" }}
+          >
             {quote.zh}
           </p>
-          <p className="text-text-muted/70 text-xs leading-relaxed italic mb-2">
+          <p
+            className="text-xs leading-relaxed italic mb-2"
+            style={{ color: "var(--theme-text-secondary)", opacity: 0.7 }}
+          >
             {quote.en}
           </p>
-          <p className="text-text-muted/60 text-[10px]">{quote.from}</p>
+          <p
+            className="text-[10px]"
+            style={{ color: "var(--theme-text-secondary)", opacity: 0.5 }}
+          >
+            {quote.from}
+          </p>
         </div>
       </div>
 
@@ -126,13 +165,23 @@ export default function AtmospherePanel() {
         <PosterFragments />
       </div>
 
-      {/* 金色几何线 */}
-      <GoldLines />
+      {/* 主题几何线 */}
+      <AccentLines />
 
       {/* 底部品牌 */}
       <div className="text-center mt-auto pt-4">
-        <p className="text-gold/50 text-[10px] tracking-widest">CineVault</p>
-        <p className="text-text-muted/40 text-[8px] mt-1">探索电影之美</p>
+        <p
+          className="text-[10px] tracking-widest"
+          style={{ color: "var(--theme-accent)", opacity: 0.5 }}
+        >
+          CineVault
+        </p>
+        <p
+          className="text-[8px] mt-1"
+          style={{ color: "var(--theme-text-secondary)", opacity: 0.4 }}
+        >
+          探索电影之美
+        </p>
       </div>
     </aside>
   );
