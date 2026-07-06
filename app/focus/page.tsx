@@ -1,17 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useTheme } from "@/components/layout/ThemeProvider";
 import SideDecor from "@/components/focus/SideDecor";
 import QuoteCarousel from "@/components/focus/QuoteCarousel";
-
-// ==================== 计时器预设 ====================
-const TIMER_PRESETS = [
-  { label: "25分钟", minutes: 25 },
-  { label: "45分钟", minutes: 45 },
-  { label: "60分钟", minutes: 60 },
-];
+import FocusTimer from "@/components/focus/FocusTimer";
 
 // ==================== 网易云 iframe 播放器 ====================
 const NETEASE_SCENES = [
@@ -21,107 +15,6 @@ const NETEASE_SCENES = [
   { id: "ocean", label: "海浪", emoji: "🌊", songId: "523368028" },
   { id: "forest", label: "森林", emoji: "🌿", songId: "523365555" },
 ];
-
-// ==================== 计时器 ====================
-function FocusTimer({
-  onComplete,
-  isRunning,
-  onToggle,
-}: {
-  onComplete: () => void;
-  isRunning: boolean;
-  onToggle: () => void;
-}) {
-  const [totalSeconds, setTotalSeconds] = useState(25 * 60);
-  const [remaining, setRemaining] = useState(25 * 60);
-  const [preset, setPreset] = useState(25);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    if (isRunning && remaining > 0) {
-      intervalRef.current = setInterval(() => {
-        setRemaining((prev) => {
-          if (prev <= 1) {
-            onComplete();
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [isRunning, remaining, onComplete]);
-
-  const setPresetMinutes = (min: number) => {
-    setPreset(min);
-    setTotalSeconds(min * 60);
-    setRemaining(min * 60);
-  };
-
-  const mins = Math.floor(remaining / 60);
-  const secs = remaining % 60;
-  const progress = totalSeconds > 0 ? remaining / totalSeconds : 0;
-
-  return (
-    <div className="flex flex-col items-center gap-3">
-      {/* 预设选择 */}
-      {!isRunning && (
-        <div className="flex gap-2">
-          {TIMER_PRESETS.map((p) => (
-            <button
-              key={p.minutes}
-              onClick={() => setPresetMinutes(p.minutes)}
-              className="px-3 py-1 text-[10px] tracking-widest rounded-full border transition-all"
-              style={{
-                borderColor: preset === p.minutes ? "var(--theme-accent)" : "var(--theme-border)",
-                color: preset === p.minutes ? "var(--theme-accent)" : "var(--theme-text-secondary)",
-                background: preset === p.minutes ? "var(--theme-accent-light)" : "transparent",
-              }}
-            >
-              {p.label}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* 环形进度 */}
-      <div className="relative w-20 h-20 md:w-24 md:h-24">
-        <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="44" fill="none" stroke="var(--theme-border)" strokeWidth="3" />
-          <circle
-            cx="50" cy="50" r="44"
-            fill="none"
-            stroke="var(--theme-accent)"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeDasharray={`${progress * 276} 276`}
-            style={{ transition: "stroke-dasharray 1s linear" }}
-          />
-        </svg>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-lg md:text-xl font-mono tracking-wider" style={{ color: "var(--theme-text)" }}>
-            {String(mins).padStart(2, "0")}:{String(secs).padStart(2, "0")}
-          </span>
-        </div>
-      </div>
-
-      {/* 开始/暂停 */}
-      <button
-        onClick={onToggle}
-        className="px-5 py-1.5 rounded-full text-xs tracking-widest transition-all"
-        style={{
-          background: "var(--theme-accent)",
-          color: isRunning ? "var(--theme-text)" : "#fff",
-          opacity: isRunning ? 0.7 : 1,
-        }}
-      >
-        {isRunning ? "暂停" : remaining === 0 ? "重新开始" : "开始专注"}
-      </button>
-    </div>
-  );
-}
 
 // ==================== 网易云内嵌播放器 ====================
 function NeteaseEmbed() {
