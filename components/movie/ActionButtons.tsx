@@ -74,7 +74,7 @@ export default function ActionButtons({ movieId, movieTitle = "", runtime = 0, g
               className={`flex-1 py-2.5 text-xs font-medium rounded-btn border transition-all
                 ${mark[field]
                   ? "border-gold bg-gold/10 text-gold"
-                  : "border-white/10 text-text-secondary hover:border-white/20"
+                  : "border-theme-border text-text-secondary hover:border-gold/40"
                 }`}
             >
               <span className="mr-1">{icon}</span>

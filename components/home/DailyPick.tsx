@@ -11,7 +11,7 @@ export default function DailyPick({ movie }: { movie: TmdbMovie }) {
         <div className="absolute inset-0 flex flex-col justify-end p-5">
           <p className="text-gold text-xs font-medium tracking-wider mb-1">✦ 今日推荐 · Daily Pick</p>
           <h2 className="text-white text-xl font-display font-semibold">{movie.title}</h2>
-          <p className="text-text-secondary text-xs mt-1 line-clamp-2">{movie.overview}</p>
+          <p className="text-white/70 text-xs mt-1 line-clamp-2">{movie.overview}</p>
           <p className="text-gold text-sm font-semibold mt-2">{movie.vote_average.toFixed(1)}</p>
         </div>
       </section>

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
+import { usePathname } from "next/navigation";
 
 // ============ 经典电影台词 ============
 
@@ -106,6 +107,7 @@ function PosterFragments() {
 // ============ 主组件 ============
 
 export default function AtmospherePanel() {
+  const pathname = usePathname();
   const [quoteIdx, setQuoteIdx] = useState(0);
   const [fading, setFading] = useState(false);
 
@@ -121,6 +123,9 @@ export default function AtmospherePanel() {
   }, []);
 
   const quote = QUOTES[quoteIdx];
+
+  // 专注模式为沉浸式全屏，隐藏右侧氛围栏
+  if (pathname === "/focus") return null;
 
   return (
     <aside

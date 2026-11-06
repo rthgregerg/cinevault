@@ -84,14 +84,14 @@ export default function CollectionDetailPage() {
                 value={editName}
                 onChange={(e) => setEditName(e.target.value)}
                 maxLength={30}
-                className="w-full px-3 py-2 bg-bg-card border border-white/10 rounded-btn text-lg font-display font-semibold text-text-primary outline-none focus:border-gold/50"
+                className="w-full px-3 py-2 bg-bg-card border border-theme-border rounded-btn text-lg font-display font-semibold text-text-primary outline-none focus:border-gold/50"
               />
               <textarea
                 value={editDesc}
                 onChange={(e) => setEditDesc(e.target.value)}
                 maxLength={100}
                 rows={2}
-                className="w-full px-3 py-2 bg-bg-card border border-white/10 rounded-btn text-sm text-text-secondary outline-none focus:border-gold/50 resize-none"
+                className="w-full px-3 py-2 bg-bg-card border border-theme-border rounded-btn text-sm text-text-secondary outline-none focus:border-gold/50 resize-none"
               />
               <div className="flex gap-2">
                 <button onClick={handleSave} className="px-4 py-2 text-xs bg-gold text-black font-medium rounded-btn">保存</button>

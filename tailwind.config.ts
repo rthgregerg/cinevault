@@ -8,28 +8,30 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // 语义色板 — 全部映射到主题变量，切换主题时自动换肤
         bg: {
-          DEFAULT: "#0a0a0a",
-          card: "#141414",
-          elevated: "#1a1a1a",
+          DEFAULT: "rgb(var(--theme-bg-rgb) / <alpha-value>)",
+          card: "rgb(var(--theme-card-rgb) / <alpha-value>)",
+          elevated: "rgb(var(--theme-surface-rgb) / <alpha-value>)",
         },
         gold: {
-          DEFAULT: "#c8a951",
-          light: "#d4b85e",
-          dark: "#a88a3a",
+          DEFAULT: "rgb(var(--theme-accent-rgb) / <alpha-value>)",
+          light: "rgb(var(--theme-accent-rgb) / 0.85)",
+          dark: "rgb(var(--theme-accent-rgb) / 0.7)",
         },
         text: {
-          primary: "#ffffff",
-          secondary: "#9ca3af",
-          muted: "#6b7280",
+          primary: "rgb(var(--theme-text-rgb) / <alpha-value>)",
+          secondary: "rgb(var(--theme-text-secondary-rgb) / <alpha-value>)",
+          muted: "rgb(var(--theme-text-muted-rgb) / <alpha-value>)",
         },
-        // 动态主题色 — 通过 CSS 变量切换
+        // 动态主题色 — 直接使用 CSS 变量（含透明度）
         theme: {
           bg: "var(--theme-bg)",
           surface: "var(--theme-surface)",
           card: "var(--theme-card)",
           text: "var(--theme-text)",
           "text-secondary": "var(--theme-text-secondary)",
+          "text-muted": "var(--theme-text-muted)",
           accent: "var(--theme-accent)",
           "accent-light": "var(--theme-accent-light)",
           border: "var(--theme-border)",

@@ -15,6 +15,9 @@ const navItems = [
 export default function DesktopSidebar() {
   const pathname = usePathname();
 
+  // 专注模式为沉浸式全屏，隐藏桌面侧栏
+  if (pathname === "/focus") return null;
+
   return (
     <aside
       className="hidden lg:flex flex-col fixed left-0 top-0 bottom-0 w-56 backdrop-blur-lg px-6 py-8 z-40"

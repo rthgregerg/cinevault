@@ -60,7 +60,7 @@ export default function WatchProviders({ movieId, movieTitle }: WatchProvidersPr
             href={p.searchUrl(searchQuery)}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-bg-card rounded-btn border border-white/5 text-text-secondary text-xs hover:border-gold/30 hover:text-gold transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-bg-card rounded-btn border border-theme-border text-text-secondary text-xs hover:border-gold/30 hover:text-gold transition-colors"
           >
             <span className="text-sm">{p.icon}</span>
             {p.name}

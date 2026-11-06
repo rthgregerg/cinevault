@@ -35,11 +35,11 @@ export default function AddToCollectionSheet({ movieId, movieTitle, onClose }: A
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm" onClick={onClose}>
       <div
-        className="bg-bg-card rounded-t-2xl border border-white/10 w-full max-w-md p-6 space-y-4 animate-in slide-in-from-bottom"
+        className="bg-bg-card rounded-t-2xl border border-theme-border w-full max-w-md p-6 space-y-4 animate-in slide-in-from-bottom"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 拖拽指示条 */}
-        <div className="w-8 h-1 bg-white/20 rounded-full mx-auto" />
+        <div className="w-8 h-1 bg-text-muted/30 rounded-full mx-auto" />
 
         <div>
           <h3 className="text-base font-display font-semibold text-text-primary">添加到收藏夹</h3>

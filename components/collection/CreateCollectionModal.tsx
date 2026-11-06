@@ -23,7 +23,7 @@ export default function CreateCollectionModal({ onClose, onCreate }: CreateColle
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="bg-bg-card rounded-card border border-white/10 w-full max-w-sm p-6 space-y-4 animate-in fade-in zoom-in-95">
+      <div className="bg-bg-card rounded-card border border-theme-border w-full max-w-sm p-6 space-y-4 animate-in fade-in zoom-in-95">
         <h3 className="text-base font-display font-semibold text-text-primary">新建收藏夹</h3>
 
         <div>
@@ -36,7 +36,7 @@ export default function CreateCollectionModal({ onClose, onCreate }: CreateColle
             onKeyDown={(e) => { if (e.key === "Enter") handleCreate(); }}
             placeholder="例如：科幻经典、必看片单"
             maxLength={30}
-            className="w-full px-3 py-2.5 bg-bg border border-white/10 rounded-btn text-sm text-text-primary placeholder:text-text-muted outline-none focus:border-gold/50 transition-colors"
+            className="w-full px-3 py-2.5 bg-bg border border-theme-border rounded-btn text-sm text-text-primary placeholder:text-text-muted outline-none focus:border-gold/50 transition-colors"
           />
         </div>
 
@@ -48,7 +48,7 @@ export default function CreateCollectionModal({ onClose, onCreate }: CreateColle
             placeholder="一句话描述这个收藏夹..."
             maxLength={100}
             rows={2}
-            className="w-full px-3 py-2 bg-bg border border-white/10 rounded-btn text-sm text-text-primary placeholder:text-text-muted outline-none focus:border-gold/50 transition-colors resize-none"
+            className="w-full px-3 py-2 bg-bg border border-theme-border rounded-btn text-sm text-text-primary placeholder:text-text-muted outline-none focus:border-gold/50 transition-colors resize-none"
           />
         </div>
 

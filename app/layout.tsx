@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import BottomTabBar from "@/components/layout/BottomTabBar";
 import DesktopSidebar from "@/components/layout/DesktopSidebar";
+import MobileTopBar from "@/components/layout/MobileTopBar";
 import AtmospherePanel from "@/components/layout/AtmospherePanel";
 import CursorGlow from "@/components/shared/CursorGlow";
 import ThemeProvider from "@/components/layout/ThemeProvider";
@@ -39,6 +40,7 @@ export default function RootLayout({
       <body className="min-h-screen">
         <ThemeProvider>
           <CursorGlow />
+          <MobileTopBar />
           <DesktopSidebar />
           {children}
           <AtmospherePanel />

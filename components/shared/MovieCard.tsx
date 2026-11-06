@@ -9,12 +9,13 @@ interface MovieCardProps {
 }
 
 export default function MovieCard({ movie, size = "sm" }: MovieCardProps) {
-  const posterH = size === "lg" ? "h-64" : size === "md" ? "h-52" : "h-44";
+  // 海报统一 2:3 比例，随栅格宽度自适应，避免桌面/移动端卡片比例不一致
+  const titleSize = size === "lg" ? "text-base" : "text-sm";
 
   return (
     <ParallaxTilt tiltAmount={5} glare={0.06}>
       <Link href={`/movie/${movie.id}`} className="card block group">
-        <div className={`${posterH} relative overflow-hidden bg-bg-elevated`}>
+        <div className="relative aspect-[2/3] overflow-hidden bg-bg-elevated">
           <img
             src={posterUrl(movie.poster_path)}
             alt={movie.title}
@@ -29,7 +30,7 @@ export default function MovieCard({ movie, size = "sm" }: MovieCardProps) {
           <div className="absolute bottom-0 left-0 right-0 h-12 gradient-overlay" />
         </div>
         <div className="p-2.5">
-          <h3 className="text-text-primary text-sm font-medium truncate">{movie.title}</h3>
+          <h3 className={`text-text-primary ${titleSize} font-medium truncate`}>{movie.title}</h3>
           <p className="text-text-secondary text-xs mt-0.5 truncate">{getYear(movie.release_date)} / {movie.original_title}</p>
         </div>
       </Link>

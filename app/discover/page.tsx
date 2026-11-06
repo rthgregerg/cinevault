@@ -72,7 +72,7 @@ export default function DiscoverPage() {
 
         <div className="mb-4">
           <button onClick={() => setShowSearch(true)}
-            className="w-full flex items-center gap-2 px-4 py-3 bg-bg-card rounded-card border border-white/5 text-text-muted text-sm hover:border-white/10 transition-colors"
+            className="w-full flex items-center gap-2 px-4 py-3 bg-bg-card rounded-card border border-theme-border text-text-muted text-sm hover:border-gold/40 transition-colors"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -87,7 +87,7 @@ export default function DiscoverPage() {
             {( ["popular", "rating", "date", "title"] as SortLabel[] ).map((opt) => (
               <button key={opt} onClick={() => { setSort(opt); setPage(1); }}
                 className={`shrink-0 px-3 py-1.5 text-xs rounded-full border transition-colors
-                  ${sort === opt ? "border-gold text-gold bg-gold/10" : "border-white/10 text-text-secondary hover:border-white/30"}`}
+                  ${sort === opt ? "border-gold text-gold bg-gold/10" : "border-theme-border text-text-secondary hover:border-gold/40"}`}
               >
                 {opt === "popular" && "热门"}{opt === "rating" && "评分最高"}{opt === "date" && "最新"}{opt === "title" && "片名"}
               </button>
@@ -96,11 +96,11 @@ export default function DiscoverPage() {
           {/* Genre tags */}
           <div className="flex flex-wrap gap-1.5">
             <button onClick={() => setActiveGenre("")}
-              className={`px-2.5 py-1 text-xs rounded-full border transition-colors ${!activeGenre ? "border-gold text-gold bg-gold/10" : "border-white/10 text-text-secondary"}`}
+              className={`px-2.5 py-1 text-xs rounded-full border transition-colors ${!activeGenre ? "border-gold text-gold bg-gold/10" : "border-theme-border text-text-secondary"}`}
             >全部</button>
             {genres.slice(0, 15).map((g) => (
               <button key={g.id} onClick={() => setActiveGenre(String(g.id))}
-                className={`px-2.5 py-1 text-xs rounded-full border transition-colors ${activeGenre === String(g.id) ? "border-gold text-gold bg-gold/10" : "border-white/10 text-text-secondary"}`}
+                className={`px-2.5 py-1 text-xs rounded-full border transition-colors ${activeGenre === String(g.id) ? "border-gold text-gold bg-gold/10" : "border-theme-border text-text-secondary"}`}
               >{g.name}</button>
             ))}
           </div>
@@ -114,7 +114,7 @@ export default function DiscoverPage() {
             {hasMore && (
               <div className="flex justify-center mt-8 mb-4">
                 <button onClick={() => { const n = page + 1; setPage(n); fetchMovies(n, false); }}
-                  className="px-8 py-2.5 border border-white/10 rounded-full text-text-secondary text-sm hover:border-gold hover:text-gold transition-colors"
+                  className="px-8 py-2.5 border border-theme-border rounded-full text-text-secondary text-sm hover:border-gold hover:text-gold transition-colors"
                 >加载更多</button>
               </div>
             )}

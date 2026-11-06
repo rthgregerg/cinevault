@@ -107,10 +107,10 @@ export default function CountryInfoPanel({ country, onClose, onMovieClick }: Cou
   if (!country) return null;
 
   return (
-    <div className="fixed right-0 top-0 bottom-0 z-40 w-full max-w-md bg-bg/95 backdrop-blur-xl border-l border-white/10 overflow-y-auto animate-in slide-in-from-right">
+    <div className="fixed right-0 top-0 bottom-0 z-40 w-full max-w-md bg-bg/95 backdrop-blur-xl border-l border-theme-border overflow-y-auto animate-in slide-in-from-right">
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-bg-card border border-white/10 text-text-muted hover:text-text-primary hover:border-white/20 transition-colors z-10"
+        className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-bg-card border border-theme-border text-text-muted hover:text-text-primary hover:border-gold/40 transition-colors z-10"
       >
         ✕
       </button>

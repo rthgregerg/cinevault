@@ -33,17 +33,17 @@ export default function DailyRecommend() {
       {/* 标题 */}
       <div className="mb-4">
         <div className="flex items-center gap-2">
-          <h2 className="text-lg font-display font-semibold text-text-primary">每日推荐</h2>
+          <h2 className="text-lg md:text-xl font-display font-semibold text-text-primary leading-tight">每日推荐</h2>
           <span className="text-[10px] px-2 py-0.5 rounded-full bg-gold/10 text-gold border border-gold/20">
             每日更新
           </span>
         </div>
-        <p className="text-text-muted text-xs mt-0.5">告诉我你的心情和场景，为你定制今日片单</p>
+        <p className="text-text-muted text-xs mt-1">告诉我你的心情和场景，为你定制今日片单</p>
       </div>
 
       {/* 心情选择 */}
       <div className="mb-3">
-        <p className="text-text-muted text-[10px] uppercase tracking-wider mb-1.5">观影心情</p>
+        <p className="text-text-muted text-[10px] tracking-[0.18em] mb-2">观影心情</p>
         <div className="flex flex-wrap gap-1.5">
           {ALL_MOODS.map((mood) => (
             <button
@@ -52,7 +52,7 @@ export default function DailyRecommend() {
               className={`shrink-0 px-3 py-1.5 text-xs rounded-full border transition-all
                 ${activeMood === mood
                   ? "border-gold bg-gold/10 text-gold scale-105"
-                  : "border-white/5 text-text-secondary hover:border-white/20 hover:text-text-primary"
+                  : "border-theme-border text-text-secondary hover:border-gold/40 hover:text-text-primary"
                 }`}
             >
               <span className="mr-1">{MOOD_EMOJI[mood]}</span>
@@ -64,7 +64,7 @@ export default function DailyRecommend() {
 
       {/* 场景选择 */}
       <div className="mb-4">
-        <p className="text-text-muted text-[10px] uppercase tracking-wider mb-1.5">观影场景</p>
+        <p className="text-text-muted text-[10px] tracking-[0.18em] mb-2">观影场景</p>
         <div className="flex flex-wrap gap-1.5">
           {ALL_SCENES.map((scene) => (
             <button
@@ -73,7 +73,7 @@ export default function DailyRecommend() {
               className={`shrink-0 px-3 py-1.5 text-xs rounded-full border transition-all
                 ${activeScene === scene
                   ? "border-gold bg-gold/10 text-gold scale-105"
-                  : "border-white/5 text-text-secondary hover:border-white/20 hover:text-text-primary"
+                  : "border-theme-border text-text-secondary hover:border-gold/40 hover:text-text-primary"
                 }`}
             >
               <span className="mr-1">{SCENE_EMOJI[scene]}</span>

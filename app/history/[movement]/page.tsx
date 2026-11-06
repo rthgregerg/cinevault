@@ -67,7 +67,7 @@ export default async function MovementDetailPage({ params }: Props) {
             <h2 className="text-base font-semibold text-text-primary font-display mb-2">美学风格</h2>
             <div className="flex flex-wrap gap-1.5">
               {movement.styleTags.map((tag) => (
-                <span key={tag} className="px-3 py-1.5 text-xs bg-bg-card rounded-full text-text-secondary border border-white/5">{tag}</span>
+                <span key={tag} className="px-3 py-1.5 text-xs bg-bg-card rounded-full text-text-secondary border border-theme-border">{tag}</span>
               ))}
             </div>
           </div>

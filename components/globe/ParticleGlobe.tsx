@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useMemo, useState, useEffect, Suspense, useCallback } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import Starfield, { type StarLayerConfig } from "./Starfield";
@@ -42,6 +42,16 @@ type Vec3 = { x: number; y: number; z: number };
 type ParticleData = { ocean: Vec3[]; land: Vec3[]; edges: Vec3[]; glow: Vec3[] };
 
 function buf(d: Vec3[]) { const p=new Float32Array(d.length*3); for(let i=0;i<d.length;i++){p[i*3]=d[i].x;p[i*3+1]=d[i].y;p[i*3+2]=d[i].z;} return p; }
+
+/** 移动端把相机拉远，保证地球完整显示，与桌面端保持同样的构图 */
+function ResponsiveCamera() {
+  const { camera, size } = useThree();
+  useEffect(() => {
+    camera.position.z = size.width < 640 ? 4.35 : 3.5;
+    camera.updateProjectionMatrix();
+  }, [camera, size.width]);
+  return null;
+}
 
 function GlobeScene({ onClickCountry, activeCountryCode, particleData }: {
   onClickCountry: (c: CountryFilmData) => void; activeCountryCode: string | null; particleData: ParticleData;
@@ -158,8 +168,9 @@ function GlobeDataLoader(props: { onClickCountry: (c: CountryFilmData) => void; 
 export default function ParticleGlobe({ onMovieClick }: { onMovieClick: (id: number) => void }) {
   const [active, setActive] = useState<CountryFilmData | null>(null);
   return (
-    <div className="relative w-full h-[360px] md:h-[420px] lg:h-[440px] bg-gradient-to-b from-[#0a1628] to-bg rounded-card overflow-hidden">
+    <div className="relative w-full h-[360px] md:h-[420px] lg:h-[440px] bg-gradient-to-b from-[#0a1628] via-[#060d18] to-[#04070f] rounded-card overflow-hidden border border-theme-border">
       <Canvas camera={{ position:[0,0.3,3.5], fov:45, near:0.1, far:20 }} gl={{ antialias:true, alpha:true }} style={{ background:"transparent" }}>
+        <ResponsiveCamera />
         <Suspense fallback={null}><GlobeDataLoader onClickCountry={setActive} activeCountryCode={active?.countryCode??null} /></Suspense>
       </Canvas>
       {!active && <div className="absolute bottom-4 left-0 right-0 text-center pointer-events-none"><p className="text-white/40 text-xs">拖拽旋转 · 滚轮缩放 · 点击金色光点探索</p></div>}

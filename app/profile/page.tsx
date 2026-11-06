@@ -63,14 +63,13 @@ export default function ProfilePage() {
             累计观影 {(totalRuntime / 60).toFixed(0)} 小时 · {watched} 部作品
           </p>
         )}
-        {totalRuntime === 0 && <p className="text-text-muted text-xs mb-4">观影记录与统计</p>}
         <StatCards watched={watched} wantToWatch={wantToWatch} collected={collected} liked={liked} />
         <div className="mt-4"><RatingChart /></div>
         <div className="mt-4"><MonthlyChart /></div>
         <div className="flex gap-2 mt-6 mb-4 overflow-x-auto">
           {tabs.map(({ key, label }) => (
             <button key={key} onClick={() => setActiveTab(key)}
-              className={`shrink-0 px-4 py-2 text-sm rounded-full border transition-colors ${activeTab === key ? "border-gold text-gold bg-gold/10" : "border-white/10 text-text-secondary hover:border-white/20"}`}
+              className={`shrink-0 px-4 py-2 text-sm rounded-full border transition-colors ${activeTab === key ? "border-gold text-gold bg-gold/10" : "border-theme-border text-text-secondary hover:border-gold/40"}`}
             >
               {label}
             </button>

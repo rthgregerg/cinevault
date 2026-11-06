@@ -30,13 +30,13 @@ export default function FilterBar({
         {( ["popular", "rating", "date", "title"] ).map((opt) => (
           <button key={opt} onClick={() => onSortChange(opt)}
             className={`shrink-0 px-3 py-1.5 text-xs rounded-full border transition-colors
-              ${activeSort === opt ? "border-gold text-gold bg-gold/10" : "border-white/10 text-text-secondary hover:border-white/30"}`}
+              ${activeSort === opt ? "border-gold text-gold bg-gold/10" : "border-theme-border text-text-secondary hover:border-gold/40"}`}
           >
             {opt === "popular" && "热门"}{opt === "rating" && "评分最高"}{opt === "date" && "最新"}{opt === "title" && "片名"}
           </button>
         ))}
         <button onClick={() => setExpanded(!expanded)}
-          className="shrink-0 px-3 py-1.5 text-xs rounded-full border border-white/10 text-text-secondary"
+          className="shrink-0 px-3 py-1.5 text-xs rounded-full border border-theme-border text-text-secondary"
         >筛选 {expanded ? "▲" : "▼"}</button>
         {hasFilters && (
           <button onClick={onClearAll} className="shrink-0 text-xs text-gold ml-auto">清除</button>
@@ -50,7 +50,7 @@ export default function FilterBar({
               {genres.map((g) => (
                 <button key={g} onClick={() => onGenreToggle(g)}
                   className={`px-2.5 py-1 text-xs rounded-full border transition-colors
-                    ${activeGenres.includes(g) ? "border-gold text-gold bg-gold/10" : "border-white/10 text-text-secondary"}`}
+                    ${activeGenres.includes(g) ? "border-gold text-gold bg-gold/10" : "border-theme-border text-text-secondary"}`}
                 >{g}</button>
               ))}
             </div>
@@ -61,7 +61,7 @@ export default function FilterBar({
               {regions.map((r) => (
                 <button key={r} onClick={() => onRegionToggle(r)}
                   className={`px-2.5 py-1 text-xs rounded-full border transition-colors
-                    ${activeRegions.includes(r) ? "border-gold text-gold bg-gold/10" : "border-white/10 text-text-secondary"}`}
+                    ${activeRegions.includes(r) ? "border-gold text-gold bg-gold/10" : "border-theme-border text-text-secondary"}`}
                 >{r}</button>
               ))}
             </div>

@@ -36,11 +36,11 @@ export default function TencentPlayer({ playUrl, movieTitle }: TencentPlayerProp
   // 有 vid → 嵌入播放器
   if (vid && !error) {
     return (
-      <div className="w-full bg-black/50 rounded-card overflow-hidden mb-4 border border-white/5">
-        <div className="flex items-center gap-2 px-4 py-2 bg-bg-card/50 border-b border-white/5">
+      <div className="w-full bg-black/60 rounded-card overflow-hidden mb-4 border border-theme-border">
+        <div className="flex items-center gap-2 px-4 py-2 bg-black/50 border-b border-white/10">
           <span className="text-xs text-gold">▶</span>
-          <span className="text-xs text-text-secondary">腾讯视频</span>
-          <span className="text-[10px] text-text-muted ml-auto">来源: v.qq.com</span>
+          <span className="text-xs text-white/70">腾讯视频</span>
+          <span className="text-[10px] text-white/40 ml-auto">来源: v.qq.com</span>
         </div>
         <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
           <iframe
@@ -59,7 +59,7 @@ export default function TencentPlayer({ playUrl, movieTitle }: TencentPlayerProp
   // 播放失败 → 错误提示 + 搜索链接
   if (error) {
     return (
-      <div className="w-full bg-bg-card rounded-card border border-white/5 p-4 mb-4">
+      <div className="w-full bg-bg-card rounded-card border border-theme-border p-4 mb-4">
         <div className="flex items-center gap-2 text-text-muted text-sm">
           <span>⚠</span>
           <span>播放加载失败</span>
